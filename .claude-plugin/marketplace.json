@@ -1,0 +1,20 @@
+{
+  "name": "authzed-marketplace",
+  "owner": {
+    "name": "AuthZed",
+    "homepage": "https://authzed.com"
+  },
+  "metadata": {
+    "description": "Official AuthZed plugin marketplace for Claude Code.",
+    "version": "1.0.0",
+    "repository": "https://github.com/authzed/authzed-marketplace"
+  },
+  "plugins": [
+    {
+      "name": "spicedb-dev",
+      "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing",
+      "version": "1.0.0",
+      "source": "./spicedb-dev/"
+    }
+  ]
+}

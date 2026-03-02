@@ -1,0 +1,140 @@
+---
+# Google Cloud IAM Style (Role-Based with Hierarchical Resource Scopes)
+# Pattern: Predefined roles with permission sets; roles granted at project/instance/database level
+# Source: https://github.com/authzed/examples/tree/main/schemas/google-iam
+#
+# Use this as a starting point when you need:
+# - Predefined system roles (e.g., spanner_database_admin, spanner_database_reader)
+# - Each role is a resource whose permissions are set by writing relations to it
+# - Roles granted at different scopes (project, instance, database) with inheritance downward
+# - Permission propagation: project-level role grant flows down to instances and databases
+#
+# Key insight: Roles are SpiceDB resources (definition role). Permissions on the role
+# are modeled as relations pointing to other roles (e.g., spanner_databases_read: role).
+# A user gets a permission by being the bound_user of a role that has the relevant
+# permission relation. This mirrors how Google IAM works with predefined roles.
+#
+# Full schema with relationships and assertions:
+# https://github.com/authzed/examples/tree/main/schemas/google-iam
+
+schema: |-
+  definition user {}
+
+  /**
+   * A role aggregates permissions. Permissions on a role are set by writing
+   * relation tuples pointing to another role (forming a self-referential graph).
+   * Users are bound to roles via the bound_user relation.
+   */
+  definition role {
+    relation bound_user: user
+
+    relation spanner_databaseoperations_cancel: role
+    relation spanner_databaseoperations_delete: role
+    relation spanner_databaseoperations_get: role
+    relation spanner_databaseoperations_list: role
+    relation spanner_databaseroles_list: role
+    relation spanner_databaseroles_use: role
+    relation spanner_databases_beginorrollbackreadwritetransaction: role
+    relation spanner_databases_beginpartitioneddmltransaction: role
+    relation spanner_databases_beginreadonlytransaction: role
+    relation spanner_databases_create: role
+    relation spanner_databases_drop: role
+    relation spanner_databases_get: role
+    relation spanner_databases_getddl: role
+    relation spanner_databases_getiampolicy: role
+    relation spanner_databases_list: role
+    relation spanner_databases_partitionquery: role
+    relation spanner_databases_partitionread: role
+    relation spanner_databases_read: role
+    relation spanner_databases_select: role
+    relation spanner_databases_setiampolicy: role
+    relation spanner_databases_update: role
+    relation spanner_databases_updateddl: role
+    relation spanner_databases_userolebasedaccess: role
+    relation spanner_databases_write: role
+    relation spanner_instances_get: role
+    relation spanner_instances_getiampolicy: role
+    relation spanner_instances_list: role
+    relation spanner_sessions_create: role
+    relation spanner_sessions_delete: role
+    relation spanner_sessions_get: role
+    relation spanner_sessions_list: role
+
+    permission can_spanner_databaseoperations_cancel = spanner_databaseoperations_cancel->bound_user
+    permission can_spanner_databaseoperations_delete = spanner_databaseoperations_delete->bound_user
+    permission can_spanner_databaseoperations_get = spanner_databaseoperations_get->bound_user
+    permission can_spanner_databaseoperations_list = spanner_databaseoperations_list->bound_user
+    permission can_spanner_databaseroles_list = spanner_databaseroles_list->bound_user
+    permission can_spanner_databaseroles_use = spanner_databaseroles_use->bound_user
+    permission can_spanner_databases_beginorrollbackreadwritetransaction = spanner_databases_beginorrollbackreadwritetransaction->bound_user
+    permission can_spanner_databases_beginpartitioneddmltransaction = spanner_databases_beginpartitioneddmltransaction->bound_user
+    permission can_spanner_databases_beginreadonlytransaction = spanner_databases_beginreadonlytransaction->bound_user
+    permission can_spanner_databases_create = spanner_databases_create->bound_user
+    permission can_spanner_databases_drop = spanner_databases_drop->bound_user
+    permission can_spanner_databases_get = spanner_databases_get->bound_user
+    permission can_spanner_databases_getddl = spanner_databases_getddl->bound_user
+    permission can_spanner_databases_getiampolicy = spanner_databases_getiampolicy->bound_user
+    permission can_spanner_databases_list = spanner_databases_list->bound_user
+    permission can_spanner_databases_partitionquery = spanner_databases_partitionquery->bound_user
+    permission can_spanner_databases_partitionread = spanner_databases_partitionread->bound_user
+    permission can_spanner_databases_read = spanner_databases_read->bound_user
+    permission can_spanner_databases_select = spanner_databases_select->bound_user
+    permission can_spanner_databases_setiampolicy = spanner_databases_setiampolicy->bound_user
+    permission can_spanner_databases_update = spanner_databases_update->bound_user
+    permission can_spanner_databases_updateddl = spanner_databases_updateddl->bound_user
+    permission can_spanner_databases_userolebasedaccess = spanner_databases_userolebasedaccess->bound_user
+    permission can_spanner_databases_write = spanner_databases_write->bound_user
+    permission can_spanner_instances_get = spanner_instances_get->bound_user
+    permission can_spanner_instances_getiampolicy = spanner_instances_getiampolicy->bound_user
+    permission can_spanner_instances_list = spanner_instances_list->bound_user
+    permission can_spanner_sessions_create = spanner_sessions_create->bound_user
+    permission can_spanner_sessions_delete = spanner_sessions_delete->bound_user
+    permission can_spanner_sessions_get = spanner_sessions_get->bound_user
+    permission can_spanner_sessions_list = spanner_sessions_list->bound_user
+  }
+
+  /**
+   * A project grants roles at the project scope; permissions flow down to instances and databases.
+   */
+  definition project {
+    relation granted: role
+
+    permission granted_spanner_instances_get = granted->can_spanner_instances_get
+    permission granted_spanner_instances_list = granted->can_spanner_instances_list
+    permission granted_spanner_databases_create = granted->can_spanner_databases_create
+    permission granted_spanner_databases_drop = granted->can_spanner_databases_drop
+    permission granted_spanner_databases_get = granted->can_spanner_databases_get
+    permission granted_spanner_databases_list = granted->can_spanner_databases_list
+    permission granted_spanner_databases_read = granted->can_spanner_databases_read
+    permission granted_spanner_databases_write = granted->can_spanner_databases_write
+    // (see full schema for all project permission propagations)
+  }
+
+  /**
+   * A Spanner instance inherits permissions from its project or from directly granted roles.
+   */
+  definition spanner_instance {
+    relation project: project
+    relation granted: role
+
+    permission get = granted->can_spanner_instances_get + project->granted_spanner_instances_get
+    permission list = granted->can_spanner_instances_list + project->granted_spanner_instances_list
+    permission granted_spanner_databases_create = granted->can_spanner_databases_create + project->granted_spanner_databases_create
+    permission granted_spanner_databases_read = granted->can_spanner_databases_read + project->granted_spanner_databases_read
+    permission granted_spanner_databases_write = granted->can_spanner_databases_write + project->granted_spanner_databases_write
+    // (see full schema for all instance permission propagations)
+  }
+
+  /**
+   * A Spanner database inherits permissions from its instance (and transitively from the project).
+   */
+  definition spanner_database {
+    relation instance: spanner_instance
+    relation granted: role
+
+    permission read = granted->can_spanner_databases_read + instance->granted_spanner_databases_read
+    permission write = granted->can_spanner_databases_write + instance->granted_spanner_databases_write
+    permission create = granted->can_spanner_databases_create + instance->granted_spanner_databases_create
+    permission drop = granted->can_spanner_databases_drop + instance->granted_spanner_databases_drop
+    // (see full schema for all database permissions)
+  }

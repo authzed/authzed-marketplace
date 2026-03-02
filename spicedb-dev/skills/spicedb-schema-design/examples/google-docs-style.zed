@@ -1,0 +1,115 @@
+// Google Docs-style document sharing model
+// Demonstrates: Ownership, sharing, link sharing, domain sharing, hierarchical folders
+
+definition user {}
+
+definition domain {
+    relation member: user
+
+    permission access = member
+}
+
+definition folder {
+    relation parent: folder
+    relation owner: user
+    relation editor: user
+    relation commenter: user
+    relation viewer: user
+
+    // Permissions with parent inheritance
+    permission view = viewer + commenter + editor + owner + parent->view
+    permission comment = commenter + editor + owner + parent->comment
+    permission edit = editor + owner + parent->edit
+    permission manage = owner + parent->manage
+}
+
+definition document {
+    relation folder: folder
+    relation owner: user
+    relation editor: user
+    relation commenter: user
+    relation viewer: user
+
+    // Link sharing (anyone with link)
+    relation link_viewer: user:*
+    relation link_commenter: user:*
+    relation link_editor: user:*
+
+    // Domain sharing (anyone in domain can access)
+    relation domain: domain
+
+    // View permission
+    permission view =
+        owner +
+        editor +
+        commenter +
+        viewer +
+        link_viewer +
+        link_commenter +
+        link_editor +
+        domain->member +
+        folder->view
+
+    // Comment permission
+    permission comment =
+        owner +
+        editor +
+        commenter +
+        link_commenter +
+        link_editor +
+        folder->comment
+
+    // Edit permission
+    permission edit =
+        owner +
+        editor +
+        link_editor +
+        folder->edit
+
+    // Share permission (manage access)
+    permission share = owner + folder->manage
+
+    // Delete permission
+    permission delete = owner
+}
+
+definition spreadsheet {
+    relation owner: user
+    relation editor: user
+    relation viewer: user
+    relation link_viewer: user:*
+    relation domain: domain
+
+    permission view = viewer + editor + owner + link_viewer + domain->member
+    permission edit = editor + owner
+    permission share = owner
+}
+
+// Example usage:
+//
+// 1. Create a domain for a company
+//    WriteRelationships(domain:acme.com#member@user:alice)
+//    WriteRelationships(domain:acme.com#member@user:bob)
+//
+// 2. Create a folder hierarchy
+//    WriteRelationships(folder:engineering#owner@user:alice)
+//    WriteRelationships(folder:backend#parent@folder:engineering)
+//    WriteRelationships(folder:backend#editor@user:bob)
+//
+// 3. Create a document in folder
+//    WriteRelationships(document:api-spec#folder@folder:backend)
+//    WriteRelationships(document:api-spec#owner@user:alice)
+//    WriteRelationships(document:api-spec#viewer@user:charlie)
+//
+// 4. Enable link sharing
+//    WriteRelationships(document:api-spec#link_viewer@user:*)
+//
+// 5. Enable domain sharing
+//    WriteRelationships(document:api-spec#domain@domain:acme.com)
+//
+// 6. Check permissions
+//    CheckPermission(user:alice, edit, document:api-spec)    // true (owner)
+//    CheckPermission(user:bob, edit, document:api-spec)      // true (folder editor)
+//    CheckPermission(user:charlie, view, document:api-spec)  // true (viewer)
+//    CheckPermission(user:anyone, view, document:api-spec)   // true (link sharing)
+//    CheckPermission(user:dave, view, document:api-spec)     // true if dave in domain:acme.com

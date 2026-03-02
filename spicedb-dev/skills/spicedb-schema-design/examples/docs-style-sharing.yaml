@@ -1,0 +1,101 @@
+---
+# Docs-Style Sharing (Group Membership with Parent/Child Hierarchies)
+# Pattern: Two approaches to group hierarchies - parent-of and child-of
+# Source: https://github.com/authzed/examples/tree/main/schemas/docs-style-sharing
+#
+# Use this as a starting point when you need:
+# - Groups that inherit membership from parent groups (e.g., company > engineering > subteam)
+# - Documents shared with a group (and all subgroup members automatically get access)
+# - Choosing between "group has a parent" vs "group has children" modeling
+#
+# Key insight: Both group_with_parent and group_with_child achieve the same result;
+# choose based on whether your write pattern is "add parent to child" or "add child to parent".
+
+schema: |-
+  /**
+   * an entity that can be granted permissions.
+   * users can be part of groups.
+   */
+  definition user {}
+
+  /**
+   * model groups as having a parent group -- membership propagates upward.
+   * e.g. engineering has parent company, so engineering members are also company members.
+   */
+  definition group_with_parent {
+    relation parent: group_with_parent
+    relation member: user
+
+    permission view = member + parent->member
+  }
+
+  /**
+   * model a group as having children -- membership propagates downward.
+   * e.g. company has child engineering, so company viewers include engineering children.
+   */
+  definition group_with_child {
+    relation child: user | group_with_child#child
+
+    permission view = child
+  }
+
+  /**
+   * a resource that we are trying to protect
+   */
+  definition document {
+    /**
+     * viewer can be a specific user, a group_with_parent (access via membership),
+     * or a group_with_child (access via child relation).
+     */
+    relation viewer: user | group_with_parent#view | group_with_child#view
+
+    permission view = viewer
+  }
+
+relationships: |-
+  // Add members to leaf groups
+  group_with_parent:engineering#member@user:engineer
+  group_with_child:engineering#child@user:engineer
+  group_with_parent:analysis#member@user:analyst
+  group_with_child:analysis#child@user:analyst
+
+  // Company is the parent of engineering and analysis (parent model)
+  group_with_parent:engineering#parent@group_with_parent:company
+  group_with_parent:analysis#parent@group_with_parent:company
+
+  // Engineering and analysis are children of company (child model)
+  group_with_child:company#child@group_with_child:engineering#child
+  group_with_child:company#child@group_with_child:analysis#child
+
+  // Share documents with groups
+  document:shared_with_company#viewer@group_with_child:company#view
+  document:shared_with_company#viewer@group_with_parent:company#view
+  document:shared_with_engineering#viewer@group_with_parent:engineering#view
+  document:shared_with_engineering#viewer@group_with_child:engineering#view
+  document:shared_with_analysis#viewer@group_with_parent:analysis#view
+  document:shared_with_analysis#viewer@group_with_child:analysis#view
+
+assertions:
+  assertTrue:
+    - "document:shared_with_company#view@user:engineer"
+    - "document:shared_with_company#view@user:analyst"
+    - "document:shared_with_engineering#view@user:engineer"
+    - "document:shared_with_analysis#view@user:analyst"
+  assertFalse:
+    - "document:shared_with_engineering#view@user:analyst"
+    - "document:shared_with_analysis#view@user:engineer"
+
+validation:
+  document:shared_with_analysis#view:
+    - "[group_with_child:analysis#view] is <document:shared_with_analysis#viewer>"
+    - "[group_with_parent:analysis#view] is <document:shared_with_analysis#viewer>"
+    - "[user:analyst] is <group_with_child:analysis#child>/<group_with_parent:analysis#member>"
+  document:shared_with_company#view:
+    - "[group_with_child:company#view] is <document:shared_with_company#viewer>"
+    - "[group_with_parent:company#view] is <document:shared_with_company#viewer>"
+    - "[user:analyst] is <group_with_child:analysis#child>"
+    - "[user:engineer] is <group_with_child:engineering#child>"
+  document:shared_with_engineering#view:
+    - "[group_with_child:engineering#view] is <document:shared_with_engineering#viewer>"
+    - "[group_with_parent:engineering#view] is <document:shared_with_engineering#viewer>"
+    - "[user:engineer] is <group_with_child:engineering#child>/<group_with_parent:engineering#member>"

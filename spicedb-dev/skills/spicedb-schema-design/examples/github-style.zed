@@ -1,0 +1,100 @@
+// GitHub-style repository permissions model
+// Demonstrates: Organizations, teams, repositories, and hierarchical permissions
+
+definition user {}
+
+definition organization {
+    relation admin: user
+    relation member: user
+
+    permission view = member + admin
+    permission manage = admin
+    permission create_repo = member + admin
+}
+
+definition team {
+    relation org: organization
+    relation member: user
+    relation maintainer: user
+
+    permission view = member + maintainer + org->member
+    permission manage_team = maintainer + org->admin
+}
+
+definition repository {
+    relation org: organization
+    relation owner: user | team#member
+    relation admin: user | team#member
+    relation writer: user | team#member
+    relation reader: user | team#member
+
+    // Public repositories
+    relation public: user:*
+
+    // Read access
+    permission read = reader + writer + admin + owner + public + org->member
+
+    // Write access (push commits)
+    permission write = writer + admin + owner + org->admin
+
+    // Admin access (settings, webhooks, etc.)
+    permission admin_repo = admin + owner + org->admin
+
+    // Manage permissions
+    permission manage_permissions = owner + org->admin
+
+    // Delete repository
+    permission delete = owner + org->admin
+}
+
+definition issue {
+    relation repo: repository
+    relation author: user
+    relation assignee: user
+
+    // Anyone who can read repo can read issues
+    permission read = repo->read
+
+    // Anyone who can write to repo can create/edit issues
+    permission write = repo->write + author
+
+    // Close issues
+    permission close = repo->write + author
+}
+
+definition pull_request {
+    relation repo: repository
+    relation author: user
+    relation reviewer: user
+
+    // Anyone who can read repo can read PRs
+    permission read = repo->read
+
+    // Author and repo writers can edit
+    permission write = repo->write + author
+
+    // Merge PRs
+    permission merge = repo->write
+
+    // Reviewers can approve
+    permission review = reviewer + repo->write
+}
+
+// Example usage:
+//
+// 1. Create organization and add members
+//    WriteRelationships(organization:acme#admin@user:alice)
+//    WriteRelationships(organization:acme#member@user:bob)
+//
+// 2. Create team within organization
+//    WriteRelationships(team:backend#org@organization:acme)
+//    WriteRelationships(team:backend#member@user:charlie)
+//
+// 3. Create repository
+//    WriteRelationships(repository:api-server#org@organization:acme)
+//    WriteRelationships(repository:api-server#admin@team:backend#member)
+//
+// 4. Check permissions
+//    CheckPermission(user:alice, admin_repo, repository:api-server)  // true (org admin)
+//    CheckPermission(user:charlie, write, repository:api-server)     // true (team member with admin)
+//    CheckPermission(user:bob, read, repository:api-server)          // true (org member)

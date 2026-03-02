@@ -1,0 +1,19 @@
+# Local settings (contains credentials)
+.claude/*.local.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Generated files
+*.log
+.DS_Store

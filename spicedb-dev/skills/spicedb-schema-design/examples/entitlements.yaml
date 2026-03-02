@@ -1,0 +1,71 @@
+---
+# Entitlements / Feature Flags (SaaS Service Tiers)
+# Pattern: Organizations subscribe to plans; plans unlock features
+# Source: https://github.com/authzed/examples/tree/main/schemas/entitlements
+#
+# Use this as a starting point when you need:
+# - Gating features behind subscription plans (free, pro, enterprise tiers)
+# - Checking if a user's organization has access to a specific feature
+# - Modeling entitlements that bridge organizations and product features
+#
+# Key insight: entitlement acts as an intermediary between org and feature.
+# Assign entitlements to orgs; assign features to entitlements.
+# Then check feature#access for any user in an org.
+
+schema: |-
+  /**
+   * an entity that can be granted permissions
+   */
+  definition user {}
+
+  /**
+   * organizations contain users
+   */
+  definition organization {
+    relation member: user
+  }
+
+  /**
+   * an entitlement is a grant given to an organization (e.g., a subscription plan)
+   */
+  definition entitlement {
+    relation org: organization
+    permission subscribed_member = org->member
+  }
+
+  /**
+   * features are gated behind entitlements
+   */
+  definition feature {
+    relation associated_entitlement: entitlement
+    permission access = associated_entitlement->subscribed_member
+  }
+
+relationships: |-
+  // Users belong to organizations
+  organization:github#member@user:maria
+  organization:acme#member@user:frank
+
+  // Organizations are subscribed to plans
+  entitlement:pro_plan#org@organization:github
+  entitlement:free_plan#org@organization:acme
+
+  // Plans unlock features
+  feature:download_analytics#associated_entitlement@entitlement:pro_plan
+  feature:view_analytics#associated_entitlement@entitlement:free_plan
+  feature:view_analytics#associated_entitlement@entitlement:pro_plan
+
+assertions:
+  assertTrue:
+    - "feature:download_analytics#access@user:maria"
+    - "feature:view_analytics#access@user:maria"
+    - "feature:view_analytics#access@user:frank"
+  assertFalse:
+    - "feature:download_analytics#access@user:frank"
+
+validation:
+  feature:download_analytics#access:
+    - "[user:maria] is <organization:github#member>"
+  feature:view_analytics#access:
+    - "[user:frank] is <organization:acme#member>"
+    - "[user:maria] is <organization:github#member>"

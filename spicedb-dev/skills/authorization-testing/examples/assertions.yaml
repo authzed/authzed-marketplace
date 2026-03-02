@@ -1,0 +1,57 @@
+# SpiceDB Assertion Test File
+#
+# Run with: zed validate assertions.yaml
+# Or:       spicedb validate assertions.yaml
+#
+# This file tests a document schema with RBAC roles.
+# Extend by adding your own schema, relationships, and assertions.
+
+schema: |
+  definition user {}
+
+  definition document {
+    relation owner: user
+    relation editor: user
+    relation viewer: user
+
+    permission view = viewer + editor + owner
+    permission edit = editor + owner
+    permission delete = owner
+  }
+
+relationships: |
+  document:doc-1#owner@user:alice
+  document:doc-1#editor@user:bob
+  document:doc-1#viewer@user:charlie
+
+assertions:
+  assertTrue:
+    # alice (owner) can view, edit, delete
+    - "document:doc-1#view@user:alice"
+    - "document:doc-1#edit@user:alice"
+    - "document:doc-1#delete@user:alice"
+
+    # bob (editor) can view and edit
+    - "document:doc-1#view@user:bob"
+    - "document:doc-1#edit@user:bob"
+
+    # charlie (viewer) can only view
+    - "document:doc-1#view@user:charlie"
+
+  assertFalse:
+    # bob (editor) cannot delete
+    - "document:doc-1#delete@user:bob"
+
+    # charlie (viewer) cannot edit or delete
+    - "document:doc-1#edit@user:charlie"
+    - "document:doc-1#delete@user:charlie"
+
+    # dave (no relationship) cannot do anything
+    - "document:doc-1#view@user:dave"
+    - "document:doc-1#edit@user:dave"
+    - "document:doc-1#delete@user:dave"
+
+  # assertCaveated: use this section for relationships that have a caveat
+  # where the result depends on context provided at check time.
+  # assertCaveated:
+  #   - "document:doc-1#view@user:eve"  # eve has a caveated viewer relationship

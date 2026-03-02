@@ -1,0 +1,21 @@
+{
+  "name": "authzed-marketplace-dev",
+  "owner": {
+    "name": "AuthZed"
+  },
+  "metadata": {
+    "description": "Development marketplace for spicedb-dev plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "spicedb-dev",
+      "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "AuthZed"
+      }
+    }
+  ]
+}

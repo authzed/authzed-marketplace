@@ -1,0 +1,74 @@
+---
+# Caveats (Attribute-Based Access Control / ABAC)
+# Pattern: Dynamic, context-aware permissions evaluated at check time
+# Source: https://github.com/authzed/examples/tree/main/schemas/caveats
+#
+# Use this as a starting point when you need:
+# - IP allowlist enforcement
+# - Rate-limited access
+# - Any permission that depends on data only available at check time (not stored as a relationship)
+# See also: spicedb-schema-design SKILL.md "When to Use Caveats" section
+
+schema: |-
+  /**
+   * an entity that can be granted permissions
+   */
+  definition user {}
+
+  /**
+   * a resource that we are trying to protect
+   */
+  definition document {
+    /**
+     * users can be made readers of specific documents,
+     * either directly, or only if they have a valid IP,
+     * or only if they aren't rate limited.
+     */
+    relation reader: user | user with has_valid_ip | user with not_rate_limited
+
+    /**
+     * if a user has the reader relationship to a specific document,
+     * they automatically get permission to view it
+     */
+    permission view = reader
+  }
+
+  /**
+   * only allowed if the IP address is within the allowed CIDR range.
+   * cidr is provided when writing the relation; user_ip is provided at CheckPermission time.
+   */
+  caveat has_valid_ip(user_ip ipaddress, cidr string) {
+    user_ip.in_cidr(cidr)
+  }
+
+  /**
+   * only allowed if rate limits haven't been exceeded.
+   * allowed_max is provided when writing the relation; current is provided at CheckPermission time.
+   */
+  caveat not_rate_limited(allowed_max int, current int) {
+    current < allowed_max
+  }
+
+relationships: |-
+  document:firstdoc#reader@user:fred
+  document:firstdoc#reader@user:tom[not_rate_limited:{"allowed_max":100}]
+  document:firstdoc#reader@user:alice[has_valid_ip:{"cidr":"1.2.3.0/24"}]
+
+assertions:
+  assertTrue:
+    - 'document:firstdoc#view@user:tom with {"current": 1}'
+    - "document:firstdoc#view@user:fred"
+    - 'document:firstdoc#view@user:alice with {"user_ip": "1.2.3.4"}'
+  assertCaveated:
+    - "document:firstdoc#view@user:tom"
+    - "document:firstdoc#view@user:alice"
+  assertFalse:
+    - 'document:firstdoc#view@user:tom with {"current": 500}'
+    - 'document:firstdoc#view@user:alice with {"user_ip": "8.8.8.8"}'
+
+validation:
+  document:firstdoc#view:
+    - "[user:fred] is <document:firstdoc#reader>"
+    - "[user:tom[...]] is <document:firstdoc#reader>"
+    - "[user:alice[...]] is <document:firstdoc#reader>"
+  document:seconddoc#view: []

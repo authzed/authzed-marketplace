@@ -1,0 +1,61 @@
+---
+# Basic ReBAC (Relationship-Based Access Control)
+# Pattern: Direct writer/reader roles on a document
+# Source: https://github.com/authzed/examples/tree/main/schemas/basic-rebac
+#
+# Use this as a starting point when you need:
+# - Simple two-role access (writer and reader)
+# - Permission inheritance (writers automatically get edit; readers + editors get view)
+
+schema: |-
+  /**
+   * an entity that can be granted permissions
+   */
+  definition user {}
+
+  /**
+   * a resource that we are trying to protect
+   */
+  definition document {
+    /**
+     * users can be made writers of specific documents
+     */
+    relation writer: user
+
+    /**
+     * users can be made readers of specific documents
+     */
+    relation reader: user
+
+    /**
+     * if a user has the writer relationship to a specific document,
+     * they automatically get permission to edit it
+     */
+    permission edit = writer
+
+    /**
+     * if a user has the reader relation to a document OR the permission
+     * to edit a document (or both), they automatically get permission to view it
+     */
+    permission view = reader + edit
+  }
+
+relationships: |-
+  document:firstdoc#writer@user:tom
+  document:firstdoc#reader@user:fred
+  document:seconddoc#reader@user:tom
+
+assertions:
+  assertTrue:
+    - "document:firstdoc#view@user:tom"
+    - "document:firstdoc#view@user:fred"
+    - "document:seconddoc#view@user:tom"
+  assertFalse:
+    - "document:seconddoc#view@user:fred"
+
+validation:
+  document:firstdoc#view:
+    - "[user:tom] is <document:firstdoc#writer>"
+    - "[user:fred] is <document:firstdoc#reader>"
+  document:seconddoc#view:
+    - "[user:tom] is <document:seconddoc#reader>"

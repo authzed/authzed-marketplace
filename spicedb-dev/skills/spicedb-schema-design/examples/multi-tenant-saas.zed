@@ -1,0 +1,135 @@
+// Multi-tenant SaaS application model
+// Demonstrates: Tenant isolation, service accounts, API access, workspace patterns
+
+definition user {}
+
+definition service_account {
+    relation tenant: tenant
+}
+
+definition tenant {
+    relation admin: user
+    relation member: user | service_account
+    relation billing_admin: user
+
+    permission view = member + admin + billing_admin
+    permission manage = admin
+    permission manage_billing = billing_admin + admin
+    permission api_access = member
+}
+
+definition workspace {
+    relation tenant: tenant
+    relation admin: user
+    relation member: user
+
+    permission view = member + admin + tenant->member
+    permission edit = member + admin + tenant->admin
+    permission manage = admin + tenant->admin
+}
+
+definition project {
+    relation workspace: workspace
+    relation tenant: tenant
+    relation owner: user
+    relation editor: user
+    relation viewer: user
+
+    // Tenant members can access
+    permission view = viewer + editor + owner + workspace->view + tenant->member
+    permission edit = editor + owner + workspace->edit + tenant->admin
+    permission delete = owner + workspace->manage + tenant->admin
+}
+
+definition api_key {
+    relation tenant: tenant
+    relation owner: user
+    relation service_account: service_account
+
+    // Only tenant members who created key can view
+    permission view = owner + tenant->admin
+
+    // API keys can be used by tenant members and service accounts
+    permission use = owner + service_account + tenant->api_access
+
+    // Only owner or tenant admin can revoke
+    permission revoke = owner + tenant->admin
+}
+
+definition resource {
+    relation project: project
+    relation tenant: tenant
+    relation owner: user
+
+    // All access requires tenant membership
+    permission view = owner + project->view + tenant->member
+    permission edit = owner + project->edit + tenant->admin
+    permission delete = owner + project->delete + tenant->admin
+}
+
+definition webhook {
+    relation tenant: tenant
+    relation workspace: workspace
+    relation owner: user
+
+    permission view = owner + workspace->view + tenant->admin
+    permission trigger = owner + workspace->member + tenant->api_access
+    permission manage = owner + workspace->admin + tenant->admin
+}
+
+definition audit_log {
+    relation tenant: tenant
+
+    // Only tenant admins can view audit logs
+    permission view = tenant->admin
+}
+
+// Example usage:
+//
+// 1. Create tenant and add users
+//    WriteRelationships(tenant:acme#admin@user:alice)
+//    WriteRelationships(tenant:acme#member@user:bob)
+//    WriteRelationships(tenant:acme#billing_admin@user:carol)
+//
+// 2. Create service account for tenant
+//    WriteRelationships(service_account:api-bot#tenant@tenant:acme)
+//    WriteRelationships(tenant:acme#member@service_account:api-bot)
+//
+// 3. Create workspace in tenant
+//    WriteRelationships(workspace:engineering#tenant@tenant:acme)
+//    WriteRelationships(workspace:engineering#admin@user:alice)
+//    WriteRelationships(workspace:engineering#member@user:bob)
+//
+// 4. Create project in workspace
+//    WriteRelationships(project:api-server#workspace@workspace:engineering)
+//    WriteRelationships(project:api-server#tenant@tenant:acme)
+//    WriteRelationships(project:api-server#owner@user:bob)
+//
+// 5. Create API key for automation
+//    WriteRelationships(api_key:key-123#tenant@tenant:acme)
+//    WriteRelationships(api_key:key-123#owner@user:alice)
+//    WriteRelationships(api_key:key-123#service_account@service_account:api-bot)
+//
+// 6. Create resource in project
+//    WriteRelationships(resource:db-schema#project@project:api-server)
+//    WriteRelationships(resource:db-schema#tenant@tenant:acme)
+//    WriteRelationships(resource:db-schema#owner@user:bob)
+//
+// 7. Check permissions
+//    CheckPermission(user:alice, manage, tenant:acme)           // true (admin)
+//    CheckPermission(user:bob, view, project:api-server)        // true (workspace member)
+//    CheckPermission(user:carol, manage_billing, tenant:acme)   // true (billing admin)
+//    CheckPermission(service_account:api-bot, use, api_key:key-123)  // true
+//    CheckPermission(user:bob, view, resource:db-schema)        // true (project owner)
+//
+// 8. Cross-tenant isolation check
+//    WriteRelationships(tenant:other-company#admin@user:eve)
+//    CheckPermission(user:eve, view, resource:db-schema)        // false (different tenant)
+//
+// Key patterns demonstrated:
+// - Strict tenant isolation (all permissions require tenant membership)
+// - Service accounts scoped to tenants
+// - Workspace-based collaboration within tenants
+// - API access control through tenant membership
+// - Hierarchical permissions (tenant -> workspace -> project -> resource)
+// - Admin override (tenant admins can access everything in tenant)
