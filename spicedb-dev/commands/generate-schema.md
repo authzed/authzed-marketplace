@@ -91,6 +91,7 @@ definition [resource_name] {
 - Relations use subject type references (user, team#member, etc.)
 - Permissions use relation expressions (+, &, ->, etc.)
 - Add comments for clarity
+- Convention is relation names are nouns, and permission names are verbs
 
 ### Step 5: Write to File
 
