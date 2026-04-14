@@ -67,11 +67,13 @@ path specified by the user). Tell the user where it was saved.
 The file serves as a shared artifact -- recommend reviewing it with stakeholders
 before beginning Phase 1, since changes are cheapest at the planning stage.
 
-### Step 6: Add Authorization Snippet to CLAUDE.md
+### Step 6: Add Authorization Snippet to Project Config
 
-This step makes SpiceDB permissions ambient in every future Claude Code session --
-Claude will consider writes and checks automatically whenever it generates handlers,
-without the developer needing to invoke any command.
+This step makes SpiceDB permissions ambient in every future coding session --
+the AI assistant will consider writes and checks automatically whenever it generates
+handlers, without the developer needing to invoke any command.
+
+#### CLAUDE.md (Claude Code)
 
 1. Use Glob to check whether `CLAUDE.md` exists in the current directory
 2. If it exists, Read it and check whether it already contains an `## Authorization`
@@ -81,7 +83,7 @@ without the developer needing to invoke any command.
 5. Tell the user: "Added authorization instructions to CLAUDE.md -- Claude will now
    consider SpiceDB writes and checks automatically when generating handlers."
 
-**Snippet to add:**
+**CLAUDE.md snippet:**
 
 ```markdown
 ## Authorization (SpiceDB)
@@ -103,6 +105,41 @@ updates, or deletes a resource:
    names in generated code match the schema exactly before inserting.
 
 If unsure which operation to add: `/spicedb-dev:implement-spicedb`
+```
+
+#### AGENTS.md (Codex, Copilot, Cursor, and other tools)
+
+6. Use Glob to check whether `AGENTS.md` exists in the current directory
+7. If it exists, Read it and check whether it already contains an `## Authorization`
+   section -- if so, skip this step
+8. If no authorization section exists, use Edit to append the snippet below
+9. If `AGENTS.md` does not exist, use Write to create it with the snippet below
+10. Tell the user: "Added authorization instructions to AGENTS.md -- tools that read
+    AGENTS.md (Codex, Copilot, Cursor, etc.) will now consider SpiceDB writes and
+    checks automatically when generating handlers."
+
+**AGENTS.md snippet:**
+
+```markdown
+## Authorization (SpiceDB)
+
+This project uses SpiceDB for fine-grained authorization via the spicedb-dev plugin.
+
+When generating or modifying any handler, route, or service method that creates, reads,
+updates, or deletes a resource:
+
+1. **Relationship writes**: Does this handler create a resource, grant access, or delete
+   a resource? If yes, add WriteRelationships (on create/grant) or DeleteRelationships
+   (on delete/revoke) alongside the database operation.
+
+2. **Permission checks**: Does this handler read, modify, or delete a resource on behalf
+   of a user? If yes, add CheckPermission before accessing the resource. For list
+   endpoints, use LookupResources -- not CheckPermission in a loop.
+
+3. **Schema match**: If schema.zed exists, verify object types and relation/permission
+   names in generated code match the schema exactly before inserting.
+
+If unsure which operation to add: use the implement-spicedb command from the spicedb-dev plugin
 ```
 
 ## Plan Output Template
