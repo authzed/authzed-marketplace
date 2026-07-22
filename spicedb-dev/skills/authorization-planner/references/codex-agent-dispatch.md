@@ -3,7 +3,9 @@
 This plugin has two autonomous agents dispatched via the `Task` tool in Claude Code.
 In Codex, use `spawn_agent` with the templates below.
 
-Requires `multi_agent = true` in `~/.codex/config.toml`.
+Multi-agent support is a stable, default-enabled Codex feature (verified on Codex
+CLI 0.145.0) -- no configuration needed. On older Codex CLI versions, enable it
+via `[features] multi_agent = true` in `~/.codex/config.toml`.
 
 ## Schema Validator
 
@@ -31,7 +33,9 @@ specified in the instructions above."
 )
 ```
 
-3. Use `wait` to collect the result, then `close_agent` to free the slot
+3. Use `wait_agent` to collect the result. There is no explicit close/free-slot step --
+   Codex manages the available concurrency slots (4 by default) automatically. Use
+   `interrupt_agent` only if you need to stop an agent before it finishes.
 
 Replace `{schema_path}` with the actual path to the `.zed` file being validated.
 
@@ -64,7 +68,9 @@ the format specified in the instructions above."
 )
 ```
 
-3. Use `wait` to collect the result, then `close_agent` to free the slot
+3. Use `wait_agent` to collect the result. There is no explicit close/free-slot step --
+   Codex manages the available concurrency slots (4 by default) automatically. Use
+   `interrupt_agent` only if you need to stop an agent before it finishes.
 
 Replace placeholders:
 - `{resource_type}` -- the resource being analyzed (e.g., "document", "project")
@@ -80,8 +86,8 @@ in Codex's worker agents.
 
 ## Fallback: No Multi-Agent Support
 
-If `spawn_agent` is not available (multi-agent not enabled or unsupported),
-execute the agent instructions inline in the current session:
+If `spawn_agent` is not available (running on an older Codex CLI without
+multi-agent support), execute the agent instructions inline in the current session:
 
 1. Read the agent file (`agents/schema-validator.md` or `agents/checkpoint-identifier.md`)
 2. Follow the instructions directly as if they were part of the current command

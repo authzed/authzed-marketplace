@@ -6,7 +6,7 @@ platform equivalent:
 | Command/skill references | Codex equivalent |
 |---|---|
 | `AskUserQuestion` | Ask the user directly in your response (no dedicated tool) |
-| `TaskCreate` / `TaskUpdate` | `update_plan` |
+| `TaskCreate` / `TaskUpdate` | Codex tracks a native todo/plan automatically -- state and update the plan in your response; no specific tool call is required |
 | `Task` tool (launch agent) | See `references/codex-agent-dispatch.md` |
 | `Skill` tool (invoke a skill) | Skills load natively -- follow the instructions |
 | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash` | Use your native file and shell tools |
@@ -20,3 +20,6 @@ platform equivalent:
   the corresponding `commands/<name>.md` file.
 - For agent dispatch details (schema-validator, checkpoint-identifier), see
   `references/codex-agent-dispatch.md`.
+
+Verified against Codex CLI 0.145.0 via `codex debug prompt-input` and a live
+`codex exec` session on 2026-07-21.

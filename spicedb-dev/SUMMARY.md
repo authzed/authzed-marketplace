@@ -21,9 +21,10 @@ needs SpiceDB authorization to work correctly from the start.
 
 **`/spicedb-dev:plan`**
 Scopes the work, produces `authorization-plan.md`, and writes an authorization snippet
-to `CLAUDE.md`. The CLAUDE.md snippet is the most important output: it makes Claude
-consider SpiceDB writes and checks automatically whenever it generates or modifies
-handlers in every future session, without the developer needing to invoke any command.
+to `CLAUDE.md` (and `AGENTS.md`, for Codex and other non-Claude tools). This snippet is
+the most important output: it makes the AI assistant consider SpiceDB writes and
+checks automatically whenever it generates or modifies handlers in every future
+session, without the developer needing to invoke any command.
 
 **`/spicedb-dev:design-model`**
 Interactive session that scans for existing model files (Prisma, Django, Go structs,

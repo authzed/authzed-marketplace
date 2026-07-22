@@ -1,0 +1,8 @@
+{
+  "name": "authzed-marketplace",
+  "private": true,
+  "description": "Manifest/config sync checks for the AuthZed plugin marketplace",
+  "scripts": {
+    "verify:manifests": "node scripts/verify-manifests.mjs"
+  }
+}

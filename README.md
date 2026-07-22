@@ -4,23 +4,19 @@ Official Claude Code plugin marketplace for AuthZed.
 
 ## Usage
 
-### From GitHub
+### Claude Code
 
-```
-/plugin marketplace add authzed/authzed-marketplace
-```
+  /plugin marketplace add authzed/authzed-marketplace
+  /plugin install <plugin-name>@authzed-marketplace
 
-### From a local clone
+From a local clone:
 
-```
-/plugin marketplace add /path/to/authzed-marketplace
-```
+  /plugin marketplace add /path/to/authzed-marketplace
 
-Then install any plugin from it:
+### Codex CLI
 
-```
-/plugin install <plugin-name>@authzed-marketplace
-```
+  codex plugin marketplace add authzed/authzed-marketplace
+  codex plugin add <plugin-name>@authzed-marketplace
 
 ## Plugins
 
