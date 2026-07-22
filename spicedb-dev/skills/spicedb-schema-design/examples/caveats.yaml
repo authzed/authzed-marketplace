@@ -45,7 +45,8 @@ schema: |-
 
   /**
    * only allowed if rate limits haven't been exceeded.
-   * allowed_max is provided when writing the relation; current is provided at CheckPermission time.
+   * allowed_max is provided when writing the relation; current is provided
+   * at CheckPermission time.
    */
   caveat not_rate_limited(allowed_max int, current int) {
     current < allowed_max

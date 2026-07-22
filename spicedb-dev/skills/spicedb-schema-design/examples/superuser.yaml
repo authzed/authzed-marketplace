@@ -14,36 +14,47 @@
 # writing explicit relationships.
 
 schema: |-
-  /** an entity that can be granted permissions */
+  /**
+   * an entity that can be granted permissions
+   */
   definition user {}
 
-  /** a resource that we are trying to protect */
+  /**
+   * a resource that we are trying to protect
+   */
   definition document {
     /**
-     * a specific user or a specific organization can be made owner of a document
+     * a specific user or a specific organization can be made owner of a
+     * document
      */
     relation owner: user | organization
 
     /**
-     * if a user has the (direct) owner relation OR if they are admin of the owner organization,
-     * they get the admin permission on the document
+     * if a user has the (direct) owner relation OR if they are admin of the
+     * owner organization, they get the admin permission on the document
      */
     permission admin = owner + owner->admin
   }
 
-  /** organizations can own documents */
+  /**
+   * organizations can own documents
+   */
   definition organization {
-    /** the organization can be linked to one platform */
+    /**
+     * the organization can be linked to one platform
+     */
     relation platform: platform
 
     /**
-     * if a user has the super_admin permission on the platform,
-     * they get the admin permission on the organization
+     * if a user has the super_admin permission on the platform, they get the
+     * admin permission on the organization
      */
     permission admin = platform->super_admin
   }
 
-  /** a root object whose administrators have super-admin access to everything */
+  /**
+   * a root object whose administrators have super-admin access to everything
+   */
   definition platform {
     relation administrator: user
     permission super_admin = administrator
@@ -57,5 +68,6 @@ relationships: |-
 assertions:
   assertTrue:
     - "document:lasers#admin@user:drevil"
+  assertFalse: null
 
 validation: null

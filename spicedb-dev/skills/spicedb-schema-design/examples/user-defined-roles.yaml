@@ -15,49 +15,164 @@
 # prevents built-in roles from being modified even by role managers.
 
 schema: |-
+  /**
+   * an entity that can be granted permissions
+   */
   definition user {}
 
+  /**
+   * a project that contains issues, comments, and user-defined roles
+   */
   definition project {
+    /**
+     * roles whose members are allowed to create issues in this project
+     */
     relation issue_creator: role#member
+
+    /**
+     * roles whose members are allowed to assign issues to project members
+     */
     relation issue_assigner: role#member
+
+    /**
+     * roles whose members are allowed to resolve any issue in the project,
+     * regardless of who it is assigned to
+     */
     relation any_issue_resolver: role#member
+
+    /**
+     * roles whose members are allowed to resolve only the issues that are
+     * assigned to them
+     */
     relation assigned_issue_resolver: role#member
+
+    /**
+     * roles whose members are allowed to create comments on issues
+     */
     relation comment_creator: role#member
+
+    /**
+     * roles whose members are allowed to delete comments on issues
+     */
     relation comment_deleter: role#member
+
+    /**
+     * roles whose members are allowed to create and manage other roles,
+     * including deleting non-built-in roles
+     */
     relation role_manager: role#member
 
+    /**
+     * members of a role with issue_creator can create issues in this project
+     */
     permission create_issue = issue_creator
+
+    /**
+     * members of a role with role_manager can create new roles for this
+     * project
+     */
     permission create_role = role_manager
   }
 
+  /**
+   * a user-defined role that aggregates permissions and can be assigned to
+   * project members; roles are resources, not schema-level permissions
+   */
   definition role {
+    /**
+     * the project this role was created for
+     */
     relation project: project
+
+    /**
+     * the users who have been assigned this role
+     */
     relation member: user
+
+    /**
+     * if set, marks this role as a built-in, protected role of the given
+     * project so it cannot be modified or deleted, even by role managers
+     */
     relation built_in_role: project
 
-    // Role managers can delete non-built-in roles only (exclusion operator)
+    /**
+     * role managers can delete this role, unless it is a built-in role; the
+     * exclusion operator strips delete rights on any role that is also
+     * marked as built-in
+     */
     permission delete = project->role_manager - built_in_role->role_manager
+
+    /**
+     * role managers can add users to this role
+     */
     permission add_user = project->role_manager
-    // Role managers can only modify non-built-in roles
+
+    /**
+     * role managers can grant this role additional permissions, unless it is
+     * a built-in role
+     */
     permission add_permission = project->role_manager - built_in_role->role_manager
+
+    /**
+     * role managers can revoke permissions from this role, unless it is a
+     * built-in role
+     */
     permission remove_permission = project->role_manager - built_in_role->role_manager
   }
 
+  /**
+   * an issue tracked within a project
+   */
   definition issue {
+    /**
+     * the project this issue belongs to
+     */
     relation project: project
+
+    /**
+     * the user this issue is currently assigned to
+     */
     relation assigned: user
 
+    /**
+     * members of a role with issue_assigner on the project can assign this
+     * issue
+     */
     permission assign = project->issue_assigner
-    // Assigned resolvers can only resolve their own issues; any_issue_resolver can resolve any
+
+    /**
+     * the assigned user can resolve this issue if their role grants
+     * assigned_issue_resolver; any member of a role with any_issue_resolver
+     * can resolve it regardless of assignment
+     */
     permission resolve = (project->assigned_issue_resolver & assigned) + project->any_issue_resolver
+
+    /**
+     * members of a role with comment_creator on the project can comment on
+     * this issue
+     */
     permission create_comment = project->comment_creator
 
-    // Synthetic: propagate comment_deleter permission from project
+    /**
+     * synthetic permission that propagates the project's comment_deleter
+     * permission down to the issue, so comment#delete can reference it
+     */
     permission project_comment_deleter = project->comment_deleter
   }
 
+  /**
+   * a comment left on an issue
+   */
   definition comment {
+    /**
+     * the issue this comment belongs to
+     */
     relation issue: issue
+
+    /**
+     * users who can delete comments on the parent issue can delete this
+     * comment
+     */
     permission delete = issue->project_comment_deleter
   }
 
@@ -118,13 +233,48 @@ validation:
     - "[role:legal#member] is <project:pied_piper#comment_deleter>"
     - "[user:richard] is <role:admin#member>"
     - "[user:ron] is <role:legal#member>"
+  issue:move_the_servers#assign:
+    - "[role:admin#member] is <project:pied_piper#issue_assigner>"
+    - "[role:project_manager#member] is <project:pied_piper#issue_assigner>"
+    - "[user:jared] is <role:project_manager#member>"
+    - "[user:richard] is <role:admin#member>"
   issue:move_the_servers#resolve:
     - "[role:admin#member] is <project:pied_piper#any_issue_resolver>"
     - "[role:project_manager#member] is <project:pied_piper#any_issue_resolver>"
     - "[user:gilfoyle] is <issue:move_the_servers#assigned>/<role:developer#member>"
     - "[user:jared] is <role:project_manager#member>"
     - "[user:richard] is <role:admin#member>"
+  issue:too_slow#assign:
+    - "[role:admin#member] is <project:pied_piper#issue_assigner>"
+    - "[role:project_manager#member] is <project:pied_piper#issue_assigner>"
+    - "[user:jared] is <role:project_manager#member>"
+    - "[user:richard] is <role:admin#member>"
+  issue:too_slow#create_comment:
+    - "[role:admin#member] is <project:pied_piper#comment_creator>"
+    - "[role:developer#member] is <project:pied_piper#comment_creator>"
+    - "[role:user#member] is <project:pied_piper#comment_creator>"
+    - "[user:gilfoyle] is <role:developer#member>"
+    - "[user:monica] is <role:user#member>"
+    - "[user:richard] is <role:admin#member>"
+  issue:too_slow#resolve:
+    - "[role:admin#member] is <project:pied_piper#any_issue_resolver>"
+    - "[role:project_manager#member] is <project:pied_piper#any_issue_resolver>"
+    - "[user:jared] is <role:project_manager#member>"
+    - "[user:richard] is <role:admin#member>"
+  project:pied_piper#create_issue:
+    - "[role:admin#member] is <project:pied_piper#issue_creator>"
+    - "[role:developer#member] is <project:pied_piper#issue_creator>"
+    - "[role:user#member] is <project:pied_piper#issue_creator>"
+    - "[user:gilfoyle] is <role:developer#member>"
+    - "[user:monica] is <role:user#member>"
+    - "[user:richard] is <role:admin#member>"
+  role:admin#add_user:
+    - "[role:admin#member] is <project:pied_piper#role_manager>"
+    - "[user:richard] is <role:admin#member>"
   role:admin#delete: []
+  role:project_manager#add_user:
+    - "[role:admin#member] is <project:pied_piper#role_manager>"
+    - "[user:richard] is <role:admin#member>"
   role:project_manager#delete:
     - "[role:admin#member] is <project:pied_piper#role_manager>"
     - "[user:richard] is <role:admin#member>"

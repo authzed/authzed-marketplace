@@ -70,7 +70,7 @@ schema: |-
     permission merge_pull_request = maintainer + organization->owner
     permission close_pull_request = triager + writer + maintainer + admin + organization->owner
 
-    // Settings
+    // Coarse grained
     permission manage_setting = maintainer + admin + organization->owner
     permission manage_sensitive_setting = admin + organization->owner
   }
@@ -103,7 +103,24 @@ validation:
   organization:authzed#manage_billing:
     - "[user:jake] is <organization:authzed#own>"
     - "[user:jimmy] is <organization:authzed#own>"
+  organization:authzed#user_seat:
+    - "[user:jake] is <organization:authzed#own>"
+    - "[user:jimmy] is <organization:authzed#own>"
   repository:authzed_go#clone:
+    - "[team:support_engineers#member] is <repository:authzed_go#maintainer>"
+    - "[user:ian] is <team:support_engineers#direct_member>"
+    - "[user:ivan] is <team:support_engineers#maintainer>"
+    - "[user:jake] is <organization:authzed#own>/<repository:authzed_go#reader>"
+    - "[user:jessica] is <repository:authzed_go#triager>"
+    - "[user:jimmy] is <organization:authzed#own>/<repository:authzed_go#admin>"
+  repository:authzed_go#close_pull_request:
+    - "[team:support_engineers#member] is <repository:authzed_go#maintainer>"
+    - "[user:ian] is <team:support_engineers#direct_member>"
+    - "[user:ivan] is <team:support_engineers#maintainer>"
+    - "[user:jake] is <organization:authzed#own>"
+    - "[user:jessica] is <repository:authzed_go#triager>"
+    - "[user:jimmy] is <organization:authzed#own>/<repository:authzed_go#admin>"
+  repository:authzed_go#create_issue:
     - "[team:support_engineers#member] is <repository:authzed_go#maintainer>"
     - "[user:ian] is <team:support_engineers#direct_member>"
     - "[user:ivan] is <team:support_engineers#maintainer>"
@@ -116,3 +133,11 @@ validation:
     - "[user:ivan] is <team:support_engineers#maintainer>"
     - "[user:jake] is <organization:authzed#own>"
     - "[user:jimmy] is <organization:authzed#own>/<repository:authzed_go#admin>"
+  team:emea_support_engineers#change_team_name:
+    - "[user:ivan] is <team:support_engineers#maintainer>"
+    - "[user:jake] is <organization:authzed#own>"
+    - "[user:jimmy] is <organization:authzed#own>"
+  team:support_engineers#change_team_name:
+    - "[user:ivan] is <team:support_engineers#maintainer>"
+    - "[user:jake] is <organization:authzed#own>"
+    - "[user:jimmy] is <organization:authzed#own>"

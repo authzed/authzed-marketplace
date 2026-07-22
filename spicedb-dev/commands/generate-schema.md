@@ -54,6 +54,8 @@ Before writing the schema from scratch, identify the closest matching example in
 | Roles with scoped inheritance across resource hierarchy | `google-iam.yaml` |
 | Multi-tenant SaaS with tenant isolation | `multi-tenant-saas.zed` |
 | Google Docs-style sharing | `google-docs-style.zed` |
+| AI agents acting on behalf of a user | `ai-agents.yaml` |
+| Schema tested across multiple independent validation files | `multiple-validation-files/` (directory, not a modeling pattern) |
 
 Read the matching example file before generating. Use its structure, naming conventions,
 and pattern as a foundation -- adapt to the user's model rather than generating from scratch.
