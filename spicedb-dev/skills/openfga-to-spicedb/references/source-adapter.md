@@ -23,10 +23,10 @@ customer's project: this file states the adapter shape that command emits from, 
 `code-mapping.md` states the mapping `/spicedb-dev:migrate-code` emits from. Both commands are
 shipped.
 
-**What is OpenFGA-specific here, and what a future pack (OSO Cloud, next in this plugin's
-source registry) copies unchanged:** the two-entry-point shape in "One seam, two entry
-points" below, the operation-comparability table, and the five-state mapping's *structure*
-(which states a source can carry, and why) are the reusable shape -- a second pack fills in
+**What is OpenFGA-specific here, and what a future pack copies unchanged:** the
+two-entry-point shape in "One seam, two entry points" below, the operation-comparability
+table, and the five-state mapping's *structure* (which states a source can carry, and why)
+are the reusable shape -- a second pack fills in
 its own call names, its own error-vs-denial signal, and its own answer to "can this source
 produce a fourth state." The forward/reverse lookup-table mechanics, the OpenFGA call
 transcripts, and the specific claim that this source's check API is strictly boolean are

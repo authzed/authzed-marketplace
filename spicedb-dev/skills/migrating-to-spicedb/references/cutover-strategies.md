@@ -9,9 +9,9 @@ regression, or a rollback nobody rehearsed.
 
 It is framework-owned and source-agnostic, the same way `pack-contract.md` and
 `findings-report.md` are: nothing below depends on which source system produced the schema
-and data being cut over, and a future pack (OSO Cloud, `SKILL.md`'s source registry)
-inherits it unchanged. A pack supplies the *what* of the conversion; this file supplies the
-*how* a converted system earns production traffic.
+and data being cut over, and a future pack inherits it unchanged. A pack supplies the
+*what* of the conversion; this file supplies the *how* a converted system earns production
+traffic.
 
 ## Precedent
 

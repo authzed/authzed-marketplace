@@ -1,9 +1,9 @@
 # The Pack Contract
 
-A conversion pack skill (`openfga-to-spicedb`, and eventually `oso-to-spicedb`) supplies
+A conversion pack skill (`openfga-to-spicedb`, and any pack that follows it) supplies
 exactly these ten things. The generic pipeline commands and agents consume only this
 interface -- nothing else about a source system is visible to the framework. This is what
-lets a second source (OSO) plug in as one new skill and one registry entry, with no change
+lets a second source plug in as one new skill and one registry entry, with no change
 to the pipeline itself.
 
 **What consumes this contract today:** `/spicedb-dev:migrate` with the
@@ -14,7 +14,7 @@ are shipped (see the phase-pipeline table in `SKILL.md`); every item in this con
 consumer today.
 
 Items 9 and 10 were added after validating the contract against a real second-source
-analysis (Oso Cloud); they are not afterthoughts, they are load-bearing.
+analysis; they are not afterthoughts, they are load-bearing.
 
 **An eleventh deliverable exists outside this numbering, for cutover rather than conversion.**
 `/spicedb-dev:migrate-verify` additionally consumes a pack's `references/source-adapter.md` --
@@ -264,9 +264,8 @@ any conversion runs. This is a day of work, and it is the pack's cheapest high-v
 output -- it produces the actual estimate, not just a go/no-go.
 
 **OpenFGA's answer:** the model, plus a grep for `contextualTuples`/`contextual_tuples`
-across the codebase, plus a store count. (For contrast, Oso's equivalent -- the second
-planned source -- is `GET /policy` plus one question: "do you call `listLocal` anywhere?"
-Different sources predict cost from different signals; each pack picks its own.)
+across the codebase, plus a store count. Different sources predict cost from different
+signals; each pack picks its own.
 
 ## 10. Validation corpus
 

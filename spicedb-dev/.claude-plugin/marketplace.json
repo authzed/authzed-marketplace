@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "spicedb-dev",
-      "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing",
-      "version": "1.4.0",
+      "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, etc.) to SpiceDB",
+      "version": "1.1.0",
       "source": "./",
       "author": {
         "name": "AuthZed"

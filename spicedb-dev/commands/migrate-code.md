@@ -1,6 +1,6 @@
 ---
 name: migrate-code
-description: Rewrite OpenFGA client call sites into SpiceDB client calls, and add the SpiceDB client to the project
+description: Rewrite a source system's client call sites into SpiceDB client calls, and add the SpiceDB client to the project
 argument-hint: "[project-dir] [output-dir]"
 allowed-tools:
   - TaskCreate

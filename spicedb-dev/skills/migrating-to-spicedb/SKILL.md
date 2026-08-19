@@ -1,7 +1,7 @@
 ---
 name: Migrating to SpiceDB
 description: Use when migrating an application from another authorization system
-  (OpenFGA, Okta FGA, OSO) to SpiceDB - runs the phase pipeline that converts schema,
+  (OpenFGA, Okta FGA) to SpiceDB - runs the phase pipeline that converts schema,
   data, application code, and tests, with a pre-flight gate that surfaces every
   blocking decision before conversion begins
 ---
@@ -27,7 +27,6 @@ code rewriting). Nothing is converted past an unresolved hard blocker.
 | Source system | Pack skill | Status |
 |---|---|---|
 | OpenFGA / Okta FGA / Auth0 FGA | `openfga-to-spicedb` | supported |
-| OSO Cloud | `oso-to-spicedb` | planned |
 
 If the detected source has no pack, stop and say so. Do not improvise a translation --
 an unsupported source needs a new pack, not an ad hoc conversion.
@@ -122,13 +121,13 @@ worth slowing down for:
   application code or another product entirely.
 
 Do not report `heavy` as `effort` -- that hides a hot-path schema-write obligation from
-the estimate. Do not report `heavy` as `blocked` either: in the reference Oso analysis,
-customer-defined roles -- the construct most likely to decide a B2B deal -- were assumed
-`blocked` and turned out to be `heavy`, verified against Oso's own documented test case.
-The distinction is easy to get wrong in both directions, and it is the one that decides
-whether a migration is priced correctly. A pack must state the evidence behind each
-rating: `heavy` requires a verified worked example, `blocked` requires a statement of
-where the capability goes instead.
+the estimate. Do not report `heavy` as `blocked` either -- customer-defined roles are
+exactly the construct this cuts against: the one most likely to decide a B2B deal, and the
+easiest to assume unsupported before it has actually been worked through. The distinction
+is easy to get wrong in both directions, and it is the one that decides whether a
+migration is priced correctly. A pack must state the evidence behind each rating: `heavy`
+requires a verified worked example, `blocked` requires a statement of where the
+capability goes instead.
 
 ## Working on someone else's repository
 
@@ -191,9 +190,9 @@ without the check above having been run, is the failure this section exists to p
 ## Red Flags
 
 If you find yourself:
-- Naming a source-specific construct (an OpenFGA `contextualTuples`, an Oso `listLocal`)
-  anywhere in this skill's files outside the source registry table -- that content belongs
-  in the pack, not here.
+- Naming a source-specific construct (an OpenFGA `contextualTuples`) anywhere in this
+  skill's files outside the source registry table -- that content belongs in the pack,
+  not here.
 - About to write `schema.zed` or touch relationship data with an unresolved Class A
   finding still open -- stop. That is exactly what the gate exists to prevent.
 - Treating `heavy` as a lesser version of `effort` -- re-read the Fidelity ratings section

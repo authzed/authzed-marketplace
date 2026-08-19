@@ -1,6 +1,6 @@
 ---
 name: migrate-data
-description: Migrate a live OpenFGA store's relationship data into SpiceDB
+description: Migrate a live source system's relationship data into SpiceDB
 argument-hint: "[store-id] [output-dir]"
 allowed-tools:
   - TaskCreate
