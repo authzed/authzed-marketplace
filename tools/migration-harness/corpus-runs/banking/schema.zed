@@ -1,0 +1,24 @@
+caveat transfer_limit_policy(transaction_amount double, transfer_cap double, new_transaction_limit_approved double) {
+	transaction_amount <= transfer_cap || transaction_amount <= new_transaction_limit_approved
+}
+
+definition employee {}
+
+definition customer {}
+
+definition bank {
+	relation customer: customer
+	relation account_manager: employee
+	relation transfer_limit_policy: bank#customer with transfer_limit_policy | bank#account_manager with transfer_limit_policy
+
+	permission transfer_limit_policy__perm = transfer_limit_policy
+}
+
+definition account {
+	relation bank: bank
+	relation owner: customer
+	relation account_manager: employee
+	relation delegate: customer
+
+	permission can_make_bank_transfer = ((owner + account_manager + delegate) & bank->transfer_limit_policy__perm)
+}

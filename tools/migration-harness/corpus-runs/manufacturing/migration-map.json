@@ -1,0 +1,88 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "production_line": "production_line",
+    "machine": "machine",
+    "work_order": "work_order",
+    "quality_report": "quality_report",
+    "part": "part",
+    "supplier": "supplier"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "plant_manager": "plant_manager",
+      "engineer": "engineer",
+      "quality_inspector": "quality_inspector",
+      "operator": "operator",
+      "procurement": "procurement",
+      "member": "member",
+      "can_create_part": "can_create_part",
+      "can_create_supplier": "can_create_supplier",
+      "can_create_quality_report": "can_create_quality_report"
+    },
+    "production_line": {
+      "organization": "organization",
+      "supervisor": "supervisor",
+      "org_admin": "org_admin",
+      "org_plant_manager": "org_plant_manager",
+      "org_engineer": "org_engineer",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_create_work_order": "can_create_work_order",
+      "can_create_machine": "can_create_machine",
+      "can_view": "can_view"
+    },
+    "machine": {
+      "production_line": "production_line",
+      "assigned_operator": "assigned_operator",
+      "org_engineer": "org_engineer",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "work_order": {
+      "production_line": "production_line",
+      "creator": "creator",
+      "assignee": "assignee",
+      "can_delete": "can_delete",
+      "can_approve": "can_approve",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "quality_report": {
+      "organization": "organization",
+      "inspector": "inspector",
+      "can_delete": "can_delete",
+      "can_approve": "can_approve",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "part": {
+      "organization": "organization",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "supplier": {
+      "organization": "organization",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

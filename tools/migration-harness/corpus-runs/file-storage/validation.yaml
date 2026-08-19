@@ -1,0 +1,39 @@
+schemaFile: schema.zed
+relationships: |-
+  drive:bobs-drive#organization@organization:acme
+  drive:bobs-drive#owner@user:bob
+  drive:shared-drive#organization@organization:acme
+  drive:shared-drive#owner@user:alice
+  file:api-spec#folder@folder:backend
+  file:api-spec#owner__direct@user:charlie
+  folder:backend#parent@folder:projects
+  folder:backend#writer__direct@group:engineering#member
+  folder:projects#owner__direct@user:bob
+  folder:projects#parent@drive:shared-drive
+  group:engineering#member@user:charlie
+  group:engineering#organization@organization:acme
+  organization:acme#admin@user:alice
+  organization:acme#member__direct@user:bob
+  organization:acme#member__direct@user:charlie
+assertions:
+  assertTrue:
+    - "drive:shared-drive#can_view@user:alice"
+    - "drive:shared-drive#can_edit@user:alice"
+    - "drive:shared-drive#can_delete@user:alice"
+    - "drive:shared-drive#can_view@user:bob"
+    - "folder:projects#can_view@user:bob"
+    - "folder:projects#can_edit@user:bob"
+    - "folder:projects#can_create_file@user:bob"
+    - "folder:backend#can_view@user:charlie"
+    - "folder:backend#can_edit@user:charlie"
+    - "folder:backend#can_create_file@user:charlie"
+    - "file:api-spec#can_view@user:charlie"
+    - "file:api-spec#can_edit@user:charlie"
+    - "file:api-spec#can_download@user:charlie"
+    - "file:api-spec#can_delete@user:charlie"
+    - "folder:backend#can_view@user:bob"
+    - "folder:backend#can_edit@user:bob"
+    - "drive:bobs-drive#can_view@user:alice"
+    - "drive:bobs-drive#can_delete@user:alice"
+  assertFalse:
+    - "drive:shared-drive#can_edit@user:bob"

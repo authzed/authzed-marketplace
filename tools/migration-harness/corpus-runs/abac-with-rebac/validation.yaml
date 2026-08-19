@@ -1,0 +1,25 @@
+# Canonical converted artifact for this store. The source `store.fga.yaml` encodes two
+# mutually exclusive scenarios for the same object (document:readme is either "draft" or
+# "published") as per-test tuples in two separate `tests:` blocks -- see schema-mapping.md's
+# "Multiple isolated test fixtures colliding in one converted graph" -> "Same object ID,
+# different relation, mutually exclusive scenarios" for why only one can be represented here.
+# This file picks the "published" scenario (Test 2 of the source). The "draft" scenario
+# (Test 1) is independently verified via store-draft.fga.yaml + validation-draft.yaml, which
+# reaches PARITY OK on its own -- see corpus-runs/README.md's abac-with-rebac section.
+schemaFile: schema.zed
+relationships: |-
+  user:bob#email_verified@user:bob
+  user:anne#email_verified@user:anne
+  document:readme#owner@user:bob
+  document:readme#viewer@user:anne
+  document:readme#viewer@user:jeremy
+  document:readme#published@document:readme
+assertions:
+  assertTrue:
+    - "document:readme#can_view@user:anne"
+    - "document:readme#can_view@user:bob"
+  assertFalse:
+    - "document:readme#can_edit@user:anne"
+    - "document:readme#can_edit@user:bob"
+    - "document:readme#can_edit@user:jeremy"
+    - "document:readme#can_view@user:jeremy"

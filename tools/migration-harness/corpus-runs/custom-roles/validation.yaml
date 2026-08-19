@@ -1,0 +1,39 @@
+schemaFile: schema.zed
+relationships: |-
+  asset_category:website-content#asset_creator__direct@role:content-manager#assignee
+  asset_category:website-content#editor__direct@role:content-manager#assignee
+  asset_category:website-content#org@org:contoso
+  asset_category:website-content#viewer__direct@role:media-asset-manager#assignee
+  asset_category:website-media#asset_creator__direct@role:media-asset-creator#assignee
+  asset_category:website-media#asset_creator__direct@role:media-asset-manager#assignee
+  asset_category:website-media#editor__direct@role:media-asset-manager#assignee
+  asset_category:website-media#org@org:contoso
+  asset_category:website-media#viewer__direct@role:content-manager#assignee
+  asset:homepage#category@asset_category:website-content
+  asset:website-hero-image#category@asset_category:website-media
+  org:branding-contractor-1#member__direct@user:edith
+  org:contoso#asset_viewer__direct@role:content-qa#assignee
+  org:contoso#member__direct@user:anne
+  org:contoso#member__direct@user:beth
+  org:contoso#member__direct@user:carlos
+  org:contoso#member__direct@user:daniel
+  org:contoso#owner@user:carlos
+  role:content-manager#assignee@team:marketing#member
+  role:content-qa#assignee@team:qa#member
+  role:media-asset-creator#assignee@org:branding-contractor-1#member
+  role:media-asset-manager#assignee@team:design#member
+  team:design#member@user:anne
+  team:marketing#member@user:beth
+  team:qa#member@user:daniel
+assertions:
+  assertTrue:
+    - "org:contoso#role_creator@user:carlos"
+    - "asset:website-hero-image#view@user:anne"
+    - "asset:homepage#edit@user:beth"
+    - "asset:homepage#edit@user:carlos"
+    - "asset:homepage#view@user:daniel"
+    - "asset_category:website-media#asset_creator@user:edith"
+  assertFalse:
+    - "asset:website-hero-image#edit@user:beth"
+    - "asset:homepage#edit@user:daniel"
+    - "asset:homepage#view@user:edith"

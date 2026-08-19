@@ -1,0 +1,57 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation editor: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission member = (member__direct + admin + editor)
+}
+
+definition group {
+	relation organization: organization
+	relation member: user
+}
+
+definition container {
+	relation organization: organization
+	// spicedb-ignore-warning: relation-name-references-parent
+	relation parent_container: container
+	relation owner: user
+	relation editor__direct: user | group#member
+	relation viewer__direct: user | group#member | user:*
+
+	permission organization_admin = organization->admin__perm
+	permission editor = (editor__direct + owner + organization_admin + parent_container->editor)
+	permission viewer = (viewer__direct + editor + parent_container->viewer + organization->member)
+	permission can_delete = (owner + organization_admin)
+	permission can_edit = (editor + can_delete)
+	permission can_create_article = (editor + can_delete)
+	permission can_view = (viewer + can_edit)
+}
+
+definition article {
+	// spicedb-ignore-warning: relation-name-references-parent
+	relation parent_container: container
+	relation author: user
+	relation editor__direct: user | group#member
+	relation viewer__direct: user | group#member | user:*
+
+	permission organization_admin = parent_container->organization_admin
+	permission editor = (editor__direct + author + parent_container->editor)
+	permission viewer = (viewer__direct + editor + parent_container->viewer)
+	permission can_delete = (author + organization_admin)
+	permission can_archive = can_delete
+	permission can_publish = can_delete
+	permission can_edit = (editor + can_delete)
+	permission can_view = (viewer + can_edit)
+}
+
+definition attachment {
+	relation article: article
+	relation uploader: user
+
+	permission can_view = (uploader + article->can_view)
+	permission can_delete = (uploader + article->organization_admin)
+}

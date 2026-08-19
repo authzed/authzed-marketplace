@@ -1,0 +1,65 @@
+definition user {}
+
+definition organization {
+	relation member__direct: user
+	relation admin: user
+	relation campaign_manager: user
+	relation analyst: user
+
+	permission member = (member__direct + admin + campaign_manager + analyst)
+	permission admin__perm = admin
+	permission campaign_manager__perm = campaign_manager
+	permission analyst__perm = analyst
+	permission can_create_report = (campaign_manager + admin)
+}
+
+definition campaign {
+	relation organization: organization
+	relation owner: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_campaign_manager = organization->campaign_manager__perm
+	permission organization_analyst = organization->analyst__perm
+	permission can_delete = organization_admin
+	permission can_publish = can_delete
+	permission can_edit = (owner + organization_campaign_manager + can_publish)
+	permission can_view = (organization_analyst + can_edit)
+}
+
+definition ad_group {
+	relation campaign: campaign
+	relation owner: user
+
+	permission organization_admin = campaign->organization_admin
+	permission organization_campaign_manager = campaign->organization_campaign_manager
+	permission organization_analyst = campaign->organization_analyst
+	permission can_delete = organization_admin
+	permission can_edit = (owner + campaign->can_edit)
+	permission can_view = (organization_analyst + can_edit)
+}
+
+definition ad0 {
+	relation ad_group: ad_group
+	relation creator: user
+
+	permission can_delete = ad_group->organization_admin
+	permission can_approve = can_delete
+	permission can_edit = (creator + ad_group->can_edit)
+	permission can_view = (ad_group->organization_analyst + can_edit)
+}
+
+definition creative {
+	relation organization: organization
+	relation creator: user
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (creator + organization->campaign_manager__perm + can_delete)
+	permission can_view = (organization->analyst__perm + can_edit)
+}
+
+definition report {
+	relation organization: organization
+
+	permission can_delete = organization->admin__perm
+	permission can_view = (organization->analyst__perm + organization->campaign_manager__perm + can_delete)
+}

@@ -1,0 +1,26 @@
+// module: core, file: core.zed
+//
+// Source: openfga/sample-stores/stores/modular/core.fga (module core)
+//
+// `organization` is assembled in manifest.zed from this file's `core_organization`
+// partial plus one partial per module that OpenFGA's `extend type organization`
+// adds to it (wiki.zed, issue-tracker/projects.zed). SpiceDB has no `extend type` --
+// the manifest is the one place that has to know about every module that
+// contributes to a shared type, which core.fga itself never does in OpenFGA.
+
+definition user {}
+
+partial core_organization {
+	// core.fga: `define admin: [user]` -- pure-direct, no split
+	relation admin: user
+
+	// core.fga: `define member: [user] or admin` -- mixes a type list with `or`,
+	// so it splits (schema-mapping.md, "The relation/permission split").
+	relation member__direct: user
+	permission member = (member__direct + admin)
+}
+
+definition group {
+	// core.fga: `define member: [user]` -- pure-direct, no split
+	relation member: user
+}

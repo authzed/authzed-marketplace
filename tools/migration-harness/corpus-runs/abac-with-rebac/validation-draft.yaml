@@ -1,0 +1,24 @@
+# Supplementary diagnostic artifact, not the canonical converted output (that is
+# validation.yaml, which picks the "published" scenario -- see the comment there). This file
+# represents the source's other, mutually exclusive scenario ("draft", Test 1 of
+# store.fga.yaml) so it can be independently verified: paired with store-draft.fga.yaml, this
+# reaches PARITY OK on its own, proving the conversion is correct for both scenarios even
+# though the harness cannot certify both in one whole-store run. Same schema.zed as the
+# canonical artifact -- only the relationships and assertions differ.
+schemaFile: schema.zed
+relationships: |-
+  user:bob#email_verified@user:bob
+  user:anne#email_verified@user:anne
+  document:readme#owner@user:bob
+  document:readme#viewer@user:anne
+  document:readme#viewer@user:jeremy
+  document:readme#draft@document:readme
+assertions:
+  assertTrue:
+    - "document:readme#can_edit@user:bob"
+    - "document:readme#can_view@user:bob"
+  assertFalse:
+    - "document:readme#can_edit@user:anne"
+    - "document:readme#can_view@user:anne"
+    - "document:readme#can_edit@user:jeremy"
+    - "document:readme#can_view@user:jeremy"

@@ -1,0 +1,24 @@
+schemaFile: schema.zed
+relationships: |-
+  channel:general#parent_workspace@workspace:sandcastle
+  channel:general#writer@user:emily
+  channel:marketing_internal#parent_workspace@workspace:sandcastle
+  channel:marketing_internal#writer@user:bob
+  channel:marketing_internal#writer@user:emily
+  channel:proj_marketing_campaign#parent_workspace@workspace:sandcastle
+  channel:proj_marketing_campaign#writer@user:david
+  channel:proj_marketing_campaign#writer@workspace:sandcastle#member
+  workspace:sandcastle#channels_admin__direct@user:bob
+  workspace:sandcastle#guest@user:david
+  workspace:sandcastle#legacy_admin@user:amy
+  workspace:sandcastle#member__direct@user:catherine
+  workspace:sandcastle#member__direct@user:emily
+assertions:
+  assertTrue:
+    - "workspace:sandcastle#channels_admin@user:amy"
+    - "channel:marketing_internal#writer@user:emily"
+    - "channel:proj_marketing_campaign#writer@user:david"
+  assertFalse:
+    - "workspace:sandcastle#channels_admin@user:david"
+    - "channel:marketing_internal#writer@user:david"
+    - "channel:general#writer@user:bob"

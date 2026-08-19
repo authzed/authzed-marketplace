@@ -1,0 +1,11 @@
+definition user {}
+
+definition project_plan {
+	relation owner: user
+	relation can_edit: user
+	relation can_edit_7d7be7: user
+	relation approver__direct: user
+	relation reviewerlevelassignmentforenterprisegradecomplianceauditi_247c02: user
+
+	permission approver = (approver__direct + owner)
+}

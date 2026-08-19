@@ -1,0 +1,82 @@
+schemaFile: schema.zed
+relationships: |-
+  benefit:diana-health#employee@employee:diana-record
+  company:acme-corp#organization@organization:acme
+  employee:diana-record#assignee@user:diana
+  employee:diana-record#company@company:acme-corp
+  employee:diana-record#manager@user:charlie
+  employment:diana-swe#employee@employee:diana-record
+  group:developers#member@user:diana
+  group:developers#organization@organization:acme
+  location:hq-office#organization@organization:acme
+  organization:acme#admin@user:alice
+  organization:acme#hr_manager@user:bob
+  organization:acme#member__direct@user:charlie
+  organization:acme#member__direct@user:diana
+  payroll_run:march-2026#organization@organization:acme
+  team:backend#member@user:eve
+  team:backend#organization@organization:acme
+  team:backend#parent_team@team:engineering
+  team:engineering#manager@user:charlie
+  team:engineering#member@user:diana
+  team:engineering#organization@organization:acme
+  time_off:diana-vacation#approver@user:charlie
+  time_off:diana-vacation#employee@employee:diana-record
+  time_off:diana-vacation#requester@user:diana
+assertions:
+  assertTrue:
+    - "benefit:diana-health#can_edit@user:alice"
+    - "benefit:diana-health#can_edit@user:bob"
+    - "benefit:diana-health#can_view@user:alice"
+    - "benefit:diana-health#can_view@user:bob"
+    - "employee:diana-record#assignee@user:diana"
+    - "employee:diana-record#can_edit@user:alice"
+    - "employee:diana-record#can_edit@user:bob"
+    - "employee:diana-record#can_terminate@user:alice"
+    - "employee:diana-record#can_view@user:alice"
+    - "employee:diana-record#can_view@user:bob"
+    - "employee:diana-record#can_view@user:charlie"
+    - "employee:diana-record#can_view@user:diana"
+    - "employee:diana-record#can_view_sensitive@user:bob"
+    - "employee:diana-record#can_view_sensitive@user:diana"
+    - "employee:diana-record#manager@user:charlie"
+    - "employment:diana-swe#can_edit@user:alice"
+    - "employment:diana-swe#can_edit@user:bob"
+    - "employment:diana-swe#can_view@user:alice"
+    - "employment:diana-swe#can_view@user:bob"
+    - "location:hq-office#can_edit@user:alice"
+    - "location:hq-office#can_view@user:alice"
+    - "location:hq-office#can_view@user:charlie"
+    - "organization:acme#admin@user:alice"
+    - "organization:acme#can_manage_employees@user:alice"
+    - "organization:acme#can_manage_employees@user:bob"
+    - "organization:acme#can_view_sensitive_data@user:alice"
+    - "organization:acme#can_view_sensitive_data@user:bob"
+    - "organization:acme#hr_manager@user:bob"
+    - "payroll_run:march-2026#can_approve@user:alice"
+    - "payroll_run:march-2026#can_view@user:alice"
+    - "payroll_run:march-2026#can_view@user:bob"
+    - "team:backend#can_view@user:diana"
+    - "team:backend#can_view@user:eve"
+    - "team:engineering#can_manage@user:charlie"
+    - "team:engineering#can_view@user:charlie"
+    - "team:engineering#can_view@user:diana"
+    - "team:engineering#manager@user:charlie"
+    - "team:engineering#member@user:diana"
+    - "time_off:diana-vacation#can_approve@user:bob"
+    - "time_off:diana-vacation#can_approve@user:charlie"
+    - "time_off:diana-vacation#can_cancel@user:diana"
+    - "time_off:diana-vacation#can_view@user:bob"
+    - "time_off:diana-vacation#can_view@user:charlie"
+    - "time_off:diana-vacation#can_view@user:diana"
+  assertFalse:
+    - "employee:diana-record#can_edit@user:charlie"
+    - "employee:diana-record#can_edit@user:diana"
+    - "employee:diana-record#can_view_sensitive@user:charlie"
+    - "location:hq-office#can_edit@user:charlie"
+    - "payroll_run:march-2026#can_approve@user:bob"
+    - "payroll_run:march-2026#can_approve@user:diana"
+    - "payroll_run:march-2026#can_view@user:diana"
+    - "team:engineering#can_manage@user:diana"
+    - "time_off:diana-vacation#can_approve@user:diana"
+    - "time_off:diana-vacation#can_cancel@user:charlie"

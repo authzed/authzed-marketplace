@@ -1,0 +1,19 @@
+definition user {}
+
+definition workspace {
+	relation channels_admin__direct: user
+	relation guest: user
+	relation legacy_admin: user
+	relation member__direct: user
+
+	permission channels_admin = (channels_admin__direct + legacy_admin)
+	permission member = (member__direct + legacy_admin + channels_admin)
+}
+
+definition channel {
+	relation commenter__direct: user | workspace#member
+	relation parent_workspace: workspace
+	relation writer: user | workspace#member
+
+	permission commenter = (commenter__direct + writer)
+}

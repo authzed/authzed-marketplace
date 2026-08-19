@@ -1,0 +1,14 @@
+schemaFile: schema.zed
+relationships: |-
+  document:1#organization@organization:acme
+  group:content#member@user:anne
+  group:marketing#member@user:bob
+  organization:acme#can_access_docs@group:content#member[doc_viewer_condition:{"permitted_states":["draft","published"]}]
+  organization:acme#can_access_docs@group:marketing#member[doc_viewer_condition:{"permitted_states":["published"]}]
+assertions:
+  assertTrue:
+    - 'document:1#can_access@user:anne with {"document_attributes":{"status":"draft"}}'
+    - 'document:1#can_access@user:anne with {"document_attributes":{"status":"published"}}'
+    - 'document:1#can_access@user:bob with {"document_attributes":{"status":"published"}}'
+  assertFalse:
+    - 'document:1#can_access@user:bob with {"document_attributes":{"status":"draft"}}'

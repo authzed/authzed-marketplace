@@ -1,0 +1,25 @@
+definition user {}
+
+definition organization {
+	relation member: user
+	relation can_access_draft_docs: group#member
+	relation can_access_published_docs: group#member
+
+	permission can_access_draft_docs__perm = can_access_draft_docs
+	permission can_access_published_docs__perm = can_access_published_docs
+}
+
+definition group {
+	relation organization: organization
+	relation member: user
+}
+
+definition document {
+	relation organization: organization
+	relation draft: document
+	relation published: document
+
+	permission can_access_when_draft = organization->can_access_draft_docs__perm
+	permission can_access_when_published = organization->can_access_published_docs__perm
+	permission can_access = (draft->can_access_when_draft + published->can_access_when_published)
+}

@@ -1,0 +1,9 @@
+# Vendored SpiceDB client (per installation.md) and npm state -- never committed.
+# scripts/vendor-client.sh recreates third_party/ and runs npm install on demand.
+*/third_party/
+*/node_modules/
+*/package-lock.json
+
+# Ephemeral run output from scripts/run-fixture.sh.
+*/out/
+.vendor/

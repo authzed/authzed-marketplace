@@ -1,6 +1,6 @@
 {
   "name": "spicedb-dev",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing",
   "author": {
     "name": "AuthZed"

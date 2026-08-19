@@ -1,0 +1,11 @@
+definition employee {
+	relation manager: employee
+
+	permission can_manage = (manager + manager->can_manage)
+}
+
+definition report {
+	relation submitter: employee
+
+	permission approver = submitter->can_manage
+}

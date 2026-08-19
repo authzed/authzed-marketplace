@@ -1,0 +1,25 @@
+{
+  "types": {
+    "user": "user",
+    "doc": "doc"
+  },
+  "permissions": {
+    "user": {},
+    "doc": {
+      "owner": "owner",
+      "viewer": "viewer"
+    }
+  },
+  "id_encoding": {
+    "mode": "base64url",
+    "types": ["user"]
+  },
+  "relation_splits": {
+    "doc": {
+      "viewer": {
+        "relation": "viewer__direct",
+        "permission": "viewer"
+      }
+    }
+  }
+}

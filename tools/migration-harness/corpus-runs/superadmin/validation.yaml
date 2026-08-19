@@ -1,0 +1,20 @@
+schemaFile: schema.zed
+relationships: |-
+  system:global#admin@employee:anne
+  system:global#admin@application:system-management-app
+  organization:acme#system@system:global
+  organization:acme#helpdesk_member@employee:john[non_expired_time_grant:{"issued_at":"2024-01-01T00:00:00Z","valid_for":"1h"}]
+  organization:acme#admin__direct@user:peter
+  project:openfga#organization@organization:acme
+  task:create-example#project@project:openfga
+assertions:
+  assertTrue:
+    - "task:create-example#viewer@employee:anne"
+    - "task:create-example#editor@employee:anne"
+    - "task:create-example#viewer@user:peter"
+    - "task:create-example#editor@user:peter"
+    - "task:create-example#viewer@application:system-management-app"
+    - "task:create-example#editor@application:system-management-app"
+    - 'task:create-example#viewer@employee:john with {"current_time":"2024-01-01T00:10:00Z"}'
+  assertFalse:
+    - 'task:create-example#editor@employee:john with {"current_time":"2024-01-01T00:10:00Z"}'

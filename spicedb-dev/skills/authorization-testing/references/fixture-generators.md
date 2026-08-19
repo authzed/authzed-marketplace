@@ -198,7 +198,7 @@ func parseRelationship(rel relationship) *v1.Relationship {
 ```go
 func setupTestClient(t *testing.T) *authzed.Client {
     t.Helper()
-    // Use a unique preshared key per test suite for serve-testing isolation
+    // Use a unique token per test suite for serve-testing isolation
     token := os.Getenv("SPICEDB_TOKEN")
     if token == "" {
         token = "test-" + t.Name()
@@ -305,4 +305,4 @@ export async function checkPermission(
   failures if the same relationship is written twice in parallel test setup.
 - Use `FullyConsistent` in tests to avoid flaky results from replica lag.
 - Clean up relationships in `t.Cleanup()` (Go) or `finally` (Python/TypeScript) to
-  keep tests independent -- or use separate preshared keys per suite with `serve-testing`.
+  keep tests independent -- or use a separate token per suite with `serve-testing`.

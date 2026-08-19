@@ -1,0 +1,17 @@
+definition user {
+	relation email_verified: user
+
+	permission email_verified__perm = email_verified
+}
+
+definition document {
+	relation draft: document
+	relation published: document
+	relation viewer: user
+	relation owner: user
+
+	permission viewer_email_verified = viewer->email_verified__perm
+	permission owner_email_verified = owner->email_verified__perm
+	permission can_view = (owner_email_verified + published->viewer_email_verified)
+	permission can_edit = draft->owner_email_verified
+}

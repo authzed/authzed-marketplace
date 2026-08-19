@@ -1,0 +1,58 @@
+schemaFile: schema.zed
+relationships: |-
+  attachment:screenshot#ticket@ticket:bug-123
+  attachment:screenshot#uploader@user:diana
+  collection:bugs#organization@organization:acme
+  collection:bugs#owner@user:bob
+  collection:ui-bugs#organization@organization:acme
+  collection:ui-bugs#parent_collection@collection:bugs
+  comment:c-001#author@user:bob
+  comment:c-001#ticket@ticket:bug-123
+  contact:customer-xyz#organization@organization:acme
+  organization:acme#admin@user:alice
+  organization:acme#agent@user:bob
+  organization:acme#member__direct@user:charlie
+  team:support#lead@user:charlie
+  team:support#member@user:bob
+  team:support#organization@organization:acme
+  ticket:bug-123#assigned_team@team:support
+  ticket:bug-123#assignee@user:bob
+  ticket:bug-123#collection@collection:bugs
+  ticket:bug-123#creator@user:diana
+assertions:
+  assertTrue:
+    - "ticket:bug-123#can_view@user:alice"
+    - "ticket:bug-123#can_edit@user:alice"
+    - "ticket:bug-123#can_close@user:alice"
+    - "ticket:bug-123#can_assign@user:alice"
+    - "ticket:bug-123#can_delete@user:alice"
+    - "ticket:bug-123#can_view@user:bob"
+    - "ticket:bug-123#can_edit@user:bob"
+    - "ticket:bug-123#can_close@user:bob"
+    - "ticket:bug-123#can_view@user:diana"
+    - "ticket:bug-123#can_view@user:charlie"
+    - "ticket:bug-123#can_close@user:charlie"
+    - "comment:c-001#can_view@user:bob"
+    - "comment:c-001#can_edit@user:bob"
+    - "comment:c-001#can_delete@user:bob"
+    - "comment:c-001#can_view@user:diana"
+    - "attachment:screenshot#can_view@user:diana"
+    - "attachment:screenshot#can_delete@user:diana"
+    - "attachment:screenshot#can_view@user:bob"
+    - "collection:bugs#can_view@user:bob"
+    - "collection:bugs#can_edit@user:bob"
+    - "collection:ui-bugs#can_view@user:bob"
+    - "comment:c-001#can_view@user:alice"
+    - "comment:c-001#can_delete@user:alice"
+    - "attachment:screenshot#can_view@user:alice"
+    - "attachment:screenshot#can_delete@user:alice"
+    - "contact:customer-xyz#can_view@user:bob"
+    - "contact:customer-xyz#can_edit@user:bob"
+  assertFalse:
+    - "ticket:bug-123#can_delete@user:bob"
+    - "ticket:bug-123#can_edit@user:diana"
+    - "ticket:bug-123#can_close@user:diana"
+    - "comment:c-001#can_edit@user:diana"
+    - "attachment:screenshot#can_delete@user:bob"
+    - "collection:bugs#can_delete@user:bob"
+    - "contact:customer-xyz#can_view@user:charlie"

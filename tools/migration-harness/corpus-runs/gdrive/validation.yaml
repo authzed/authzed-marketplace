@@ -1,0 +1,17 @@
+schemaFile: schema.zed
+relationships: |-
+  doc:2021-roadmap#parent@folder:product-2021
+  doc:2021-roadmap#viewer@user:beth
+  doc:public-roadmap#parent@folder:product-2021
+  doc:public-roadmap#viewer@user:*
+  folder:product-2021#owner@user:anne
+  folder:product-2021#viewer__direct@group:fabrikam#member
+  group:contoso#member@user:anne
+  group:contoso#member@user:beth
+  group:fabrikam#member@user:charles
+assertions:
+  assertTrue:
+    - "doc:2021-roadmap#can_write@user:anne"
+    - "doc:2021-roadmap#can_read@user:charles"
+  assertFalse:
+    - "doc:2021-roadmap#can_change_owner@user:beth"

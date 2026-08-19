@@ -19,11 +19,22 @@ for relationships that exist in your DB but not yet in SpiceDB.
 | Method | Limit | Use for |
 |---|---|---|
 | `WriteRelationships` | 1,000 updates per call | Normal application writes |
-| `ImportBulkRelationships` (Go, streaming) | Unlimited | Initial data load |
+| `ImportBulkRelationships` (streaming) | Unlimited | Initial data load |
 
-For datasets over a few thousand relationships, use `ImportBulkRelationships` in Go.
-For TypeScript and Python (where bulk import is not yet exposed as streaming),
-batch `WriteRelationships` calls at 1,000 items each.
+For datasets over a few thousand relationships, prefer `ImportBulkRelationships` when your
+language's generated client exposes it as a streaming call. **Do not assume this by
+language** -- confirm against the installed SDK's own generated stub rather than trusting
+any note (including this one) as current, since SDK code generation catches up over time.
+Verified directly against the installed `authzed` Python package (v1.25.0): its
+`PermissionsServiceStub.ImportBulkRelationships` **is** `channel.stream_unary` (genuine
+client-streaming), contradicting an earlier version of this note that called Python
+batched-only. Also watch the import surface, not just the stub: in that same package,
+`authzed.api.v1.BulkImportRelationshipsRequest` (importable at the top level) is the
+**deprecated** `ExperimentalService` message; the current `PermissionsService` request type
+(`ImportBulkRelationshipsRequest`, transposed word order) is not exported at the top level
+and must be imported from the `permission_service_pb2` submodule directly. If your language's
+client genuinely has no streaming bulk-import call, batch `WriteRelationships` calls at 1,000
+items each instead (example below).
 
 ---
 
@@ -154,8 +165,10 @@ checks in production.
 ## Key Rules
 
 1. Import in hierarchy order (parents before children)
-2. Use `ImportBulkRelationships` for Go datasets over 1,000 rows
-3. Batch to 1,000 per `WriteRelationships` call for TypeScript/Python
+2. Use `ImportBulkRelationships` for datasets over 1,000 rows when your language's
+   installed SDK exposes it as a streaming call -- check the generated stub, don't assume
+   by language
+3. Otherwise, batch to 1,000 per `WriteRelationships` call
 4. Verify with `FullyConsistent` spot-checks before cutover (only appropriate for
    this one-time verification; use `MinimizeLatency` in production)
 5. Use a shadow/dual-write window -- avoid a hard cutover

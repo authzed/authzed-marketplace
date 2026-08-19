@@ -1,0 +1,55 @@
+schemaFile: schema.zed
+relationships: |-
+  article:getting-started#author@user:bob
+  article:getting-started#parent_container@container:api-docs
+  article:public-faq#author@user:bob
+  article:public-faq#viewer__direct@user:*
+  attachment:diagram-png#article@article:getting-started
+  attachment:diagram-png#uploader@user:bob
+  container:api-docs#organization@organization:acme
+  container:api-docs#parent_container@container:engineering-space
+  container:engineering-space#editor__direct@group:docs-team#member
+  container:engineering-space#organization@organization:acme
+  container:engineering-space#owner@user:bob
+  group:docs-team#member@user:bob
+  group:docs-team#member@user:dave
+  group:docs-team#organization@organization:acme
+  organization:acme#admin@user:alice
+  organization:acme#editor@user:bob
+  organization:acme#member__direct@user:charlie
+assertions:
+  assertTrue:
+    - "container:engineering-space#can_view@user:alice"
+    - "container:engineering-space#can_edit@user:alice"
+    - "container:engineering-space#can_delete@user:alice"
+    - "container:engineering-space#can_view@user:bob"
+    - "container:engineering-space#can_edit@user:bob"
+    - "container:engineering-space#can_create_article@user:bob"
+    - "container:engineering-space#can_delete@user:bob"
+    - "container:engineering-space#can_view@user:charlie"
+    - "container:api-docs#can_view@user:bob"
+    - "container:api-docs#can_edit@user:bob"
+    - "container:api-docs#can_view@user:charlie"
+    - "article:getting-started#can_view@user:bob"
+    - "article:getting-started#can_edit@user:bob"
+    - "article:getting-started#can_publish@user:bob"
+    - "article:getting-started#can_archive@user:bob"
+    - "article:getting-started#can_delete@user:bob"
+    - "article:getting-started#can_view@user:charlie"
+    - "article:public-faq#can_view@user:charlie"
+    - "article:public-faq#can_view@user:bob"
+    - "article:public-faq#can_publish@user:bob"
+    - "container:engineering-space#can_view@user:dave"
+    - "container:engineering-space#can_edit@user:dave"
+    - "container:engineering-space#can_create_article@user:dave"
+    - "article:getting-started#can_view@user:dave"
+    - "article:getting-started#can_edit@user:dave"
+    - "attachment:diagram-png#can_view@user:bob"
+    - "attachment:diagram-png#can_delete@user:bob"
+    - "attachment:diagram-png#can_view@user:charlie"
+  assertFalse:
+    - "container:engineering-space#can_edit@user:charlie"
+    - "container:api-docs#can_edit@user:charlie"
+    - "article:getting-started#can_edit@user:charlie"
+    - "article:getting-started#can_publish@user:charlie"
+    - "attachment:diagram-png#can_delete@user:charlie"

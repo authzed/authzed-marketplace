@@ -257,16 +257,18 @@ assertions:
 
 ### spicedb serve-testing
 
-SpiceDB provides a `serve-testing` mode where each unique preshared key gets an
-isolated, empty datastore. This lets parallel test suites share one SpiceDB instance:
+SpiceDB provides a `serve-testing` mode where each unique client-supplied token gets an
+isolated, empty datastore -- no preshared key is configured on the server. This lets
+parallel test suites share one SpiceDB instance:
 
 ```bash
 # Start SpiceDB in testing mode
-spicedb serve-testing --grpc-preshared-key test-key-1 --grpc-preshared-key test-key-2
+spicedb serve-testing
 ```
 
-Each key gets its own namespace -- tests using `test-key-1` cannot see data written
-by tests using `test-key-2`.
+Then connect each test suite with its own token (e.g. `--token test-key-1` and
+`--token test-key-2`). Each token gets its own namespace -- tests using `test-key-1`
+cannot see data written by tests using `test-key-2`.
 
 ### GitHub Actions
 

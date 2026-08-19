@@ -1,0 +1,31 @@
+definition user {}
+
+definition role {
+	relation can_edit_project: user:*
+	relation can_view_project: user:*
+
+	permission can_edit_project__perm = can_edit_project
+	permission can_view_project__perm = can_view_project
+}
+
+definition role_assignment {
+	relation assignee: user
+	relation role: role
+
+	permission can_view_project = (assignee & role->can_view_project__perm)
+	permission can_edit_project = (assignee & role->can_edit_project__perm)
+}
+
+definition organization {
+	relation admin: user
+
+	permission admin__perm = admin
+}
+
+definition project {
+	relation organization: organization
+	relation role_assignment: role_assignment
+
+	permission can_view = (role_assignment->can_view_project + organization->admin__perm)
+	permission can_edit = (role_assignment->can_edit_project + organization->admin__perm)
+}

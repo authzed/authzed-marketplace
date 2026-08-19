@@ -1,0 +1,59 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "space": "space",
+    "page": "page",
+    "comment": "comment"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "editor": "editor",
+      "viewer": "viewer",
+      "member": "member"
+    },
+    "space": {
+      "organization": "organization",
+      "owner": "owner",
+      "organization_admin": "organization_admin",
+      "organization_editor": "organization_editor",
+      "organization_viewer": "organization_viewer",
+      "can_delete": "can_delete",
+      "can_manage_members": "can_manage_members",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "page": {
+      "space": "space",
+      "author": "author",
+      "organization_admin": "organization_admin",
+      "organization_editor": "organization_editor",
+      "organization_viewer": "organization_viewer",
+      "can_publish": "can_publish",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "comment": {
+      "page": "page",
+      "author": "author",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

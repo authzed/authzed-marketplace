@@ -1,0 +1,126 @@
+schemaFile: schema.zed
+relationships: |-
+  organization:mercy-hospital#admin@user:alice
+  organization:mercy-hospital#provider@user:dr-smith
+  organization:mercy-hospital#provider@user:dr-jones
+  organization:mercy-hospital#nurse@user:nurse-williams
+  organization:mercy-hospital#medical_records_staff@user:clerk-brown
+  organization:mercy-hospital#member__direct@user:billing-davis
+  facility:main-campus#organization@organization:mercy-hospital
+  facility:main-campus#director@user:dr-jones
+  patient:doe#organization@organization:mercy-hospital
+  patient:doe#primary_provider@user:dr-smith
+  patient:doe#care_team@user:nurse-williams
+  patient:roe#organization@organization:mercy-hospital
+  patient:roe#primary_provider@user:dr-jones
+  encounter:enc-001#patient@patient:doe
+  encounter:enc-001#attending_provider@user:dr-smith
+  diagnosis:diag-001#patient@patient:doe
+  diagnosis:diag-001#diagnosing_provider@user:dr-smith
+  treatment:treat-001#encounter@encounter:enc-001
+  treatment:treat-001#ordering_provider@user:dr-smith
+  medication:aspirin#organization@organization:mercy-hospital
+assertions:
+  assertTrue:
+    - "patient:doe#can_delete@user:alice"
+    - "patient:doe#can_edit@user:alice"
+    - "patient:doe#can_view_sensitive@user:alice"
+    - "patient:doe#can_create_encounter@user:alice"
+    - "patient:doe#can_view@user:alice"
+    - "encounter:enc-001#can_delete@user:alice"
+    - "encounter:enc-001#can_create_treatment@user:alice"
+    - "encounter:enc-001#can_edit@user:alice"
+    - "encounter:enc-001#can_view@user:alice"
+    - "diagnosis:diag-001#can_edit@user:alice"
+    - "diagnosis:diag-001#can_view@user:alice"
+    - "treatment:treat-001#can_delete@user:alice"
+    - "treatment:treat-001#can_edit@user:alice"
+    - "treatment:treat-001#can_view@user:alice"
+    - "facility:main-campus#can_delete@user:alice"
+    - "facility:main-campus#can_edit@user:alice"
+    - "facility:main-campus#can_view@user:alice"
+    - "medication:aspirin#can_edit@user:alice"
+    - "medication:aspirin#can_view@user:alice"
+    - "patient:doe#can_edit@user:dr-smith"
+    - "patient:doe#can_view_sensitive@user:dr-smith"
+    - "patient:doe#can_create_encounter@user:dr-smith"
+    - "patient:doe#can_view@user:dr-smith"
+    - "encounter:enc-001#can_create_treatment@user:dr-smith"
+    - "encounter:enc-001#can_edit@user:dr-smith"
+    - "encounter:enc-001#can_view@user:dr-smith"
+    - "diagnosis:diag-001#can_edit@user:dr-smith"
+    - "diagnosis:diag-001#can_view@user:dr-smith"
+    - "treatment:treat-001#can_edit@user:dr-smith"
+    - "treatment:treat-001#can_view@user:dr-smith"
+    - "patient:doe#can_view_sensitive@user:nurse-williams"
+    - "patient:doe#can_create_encounter@user:nurse-williams"
+    - "patient:doe#can_view@user:nurse-williams"
+    - "encounter:enc-001#can_view@user:nurse-williams"
+    - "diagnosis:diag-001#can_view@user:nurse-williams"
+    - "treatment:treat-001#can_view@user:nurse-williams"
+    - "patient:doe#can_edit@user:clerk-brown"
+    - "patient:doe#can_view_sensitive@user:clerk-brown"
+    - "patient:doe#can_create_encounter@user:clerk-brown"
+    - "patient:doe#can_create_diagnosis@user:clerk-brown"
+    - "patient:doe#can_view@user:clerk-brown"
+    - "encounter:enc-001#can_view@user:clerk-brown"
+    - "diagnosis:diag-001#can_view@user:clerk-brown"
+    - "patient:roe#can_edit@user:dr-jones"
+    - "patient:roe#can_view_sensitive@user:dr-jones"
+    - "patient:roe#can_view@user:dr-jones"
+    - "facility:main-campus#can_edit@user:dr-jones"
+    - "facility:main-campus#can_view@user:dr-jones"
+    - "facility:main-campus#can_view@user:dr-smith"
+    - "facility:main-campus#can_view@user:billing-davis"
+    - "medication:aspirin#can_view@user:dr-smith"
+    - "medication:aspirin#can_view@user:nurse-williams"
+  assertFalse:
+    - "patient:doe#can_delete@user:dr-smith"
+    - "encounter:enc-001#can_delete@user:dr-smith"
+    - "treatment:treat-001#can_delete@user:dr-smith"
+    - "patient:doe#can_delete@user:nurse-williams"
+    - "patient:doe#can_edit@user:nurse-williams"
+    - "encounter:enc-001#can_delete@user:nurse-williams"
+    - "encounter:enc-001#can_create_treatment@user:nurse-williams"
+    - "encounter:enc-001#can_edit@user:nurse-williams"
+    - "diagnosis:diag-001#can_edit@user:nurse-williams"
+    - "treatment:treat-001#can_delete@user:nurse-williams"
+    - "treatment:treat-001#can_edit@user:nurse-williams"
+    - "patient:doe#can_delete@user:clerk-brown"
+    - "encounter:enc-001#can_delete@user:clerk-brown"
+    - "encounter:enc-001#can_edit@user:clerk-brown"
+    - "diagnosis:diag-001#can_edit@user:clerk-brown"
+    - "patient:doe#can_delete@user:dr-jones"
+    - "patient:doe#can_edit@user:dr-jones"
+    - "patient:doe#can_view_sensitive@user:dr-jones"
+    - "patient:doe#can_create_encounter@user:dr-jones"
+    - "patient:doe#can_view@user:dr-jones"
+    - "encounter:enc-001#can_delete@user:dr-jones"
+    - "encounter:enc-001#can_edit@user:dr-jones"
+    - "encounter:enc-001#can_view@user:dr-jones"
+    - "diagnosis:diag-001#can_edit@user:dr-jones"
+    - "diagnosis:diag-001#can_view@user:dr-jones"
+    - "treatment:treat-001#can_delete@user:dr-jones"
+    - "treatment:treat-001#can_edit@user:dr-jones"
+    - "treatment:treat-001#can_view@user:dr-jones"
+    - "patient:roe#can_edit@user:dr-smith"
+    - "patient:roe#can_view_sensitive@user:dr-smith"
+    - "patient:roe#can_view@user:dr-smith"
+    - "facility:main-campus#can_delete@user:dr-jones"
+    - "facility:main-campus#can_delete@user:dr-smith"
+    - "facility:main-campus#can_edit@user:dr-smith"
+    - "facility:main-campus#can_delete@user:billing-davis"
+    - "facility:main-campus#can_edit@user:billing-davis"
+    - "medication:aspirin#can_edit@user:dr-smith"
+    - "medication:aspirin#can_edit@user:nurse-williams"
+    - "medication:aspirin#can_edit@user:clerk-brown"
+    - "medication:aspirin#can_view@user:clerk-brown"
+    - "medication:aspirin#can_edit@user:billing-davis"
+    - "medication:aspirin#can_view@user:billing-davis"
+    - "patient:doe#can_delete@user:billing-davis"
+    - "patient:doe#can_edit@user:billing-davis"
+    - "patient:doe#can_view_sensitive@user:billing-davis"
+    - "patient:doe#can_view@user:billing-davis"
+    - "encounter:enc-001#can_delete@user:billing-davis"
+    - "encounter:enc-001#can_edit@user:billing-davis"
+    - "encounter:enc-001#can_view@user:billing-davis"

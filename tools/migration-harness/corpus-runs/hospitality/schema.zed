@@ -1,0 +1,77 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation revenue_manager: user
+	permission revenue_manager__perm = revenue_manager
+
+	relation member__direct: user
+	permission member = (member__direct + admin + revenue_manager)
+
+	permission can_create_hotel = admin
+	permission can_create_guest = admin
+}
+
+definition hotel {
+	relation organization: organization
+	relation general_manager: user
+
+	relation front_desk: user
+	permission front_desk__perm = front_desk
+
+	relation housekeeping: user
+	permission housekeeping__perm = housekeeping
+
+	relation concierge: user
+	permission concierge__perm = concierge
+
+	permission org_admin = organization->admin__perm
+	permission org_revenue_manager = organization->revenue_manager__perm
+
+	relation staff__direct: user
+	permission staff = (staff__direct + general_manager + front_desk + housekeeping + concierge)
+
+	permission can_delete = org_admin
+	permission can_edit = (general_manager + can_delete)
+	permission can_create_room = can_edit
+	permission can_create_reservation = (front_desk + concierge + can_edit)
+	permission can_create_service = (concierge + can_edit)
+	permission can_view_revenue = (org_revenue_manager + can_edit)
+	permission can_view = (staff + organization->member + can_edit)
+}
+
+definition room {
+	relation hotel: hotel
+
+	permission can_delete = hotel->can_delete
+	permission can_edit = (hotel->front_desk__perm + hotel->housekeeping__perm + hotel->can_edit)
+	permission can_view = (hotel->can_view + can_edit)
+}
+
+definition reservation {
+	relation hotel: hotel
+	relation guest: guest
+
+	permission can_delete = hotel->can_delete
+	permission can_cancel = (hotel->front_desk__perm + hotel->can_edit)
+	permission can_edit = can_cancel
+	permission can_view = (hotel->can_view + can_edit)
+}
+
+definition guest {
+	relation organization: organization
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = can_delete
+	permission can_view = (organization->member + can_edit)
+}
+
+definition service {
+	relation hotel: hotel
+
+	permission can_delete = hotel->can_delete
+	permission can_edit = (hotel->concierge__perm + hotel->can_edit)
+	permission can_view = (hotel->can_view + can_edit)
+}

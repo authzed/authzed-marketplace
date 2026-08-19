@@ -1,0 +1,40 @@
+schemaFile: schema.zed
+relationships: |-
+  organization:acme#member@user:anne
+  organization:okta#member@user:beth
+  plan:free#subscriber@organization:acme#member
+  plan:pro#subscriber@organization:okta#member
+  feature:can-view-page-history#has_feature@plan:free#subscriber[is_below_page_history_days_limit:{"page_history_days_max":7}]
+  feature:can-invite-collaborator#has_feature@plan:free#subscriber[is_below_collaborator_limit:{"collaborator_max":10}]
+  feature:can-sync-rows#has_feature@plan:free#subscriber[is_below_row_sync_limit:{"row_sync_max":100}]
+  feature:basic-page-analytics#has_feature@plan:free#subscriber
+  feature:can-view-page-history#has_feature@plan:pro#subscriber[is_below_page_history_days_limit:{"page_history_days_max":30}]
+  feature:can-invite-collaborator#has_feature@plan:pro#subscriber[is_below_collaborator_limit:{"collaborator_max":100}]
+  feature:can-sync-rows#has_feature@plan:pro#subscriber[is_below_row_sync_limit:{"row_sync_max":20000}]
+  feature:advanced-page-analytics#has_feature@plan:pro#subscriber
+  feature:enterprise-support#has_feature@plan:pro#subscriber
+assertions:
+  assertTrue:
+    # Tests for Pro subscriber (beth, via organization:okta -> plan:pro)
+    - 'feature:can-view-page-history#has_feature@user:beth with {"page_history_days_count":10}'
+    - 'feature:can-invite-collaborator#has_feature@user:beth with {"collaborator_count":20}'
+    - 'feature:can-sync-rows#has_feature@user:beth with {"row_sync_count":200}'
+    - "feature:advanced-page-analytics#has_feature@user:beth"
+    - "feature:enterprise-support#has_feature@user:beth"
+    - "plan:pro#subscriber@user:beth"
+    # Tests for Free subscriber (anne, via organization:acme -> plan:free) --
+    # same three quota checks, well under the free plan's lower limits.
+    - 'feature:can-view-page-history#has_feature@user:anne with {"page_history_days_count":1}'
+    - 'feature:can-invite-collaborator#has_feature@user:anne with {"collaborator_count":1}'
+    - 'feature:can-sync-rows#has_feature@user:anne with {"row_sync_count":1}'
+    - "feature:basic-page-analytics#has_feature@user:anne"
+  assertFalse:
+    # Tests for Free subscriber (anne) -- the same three quota-gated features,
+    # each over the free plan's lower limit, plus two pro-only uncaveated
+    # features and the plan:pro subscriber check itself.
+    - 'feature:can-view-page-history#has_feature@user:anne with {"page_history_days_count":10}'
+    - 'feature:can-invite-collaborator#has_feature@user:anne with {"collaborator_count":20}'
+    - 'feature:can-sync-rows#has_feature@user:anne with {"row_sync_count":200}'
+    - "feature:advanced-page-analytics#has_feature@user:anne"
+    - "feature:enterprise-support#has_feature@user:anne"
+    - "plan:pro#subscriber@user:anne"

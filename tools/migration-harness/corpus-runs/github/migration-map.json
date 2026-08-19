@@ -1,0 +1,63 @@
+{
+  "types": {
+    "user": "user",
+    "team": "team",
+    "repo": "repo",
+    "organization": "organization"
+  },
+  "permissions": {
+    "user": {},
+    "team": {
+      "member": "member"
+    },
+    "repo": {
+      "admin": "admin",
+      "maintainer": "maintainer",
+      "owner": "owner",
+      "reader": "reader",
+      "triager": "triager",
+      "writer": "writer"
+    },
+    "organization": {
+      "member": "member",
+      "owner": "owner",
+      "repo_admin": "repo_admin",
+      "repo_reader": "repo_reader",
+      "repo_writer": "repo_writer"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    },
+    "repo": {
+      "admin": {
+        "relation": "admin__direct",
+        "permission": "admin"
+      },
+      "maintainer": {
+        "relation": "maintainer__direct",
+        "permission": "maintainer"
+      },
+      "reader": {
+        "relation": "reader__direct",
+        "permission": "reader"
+      },
+      "triager": {
+        "relation": "triager__direct",
+        "permission": "triager"
+      },
+      "writer": {
+        "relation": "writer__direct",
+        "permission": "writer"
+      }
+    }
+  }
+}

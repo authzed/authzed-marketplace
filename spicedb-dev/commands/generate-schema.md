@@ -110,7 +110,7 @@ After generating the schema, use the Task tool to launch the `schema-validator` 
 
 ```
 Task(
-    subagent_type="schema-validator",
+    subagent_type="spicedb-dev:schema-validator",
     description="Validate generated schema",
     prompt="Validate the schema file at [path] and suggest improvements"
 )
@@ -236,7 +236,13 @@ definition document {
 If the model is unclear or missing information:
 1. Load the `spicedb-schema-design` skill for guidance
 2. Make reasonable assumptions based on common patterns
-3. Add TODO comments in the schema for areas needing clarification
+3. Add a concise `// TODO:` comment for each area needing clarification -- one line, naming
+   what's unclear, not a restatement of the model or a general explanation of the pattern
+   used. (This command has no migration in scope, so it is not the
+   `TODO(spicedbmigration):` marker `migrating-to-spicedb/references/findings-report.md`
+   defines for `/spicedb-dev:migrate-code` and its siblings -- that prefix means "found
+   while converting a source system"; a plain `// TODO:` is the right marker for a
+   greenfield schema.)
 4. Ask the user to review and provide missing details
 
 ## Example Output

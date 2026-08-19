@@ -1,0 +1,41 @@
+// The SpiceDB analogue of fga.mod: the one file that has to know about every
+// module, because SpiceDB has no `extend type`. `import` pulls each module's
+// definitions and partials into one compile-time symbol table (verified: a
+// module file does NOT need to `import` the other modules it references by
+// name -- only this root file needs to reach all of them; see
+// schema-mapping.md's "Modular models" section for how that was verified).
+//
+// `organization` itself is declared here, not in core.zed, because assembling
+// it is the one piece of work that has no owner in the module structure: core
+// owns organization's *base* shape, but can_create_space and can_create_project
+// are owned by wiki and issue-tracker respectively, and nothing in OpenFGA's own
+// module system requires core to know that either of them exists.
+//
+// This file is NOT what gets deployed, because it uses `import` across four
+// files. `import` is rejected by a real SpiceDB WriteSchema unconditionally --
+// verified live on v1.54.0 and v1.56.0, in both its bare form (as used here,
+// "Unexpected token at root level") and its `use import`-flagged form ("import
+// statements are not allowed in this context"). `zed validate` accepts this
+// file's bare-keyword form directly (that is the "extended syntax" zed's own
+// tooling understands), which is exactly why validating this file proves
+// nothing about whether it can be deployed. Run
+// `zed schema compile modules/manifest.zed --out schema.zed` to produce the
+// file that actually gets written.
+//
+// Note this is specific to `import`, not to `partial` in general: a
+// single-file schema using only `partial` (no `import`) CAN deploy directly
+// via `use partial`, with no compile step -- verified live. See
+// schema-mapping.md's "Modular models" section, "Three ways to ship a modular
+// schema", for that option and why this store's artifacts use the compiled
+// form instead.
+
+import "./core.zed"
+import "./wiki.zed"
+import "./issue-tracker/projects.zed"
+import "./issue-tracker/tickets.zed"
+
+definition organization {
+	...core_organization
+	...wiki_organization_ext
+	...issuetracker_organization_ext
+}

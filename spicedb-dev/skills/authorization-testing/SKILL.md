@@ -52,7 +52,7 @@ Integration tests verify authorization in the context of your application.
 **Pattern:** Setup, execute, verify, cleanup.
 
 See `examples/go_test.go` for a complete Go test suite demonstrating:
-- Client setup with `serve-testing` isolation (unique preshared key per test)
+- Client setup with `serve-testing` isolation (unique token per test)
 - Schema loading, relationship writing, and permission checking helpers
 - Table-driven positive and negative test cases
 - Revocation testing

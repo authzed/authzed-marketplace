@@ -1,0 +1,55 @@
+schemaFile: schema.zed
+relationships: |-
+  folder:root#owner@user:anne
+  document:welcome#parent@folder:root
+  document:welcome#owner@user:bob
+  organization:acme#admin__direct@user:peter
+  folder:root#organization@organization:acme
+  group:engineering#member@user:martin
+  group:everyone#member@group:engineering#member
+  folder:root#editor@group:everyone#member
+  document:public-roadmap#viewer__direct@user:*
+  document:document-not-published#parent@folder:root
+  document:document-not-published#viewer__direct@user:*
+  document:public-roadmap#published@document:public-roadmap
+  organization:acme#system@system:root
+  system:root#super_admin@user:sam[time_based_grant:{"issued_at":"2024-07-21T00:00:00Z","valid_for":"1h"}]
+  role:acme-organization-manager#assignee@user:omar
+  role:acme-content-editor#assignee@user:edith
+  organization:acme#can_add_admin__direct@role:acme-organization-manager#assignee
+  organization:acme#can_create_document__direct@role:acme-content-editor#assignee
+  organization:acme#can_create_document__direct@application:app-1
+  organization:acme#can_edit_documents__direct@application:app-1
+assertions:
+  assertTrue:
+    - "document:welcome#can_edit@user:anne"
+    - "document:welcome#can_view@user:anne"
+    - "folder:root#can_edit@user:peter"
+    - "folder:root#can_view@user:peter"
+    - "document:welcome#can_edit@user:peter"
+    - "document:welcome#can_view@user:peter"
+    - "document:welcome#can_edit@user:martin"
+    - "document:welcome#can_view@user:martin"
+    - "folder:root#can_edit@user:martin"
+    - "folder:root#can_view@user:martin"
+    - "document:public-roadmap#can_view@user:john"
+    - 'document:welcome#can_edit@user:sam with {"current_time":"2024-07-21T00:00:09Z"}'
+    - 'document:welcome#can_view@user:sam with {"current_time":"2024-07-21T00:00:09Z"}'
+    - "organization:acme#can_add_admin@user:omar"
+    - "organization:acme#can_create_document@user:edith"
+    - "organization:acme#can_create_document@application:app-1"
+    - "document:welcome#can_edit@application:app-1"
+    - "document:welcome#can_view@application:app-1"
+  assertFalse:
+    - "folder:root#can_edit@user:bob"
+    - "folder:root#can_view@user:bob"
+    - "document:public-roadmap#can_edit@user:john"
+    - "document:document-not-published#can_edit@user:john"
+    - "document:document-not-published#can_view@user:john"
+    - 'document:welcome#can_edit@user:sam with {"current_time":"2024-07-22T00:00:09Z"}'
+    - 'document:welcome#can_view@user:sam with {"current_time":"2024-07-22T00:00:09Z"}'
+    - "organization:acme#can_create_document@user:omar"
+    - "organization:acme#can_add_admin@user:edith"
+    - "organization:acme#can_add_admin@application:app-1"
+    - "organization:acme#can_add_admin@application:app-2"
+    - "organization:acme#can_create_document@application:app-2"

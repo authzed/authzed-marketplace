@@ -1,0 +1,74 @@
+schemaFile: schema.zed
+relationships: |-
+  account:revenue#organization@organization:acme
+  contact:vendor-abc#organization@organization:acme
+  contact:vendor-abc#owner@user:diana
+  expense:exp-001#organization@organization:acme
+  expense:exp-001#submitter@user:diana
+  financial_statement:balance-sheet-q1#organization@organization:acme
+  invoice:inv-001#creator@user:bob
+  invoice:inv-001#organization@organization:acme
+  journal_entry:je-001#creator@user:bob
+  journal_entry:je-001#organization@organization:acme
+  organization:acme#accountant__direct@user:bob
+  organization:acme#admin@user:alice
+  organization:acme#auditor__direct@user:charlie
+  organization:acme#member__direct@user:diana
+  payment:pay-001#organization@organization:acme
+  purchase_order:po-001#approver@user:bob
+  purchase_order:po-001#organization@organization:acme
+  purchase_order:po-001#requester@user:diana
+assertions:
+  assertTrue:
+    - "organization:acme#can_create_account@user:alice"
+    - "organization:acme#can_create_payment@user:alice"
+    - "account:revenue#can_view@user:alice"
+    - "account:revenue#can_edit@user:alice"
+    - "invoice:inv-001#can_view@user:alice"
+    - "invoice:inv-001#can_edit@user:alice"
+    - "invoice:inv-001#can_approve@user:alice"
+    - "invoice:inv-001#can_void@user:alice"
+    - "organization:acme#can_create_account@user:bob"
+    - "organization:acme#can_create_payment@user:bob"
+    - "account:revenue#can_view@user:bob"
+    - "account:revenue#can_edit@user:bob"
+    - "invoice:inv-001#can_view@user:bob"
+    - "invoice:inv-001#can_edit@user:bob"
+    - "account:revenue#can_view@user:charlie"
+    - "invoice:inv-001#can_view@user:charlie"
+    - "financial_statement:balance-sheet-q1#can_view@user:charlie"
+    - "expense:exp-001#can_view@user:charlie"
+    - "payment:pay-001#can_view@user:charlie"
+    - "journal_entry:je-001#can_view@user:charlie"
+    - "expense:exp-001#can_view@user:diana"
+    - "expense:exp-001#can_edit@user:diana"
+    - "purchase_order:po-001#can_view@user:diana"
+    - "purchase_order:po-001#can_edit@user:diana"
+    - "purchase_order:po-001#can_view@user:bob"
+    - "purchase_order:po-001#can_edit@user:bob"
+    - "purchase_order:po-001#can_approve@user:bob"
+    - "journal_entry:je-001#can_view@user:bob"
+    - "journal_entry:je-001#can_edit@user:bob"
+    - "journal_entry:je-001#can_view@user:alice"
+    - "journal_entry:je-001#can_edit@user:alice"
+    - "journal_entry:je-001#can_post@user:alice"
+  assertFalse:
+    - "invoice:inv-001#can_approve@user:bob"
+    - "organization:acme#can_create_account@user:charlie"
+    - "organization:acme#can_create_payment@user:charlie"
+    - "account:revenue#can_edit@user:charlie"
+    - "invoice:inv-001#can_edit@user:charlie"
+    - "expense:exp-001#can_edit@user:charlie"
+    - "payment:pay-001#can_edit@user:charlie"
+    - "journal_entry:je-001#can_edit@user:charlie"
+    - "journal_entry:je-001#can_post@user:charlie"
+    - "invoice:inv-001#can_void@user:bob"
+    - "invoice:inv-001#can_void@user:charlie"
+    - "financial_statement:balance-sheet-q1#can_view@user:diana"
+    - "organization:acme#can_create_account@user:diana"
+    - "organization:acme#can_create_payment@user:diana"
+    - "account:revenue#can_view@user:diana"
+    - "payment:pay-001#can_view@user:diana"
+    - "expense:exp-001#can_approve@user:diana"
+    - "purchase_order:po-001#can_approve@user:diana"
+    - "journal_entry:je-001#can_post@user:bob"

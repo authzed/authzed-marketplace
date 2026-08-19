@@ -1,0 +1,69 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation member__direct: user
+	permission member = (member__direct + admin)
+}
+
+definition group {
+	relation organization: organization
+	relation member: user
+}
+
+definition drive {
+	relation organization: organization
+	relation owner: user
+	permission owner__perm = owner
+
+	relation writer__direct: user | group#member
+	permission writer = (writer__direct + owner)
+
+	relation reader__direct: user | group#member
+	permission reader = (reader__direct + writer + organization->member)
+
+	permission organization_admin = organization->admin__perm
+	permission can_delete = (owner + organization_admin)
+	permission can_edit = (writer + can_delete)
+	permission can_view = (reader + can_edit)
+}
+
+definition folder {
+	relation parent: drive | folder
+
+	relation owner__direct: user
+	permission owner = (owner__direct + parent->owner__perm)
+	permission owner__perm = owner
+
+	relation writer__direct: user | group#member
+	permission writer = (writer__direct + owner + parent->writer)
+
+	relation reader__direct: user | group#member
+	permission reader = (reader__direct + writer + parent->reader)
+
+	permission organization_admin = parent->organization_admin
+	permission can_delete = (owner + organization_admin)
+	permission can_create_file = (writer + can_delete)
+	permission can_edit = (writer + can_delete)
+	permission can_view = (reader + can_edit)
+}
+
+definition file {
+	relation folder: folder
+
+	relation owner__direct: user
+	permission owner = (owner__direct + folder->owner)
+
+	relation writer__direct: user | group#member
+	permission writer = (writer__direct + owner + folder->writer)
+
+	relation reader__direct: user | group#member
+	permission reader = (reader__direct + writer + folder->reader)
+
+	permission can_delete = (owner + folder->organization_admin)
+	permission can_edit = (writer + can_delete)
+	permission can_download = (reader + can_edit)
+	permission can_view = (reader + can_edit)
+}

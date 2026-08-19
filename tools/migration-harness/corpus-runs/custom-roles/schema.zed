@@ -1,0 +1,58 @@
+definition user {}
+
+definition team {
+	relation member: user
+}
+
+definition role {
+	relation assignee: user | team#member | org#member
+}
+
+definition org {
+	relation asset_category_creator__direct: role#assignee
+	relation asset_commenter__direct: role#assignee
+	relation asset_creator__direct: role#assignee
+	relation asset_editor__direct: role#assignee
+	relation asset_viewer__direct: role#assignee
+	relation member__direct: user
+	relation owner: user
+	relation role_assigner__direct: role#assignee
+	relation role_creator__direct: role#assignee
+	relation team_assigner__direct: role#assignee
+	relation team_creator__direct: role#assignee
+
+	permission asset_category_creator = (asset_category_creator__direct + owner)
+	permission asset_commenter = (asset_commenter__direct + asset_editor)
+	permission asset_creator = (asset_creator__direct + owner)
+	permission asset_editor = (asset_editor__direct + owner)
+	permission asset_viewer = (asset_viewer__direct + asset_commenter)
+	permission member = (member__direct + owner)
+	permission role_assigner = (role_assigner__direct + owner)
+	permission role_creator = (role_creator__direct + owner)
+	permission team_assigner = (team_assigner__direct + owner)
+	permission team_creator = (team_creator__direct + owner)
+}
+
+definition asset_category {
+	relation asset_creator__direct: role#assignee
+	relation commenter__direct: role#assignee
+	relation editor__direct: role#assignee
+	relation org: org
+	relation viewer__direct: role#assignee
+
+	permission asset_creator = (asset_creator__direct + org->asset_creator)
+	permission commenter = (commenter__direct + editor + org->asset_commenter)
+	permission editor = (editor__direct + org->asset_editor)
+	permission viewer = (viewer__direct + commenter + org->asset_viewer)
+}
+
+definition asset {
+	relation category: asset_category
+	relation comment__direct: role#assignee
+	relation edit__direct: role#assignee
+	relation view__direct: role#assignee
+
+	permission comment = (comment__direct + edit + category->commenter)
+	permission edit = (edit__direct + category->editor)
+	permission view = (view__direct + comment + category->viewer)
+}

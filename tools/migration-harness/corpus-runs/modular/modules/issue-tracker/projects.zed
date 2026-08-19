@@ -1,0 +1,22 @@
+// module: issue-tracker, file: issue-tracker/projects.zed
+//
+// Source: openfga/sample-stores/stores/modular/issue-tracker/projects.fga
+// (module issue-tracker)
+//
+// Same shape as wiki.zed's extension of `organization` -- a second, independent
+// module contributing to the same shared type via its own partial.
+
+partial issuetracker_organization_ext {
+	// projects.fga: `define can_create_project: admin` -- pure alias, no split
+	permission can_create_project = admin
+}
+
+definition project {
+	// projects.fga: `define organization: [organization]` -- pure-direct, no split
+	relation organization: organization
+
+	// projects.fga: `define viewer: member from organization` -- arrow, reversed
+	// operand order, no `__perm` alias needed (target is `organization#member`, a
+	// permission after the core split).
+	permission viewer = organization->member
+}

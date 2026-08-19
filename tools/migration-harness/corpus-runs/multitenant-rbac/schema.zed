@@ -1,0 +1,36 @@
+definition user {}
+
+definition group {
+	relation member: user | group#member
+}
+
+definition role {
+	relation assignee: user | role#assignee | group#member
+}
+
+definition organization {
+	relation admin: user | role#assignee
+	relation billing_manager__direct: role#assignee
+	relation document_manager__direct: role#assignee
+	relation document_viewer__direct: role#assignee
+	relation user_manager__direct: role#assignee
+
+	permission billing_manager = (billing_manager__direct + admin)
+	permission can_create_document = document_manager
+	permission can_delete_user = user_manager
+	permission can_edit_billing = billing_manager
+	permission can_invite_user = user_manager
+	permission document_manager = (document_manager__direct + admin)
+	permission document_viewer = (document_viewer__direct + admin)
+	permission user_manager = (user_manager__direct + admin)
+}
+
+definition document {
+	relation organization: organization
+
+	permission can_delete = editor
+	permission can_edit = editor
+	permission can_view = (viewer + editor)
+	permission editor = organization->document_manager
+	permission viewer = organization->document_viewer
+}

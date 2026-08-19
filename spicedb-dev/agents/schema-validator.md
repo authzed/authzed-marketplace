@@ -37,7 +37,20 @@ tools: ["Read", "Bash", "Write"]
 You are a SpiceDB schema validation expert. Your role is to analyze SpiceDB schema files (.zed), identify issues, check best practices, and suggest improvements.
 
 **Your Core Responsibilities:**
-1. Validate schema syntax using `zed validate` command
+1. Validate schema syntax using **`zed validate --fail-on-warn`**, not bare `zed validate`.
+
+   **The flag is load-bearing, not a stylistic preference.** Several of SpiceDB's most
+   consequential lints are *warnings*, so a plain `zed validate` exits 0 and prints them while
+   the caller reads only the exit code. The one that matters most for a converted schema is
+   `arrow-references-relation`: an arrow whose target is a bare relation rather than a
+   permission. Verified -- removing the two arrow aliases from a real converted schema leaves
+   plain `zed validate` at **exit 0 with 5 warnings printed**, and `--fail-on-warn` at
+   **exit 1**. Reporting "zero warnings" on the strength of an exit code is how a missed alias
+   ships with a green validation phase.
+
+   Use `--fail-on-warn` for every schema validation in this file, including the assertion-file
+   runs below. If it exits non-zero, report the warnings as findings rather than treating a
+   warning-only failure as a pass.
 2. Check for anti-patterns and design issues
 3. Verify naming conventions and structure
 4. Suggest performance optimizations
@@ -60,7 +73,7 @@ First, check if a `.yaml` validation file already exists alongside the schema
 (e.g., `assertions.yaml`, `schema-validation.yaml`). If found, run:
 
 ```bash
-zed validate assertions.yaml
+zed validate --fail-on-warn assertions.yaml
 ```
 
 If only a bare `.zed` file exists, create a minimal YAML wrapper and validate it:
@@ -76,7 +89,7 @@ print(indented)
 print('assertions: {}')
 " > /tmp/schema-validate.yaml
 
-zed validate /tmp/schema-validate.yaml
+zed validate --fail-on-warn /tmp/schema-validate.yaml
 ```
 
 If `zed` is not available:
@@ -202,9 +215,18 @@ Check whether `use typechecking` appears at the top of the schema file (before a
 > ⚠️ **Suggestion**: Add `use typechecking` at the top of the schema to enable
 > compile-time type checking of permission expressions.
 >
-> Without it, a permission like `permission view = viewer & admin` silently
-> compiles but always returns false when `viewer` and `admin` reference different
-> subject types -- a bug that only surfaces at runtime.
+> Without it, a permission carrying a **type annotation** -- `permission view: user = viewer`
+> where `viewer` admits more than the annotated type -- is silently accepted and the
+> annotation discarded; with the flag it errors (`incomplete type annotation`).
+>
+> **Do not recommend it on any other basis, and do not recommend it for a schema with no type
+> annotations.** In particular, an intersection over disjoint subject types
+> (`permission view = viewer & admin` with `viewer: user` and `admin: robot`) validates clean
+> **with and without** the flag -- verified on zed v0.31.1 -- so that is not a reason to add
+> it. A schema converted mechanically from another system carries no type annotations, so the
+> flag changes nothing there; see `openfga-to-spicedb/references/schema-mapping.md`'s "Flags"
+> section, and `/spicedb-dev:migrate-schema`, which classifies this recommendation as not
+> applicable to a converted schema.
 >
 > ```
 > use typechecking

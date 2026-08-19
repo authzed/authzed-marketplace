@@ -1,0 +1,48 @@
+name: Synthetic fixture -- identifier renaming (oracle gap 2)
+# Not a real openfga/sample-stores store. Hand-authored so normalize_name /
+# _disambiguate actually have work to do: a hyphenated type name, CamelCase
+# and hyphen/underscore-colliding relation names, and a relation name over
+# 64 characters. See fixtures/README.md and tests/test_oracle_fixtures.py.
+# No model_file is shipped -- migration_harness never reads that key.
+
+tuples:
+  - {user: user:alice, relation: owner, object: project-plan:roadmap-q1}
+
+  # "can-edit" and "can_edit" both normalize to "can_edit" -- two distinct
+  # source relations that _disambiguate must keep distinct, not merge.
+  - {user: user:bob, relation: can-edit, object: project-plan:roadmap-q1}
+  - {user: user:carol, relation: can_edit, object: project-plan:roadmap-q1}
+
+  # "Approver" is CamelCase *and* splits (the converted schema unions the
+  # direct grant with the plan owner), so renaming and splitting interact:
+  # the write must target the renamed-and-split __direct relation.
+  - {user: user:dave, relation: Approver, object: project-plan:roadmap-q1}
+
+  # 68 characters raw -- normalize_name must truncate-with-hash to fit
+  # SpiceDB's 64-character identifier limit.
+  - {user: user:erin, relation: ReviewerLevelAssignmentForEnterpriseGradeComplianceAuditingProcess, object: project-plan:roadmap-q1}
+
+tests:
+  - name: renamed identifiers resolve to the right, and only the right, permission
+    check:
+      # owner is unioned into the split "approver" permission; alice was
+      # never granted either edit relation.
+      - {user: user:alice, object: project-plan:roadmap-q1, assertions: {owner: true, approver: true, can-edit: false}}
+
+  - name: colliding hyphen/underscore relations stay distinct after disambiguation
+    check:
+      # bob has the hyphen relation only, not the underscore one.
+      - {user: user:bob, object: project-plan:roadmap-q1, assertions: {can-edit: true, can_edit: false}}
+      # carol has the underscore relation only, not the hyphen one.
+      - {user: user:carol, object: project-plan:roadmap-q1, assertions: {can_edit: true, can-edit: false}}
+
+  - name: CamelCase split relation checks the permission, not the write-only relation
+    check:
+      - {user: user:dave, object: project-plan:roadmap-q1, assertions: {Approver: true}}
+      # bob has can-edit only, never granted Approver.
+      - {user: user:bob, object: project-plan:roadmap-q1, assertions: {Approver: false}}
+
+  - name: an over-64-character relation name round-trips through hash truncation
+    check:
+      - {user: user:erin, object: project-plan:roadmap-q1, assertions: {ReviewerLevelAssignmentForEnterpriseGradeComplianceAuditingProcess: true}}
+      - {user: user:dave, object: project-plan:roadmap-q1, assertions: {ReviewerLevelAssignmentForEnterpriseGradeComplianceAuditingProcess: false}}

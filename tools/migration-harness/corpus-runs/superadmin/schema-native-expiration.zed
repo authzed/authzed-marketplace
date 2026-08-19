@@ -1,0 +1,86 @@
+// RECOMMENDED encoding for the helpdesk grant's temporal access, per this pack's existing
+// gate decision (schema-mapping.md, "Temporal access: caveat vs. native expiration", "The
+// gate decision"). That decision was made once, for temporal-access, and is applied here
+// unchanged rather than re-litigated: native expiration is the recommended default for a
+// temporal-access condition carried over from an OpenFGA source, and caveat (schema.zed) is
+// the documented alternative for a call site that genuinely needs "was this valid at time T"
+// rather than "is this valid right now" -- which is exactly this store's own case (see below).
+//
+// schema.zed (the caveat form) remains the only artifact this store's harness ritual
+// validates -- not because it is the better production choice, but because it is the only
+// one this pack's own tooling (zed validate / the migration-harness) can verify end to end,
+// and because this store's own source assertions are themselves fixed-instant ("was this
+// grant valid at 2024-01-01T00:10:00Z"), not real-clock-relative -- reproducing them with
+// native expiration would require either sleeping in real time or asserting against dates
+// arbitrarily far in the past/future relative to whenever the suite runs, neither of which
+// tests the same claim the source does. See schema-mapping.md's "Why the harness only
+// verifies the caveat form" for the general version of this argument.
+//
+// Verified live (SpiceDB v1.56.0, separate keyspace/token from schema.zed's): `use
+// expiration` is required (dropping it reproduces the documented trap exactly -- "could not
+// lookup caveat `expiration` for relation `helpdesk_member`: caveat with name `expiration`
+// not found"); with the flag, WriteSchema and zed validate both accept this file directly,
+// no compile step. A relationship written with `--expiration-time` 6s in the future checked
+// true and appeared in `zed relationship read` immediately after write; ~8s later (inside
+// SpiceDB's GC interval, so nothing was physically reclaimed) it checked false and had
+// vanished from `zed relationship read` entirely -- gone from every read path the instant
+// the timestamp passes, independent of GC, matching schema-mapping.md's documented mechanism
+// exactly.
+
+use expiration
+
+definition user {}
+
+definition employee {}
+
+definition application {}
+
+definition system {
+	relation admin: employee | application
+
+	permission admin__perm = admin
+}
+
+definition organization {
+	relation system: system
+	relation admin__direct: user
+	relation member: user
+	relation helpdesk_member: employee with expiration
+
+	permission admin = (admin__direct + system->admin__perm)
+	permission can_create_project = (admin + member)
+	permission helpdesk_member__perm = helpdesk_member
+}
+
+definition project {
+	relation organization: organization
+	relation owner: user
+	relation editor__direct: user
+	relation viewer__direct: user
+
+	permission editor = (editor__direct + owner + organization->admin)
+	permission viewer = (viewer__direct + editor + organization->helpdesk_member__perm)
+}
+
+definition task {
+	relation project: project
+	relation owner: user
+	relation editor__direct: user
+	relation viewer__direct: user
+
+	permission editor = (editor__direct + project->editor)
+	permission viewer = (viewer__direct + editor + project->viewer)
+}
+
+// Illustrative write for this store's own fixture data (issued_at + valid_for,
+// computed once at conversion time into one absolute timestamp, per the gate decision's
+// recorded consequence -- the source's separate issued_at/valid_for values are not
+// reconstructable from it afterward):
+//
+//   zed relationship touch organization:acme helpdesk_member employee:john --expiration-time 2024-01-01T01:00:00Z   # issued_at (00:00:00Z) + 1h
+//
+// That grant is expired relative to any real clock past 2024 -- on a live server today,
+// `organization:acme#helpdesk_member@employee:john` (and anything reached through it) checks
+// false and is absent from `zed relationship read`, which is expected and is exactly the
+// scope-narrowing the gate decision names: this file can answer "is john's grant valid right
+// now," never "was it valid at 2024-01-01T00:10:00Z."

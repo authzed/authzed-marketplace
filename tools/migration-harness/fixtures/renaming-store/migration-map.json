@@ -1,0 +1,28 @@
+{
+  "types": {
+    "user": "user",
+    "project-plan": "project_plan"
+  },
+  "permissions": {
+    "user": {},
+    "project-plan": {
+      "owner": "owner",
+      "can-edit": "can_edit",
+      "can_edit": "can_edit_7d7be7",
+      "Approver": "approver",
+      "ReviewerLevelAssignmentForEnterpriseGradeComplianceAuditingProcess": "reviewerlevelassignmentforenterprisegradecomplianceauditi_247c02"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "project-plan": {
+      "Approver": {
+        "relation": "approver__direct",
+        "permission": "approver"
+      }
+    }
+  }
+}

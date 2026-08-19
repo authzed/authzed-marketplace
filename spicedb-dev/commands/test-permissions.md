@@ -430,9 +430,11 @@ Include a "SpiceDB Testing Setup" section in the output with these options:
 
 **Local development -- `spicedb serve-testing`:**
 ```bash
-spicedb serve-testing --grpc-preshared-key test-key-1 --grpc-preshared-key test-key-2
+spicedb serve-testing
 ```
-Each unique preshared key gets an isolated, empty datastore. Parallel test suites can share one SpiceDB instance without interference.
+No preshared key needed -- `serve-testing` accepts any client-supplied token and gives
+each unique token its own isolated, empty datastore (e.g. connect with `--token test-key-1`
+and `--token test-key-2`). Parallel test suites can share one SpiceDB instance without interference.
 
 **Integration tests with testcontainers:**
 

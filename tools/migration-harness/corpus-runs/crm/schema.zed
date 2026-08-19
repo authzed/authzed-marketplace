@@ -1,0 +1,80 @@
+definition user {}
+
+definition organization {
+	relation member__direct: user
+	relation admin: user
+	relation sales_manager: user
+	relation sales_rep: user
+
+	permission member = (member__direct + admin + sales_rep + sales_manager)
+	permission admin__perm = admin
+	permission sales_manager__perm = sales_manager
+}
+
+definition account {
+	relation organization: organization
+	relation owner: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_sales_manager = organization->sales_manager__perm
+	permission can_delete = organization_admin
+	permission can_edit = (owner + organization_sales_manager + can_delete)
+	permission can_create_contact = can_edit
+	permission can_create_opportunity = can_edit
+	permission can_view = can_edit
+}
+
+definition contact {
+	relation account: account
+	relation owner: user
+
+	permission can_delete = account->organization_admin
+	permission can_edit = (owner + can_delete)
+	permission can_view = (account->can_view + can_edit)
+}
+
+definition lead {
+	relation organization: organization
+	relation owner: user
+
+	permission can_delete = organization->admin__perm
+	permission can_convert = (owner + organization->sales_manager__perm)
+	permission can_edit = (can_convert + can_delete)
+	permission can_view = can_edit
+}
+
+definition opportunity {
+	relation account: account
+	relation owner: user
+
+	permission can_delete = account->organization_admin
+	permission can_close = (owner + account->organization_sales_manager)
+	permission can_edit = (can_close + can_delete)
+	permission can_view = (account->can_view + can_edit)
+}
+
+definition engagement {
+	relation organization: organization
+	relation owner: user
+
+	permission can_edit = (owner + organization->admin__perm)
+	permission can_view = (organization->sales_manager__perm + can_edit)
+}
+
+definition note {
+	relation organization: organization
+	relation owner: user
+
+	permission can_delete = (owner + organization->admin__perm)
+	permission can_edit = can_delete
+	permission can_view = (organization->sales_manager__perm + can_edit)
+}
+
+definition task {
+	relation organization: organization
+	relation owner: user
+
+	permission can_edit = (owner + organization->admin__perm)
+	permission can_complete = owner
+	permission can_view = (organization->sales_manager__perm + can_edit)
+}

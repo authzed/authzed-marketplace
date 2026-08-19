@@ -1,0 +1,74 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation provider: user
+	relation nurse: user
+	relation medical_records_staff: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission provider__perm = provider
+	permission nurse__perm = nurse
+	permission medical_records_staff__perm = medical_records_staff
+	permission member = (member__direct + admin + provider + nurse + medical_records_staff)
+}
+
+definition facility {
+	relation organization: organization
+	relation director: user
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (director + can_delete)
+	permission can_view = (organization->member + can_edit)
+}
+
+definition patient {
+	relation organization: organization
+	relation primary_provider: user
+	relation care_team: user
+
+	permission org_admin = organization->admin__perm
+	permission org_medical_records = organization->medical_records_staff__perm
+	permission can_delete = org_admin
+	permission can_edit = (primary_provider + org_medical_records + can_delete)
+	permission can_view_sensitive = (primary_provider + care_team + org_medical_records + can_delete)
+	permission can_create_encounter = can_view_sensitive
+	permission can_create_diagnosis = can_edit
+	permission can_view = (can_view_sensitive + can_edit)
+}
+
+definition encounter {
+	relation patient: patient
+	relation attending_provider: user
+
+	permission org_admin = patient->org_admin
+	permission can_delete = org_admin
+	permission can_create_treatment = (attending_provider + can_delete)
+	permission can_edit = (attending_provider + can_delete)
+	permission can_view = (patient->can_view + can_edit)
+}
+
+definition diagnosis {
+	relation patient: patient
+	relation diagnosing_provider: user
+
+	permission can_edit = (diagnosing_provider + patient->org_admin)
+	permission can_view = (patient->can_view + can_edit)
+}
+
+definition treatment {
+	relation encounter: encounter
+	relation ordering_provider: user
+
+	permission can_delete = encounter->can_delete
+	permission can_edit = (ordering_provider + can_delete)
+	permission can_view = (encounter->can_view + can_edit)
+}
+
+definition medication {
+	relation organization: organization
+
+	permission can_edit = organization->admin__perm
+	permission can_view = (organization->provider__perm + organization->nurse__perm + can_edit)
+}

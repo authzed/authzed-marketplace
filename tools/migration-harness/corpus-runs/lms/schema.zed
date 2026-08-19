@@ -1,0 +1,75 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation instructor: user
+	relation student: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission instructor__perm = instructor
+	permission student__perm = student
+	permission member = (member__direct + admin + instructor + student)
+}
+
+definition course {
+	relation organization: organization
+	relation owner: user
+	relation enrolled_instructor: user
+	relation enrolled_student: user
+
+	permission enrolled_instructor__perm = enrolled_instructor
+	permission organization_admin = organization->admin__perm
+	permission organization_instructor = organization->instructor__perm
+	permission organization_student = organization->student__perm
+	permission can_delete = organization_admin
+	permission can_publish = (owner + can_delete)
+	permission can_edit = (enrolled_instructor + can_publish)
+	permission can_create_class = can_edit
+	permission can_create_content = can_edit
+	permission can_view = (enrolled_student + organization_instructor + can_edit)
+}
+
+definition class {
+	relation course: course
+	relation instructor: user
+	relation student: user
+
+	permission instructor__perm = instructor
+	permission organization_admin = course->organization_admin
+	permission organization_instructor = course->organization_instructor
+	permission can_delete = organization_admin
+	permission can_enroll = (instructor + can_delete)
+	permission can_edit = (course->enrolled_instructor__perm + can_enroll)
+	permission can_view = (student + course->can_view + can_edit)
+}
+
+definition content {
+	relation course: course
+	relation author: user
+
+	permission can_delete = (author + course->organization_admin)
+	permission can_edit = (course->organization_instructor + can_delete)
+	permission can_view = (course->organization_student + can_edit)
+}
+
+definition collection {
+	relation organization: organization
+	relation owner: user
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (owner + organization->instructor__perm + can_delete)
+	permission can_view = (organization->student__perm + can_edit)
+}
+
+definition activity {
+	relation class: class
+	relation creator: user
+	relation assignee: user
+
+	permission can_delete = class->organization_admin
+	permission can_grade = (creator + class->instructor__perm + class->organization_instructor + can_delete)
+	permission can_edit = can_grade
+	permission can_view = (assignee + can_edit)
+	permission can_submit = assignee
+}

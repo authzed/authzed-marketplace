@@ -1,0 +1,40 @@
+schemaFile: schema.zed
+relationships: |-
+  datatype_test:one#is_valid@user:int[is_valid_uint:{"_uint":1}]
+  datatype_test:one#is_valid@user:uint[is_valid_uint:{"_uint":1}]
+  datatype_test:one#is_valid@user:double[is_valid_double:{"_double":1}]
+  datatype_test:one#is_valid@user:string[is_valid_string:{"_string":"1"}]
+  datatype_test:one#is_valid@user:timestamp[is_valid_timestamp:{"_timestamp":"2019-02-01T00:00:00Z"}]
+  datatype_test:one#is_valid@user:duration[is_valid_duration:{"_duration":"10s"}]
+  datatype_test:one#is_valid@user:mapstring[is_valid_map_string:{"_mapstring":{"key":"1"}}]
+  datatype_test:one#is_valid@user:liststring[is_valid_list_string:{"_liststring":["1"]}]
+  datatype_test:one#is_valid@user:ipaddress[is_valid_ipaddress:{"_ipaddress":"192.168.0.1"}]
+assertions:
+  assertTrue:
+    # "Test with context in tuples" -- context is bound to the tuple at write
+    # time (above), so these checks carry no context of their own.
+    - "datatype_test:one#is_valid@user:int"
+    - "datatype_test:one#is_valid@user:uint"
+    - "datatype_test:one#is_valid@user:double"
+    - "datatype_test:one#is_valid@user:string"
+    - "datatype_test:one#is_valid@user:timestamp"
+    - "datatype_test:one#is_valid@user:duration"
+    - "datatype_test:one#is_valid@user:mapstring"
+    - "datatype_test:one#is_valid@user:liststring"
+    - "datatype_test:one#is_valid@user:ipaddress"
+    # "Test with context in checks" -- reuses the same (resource, relation,
+    # subject) triples as the block above (source quirk, not a conversion
+    # choice -- see corpus-runs/README.md "condition-data-types" findings).
+    # These pass here because the relationship above already satisfies the
+    # bound caveat from its own embedded context; they do not independently
+    # exercise check-time-only context resolution, and for user:int they do
+    # not exercise is_valid_int at all.
+    - 'datatype_test:one#is_valid@user:int with {"_int":1}'
+    - 'datatype_test:one#is_valid@user:uint with {"_uint":1}'
+    - 'datatype_test:one#is_valid@user:double with {"_double":1}'
+    - 'datatype_test:one#is_valid@user:string with {"_string":"1"}'
+    - 'datatype_test:one#is_valid@user:timestamp with {"_timestamp":"2019-02-01T00:00:00Z"}'
+    - 'datatype_test:one#is_valid@user:duration with {"_duration":"10s"}'
+    - 'datatype_test:one#is_valid@user:mapstring with {"_mapstring":{"key":"1"}}'
+    - 'datatype_test:one#is_valid@user:liststring with {"_liststring":["1"]}'
+    - 'datatype_test:one#is_valid@user:ipaddress with {"_ipaddress":"192.168.0.1"}'

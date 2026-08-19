@@ -1,0 +1,26 @@
+definition user {}
+
+definition group {
+	relation member: user
+}
+
+definition folder {
+	relation owner: user
+	relation parent: folder
+	relation viewer__direct: user | user:* | group#member
+
+	permission owner__perm = owner
+	permission viewer = (viewer__direct + owner + parent->viewer)
+	permission can_create_file = owner
+}
+
+definition doc {
+	relation owner: user
+	relation parent: folder
+	relation viewer: user | user:* | group#member
+
+	permission can_change_owner = owner
+	permission can_read = (viewer + owner + parent->viewer)
+	permission can_share = (owner + parent->owner__perm)
+	permission can_write = (owner + parent->owner__perm)
+}

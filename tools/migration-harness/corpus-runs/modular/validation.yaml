@@ -1,0 +1,13 @@
+schemaFile: schema.zed
+relationships: |-
+  organization:openfga#admin@user:anne
+  space:openfga#organization@organization:openfga
+  project:openfga#organization@organization:openfga
+assertions:
+  assertTrue:
+    - "organization:openfga#admin@user:anne"
+    - "organization:openfga#member@user:anne"
+    - "organization:openfga#can_create_space@user:anne"
+    - "space:openfga#can_view_pages@user:anne"
+    - "project:openfga#viewer@user:anne"
+  assertFalse: []

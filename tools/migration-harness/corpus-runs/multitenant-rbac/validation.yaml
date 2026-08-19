@@ -1,0 +1,29 @@
+schemaFile: schema.zed
+relationships: |-
+  document:readme#organization@organization:acme
+  group:acme-data-engineering#member@user:emily
+  group:acme-finance#member@user:francis
+  group:acme-it-admins#member@user:ian
+  group:engineering#member@group:acme-data-engineering#member
+  organization:acme#admin@role:acme-admins#assignee
+  organization:acme#admin@user:anne
+  organization:acme#billing_manager__direct@role:acme-billing-manager#assignee
+  organization:acme#document_manager__direct@role:acme-document-management#assignee
+  role:acme-admins#assignee@group:acme-it-admins#member
+  role:acme-billing-manager#assignee@group:acme-finance#member
+  role:acme-document-management#assignee@group:engineering#member
+assertions:
+  assertTrue:
+    - "document:readme#can_edit@user:emily"
+    - "document:readme#can_view@user:emily"
+    - "document:readme#can_edit@user:anne"
+    - "document:readme#can_view@user:anne"
+    - "document:readme#can_edit@user:ian"
+    - "document:readme#can_view@user:ian"
+    - "organization:acme#can_edit_billing@user:francis"
+    - "organization:acme#can_edit_billing@user:ian"
+    - "organization:acme#can_edit_billing@user:anne"
+  assertFalse:
+    - "document:readme#can_edit@user:francis"
+    - "document:readme#can_view@user:francis"
+    - "organization:acme#can_edit_billing@user:emily"

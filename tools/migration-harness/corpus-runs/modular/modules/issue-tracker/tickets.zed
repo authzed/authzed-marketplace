@@ -1,0 +1,14 @@
+// module: issue-tracker, file: issue-tracker/tickets.zed
+//
+// Source: openfga/sample-stores/stores/modular/issue-tracker/tickets.fga
+// (module issue-tracker, a second file in the same module -- OpenFGA modules can
+// span more than one .fga file, and SpiceDB modules can span more than one .zed
+// file the same way: this file needs no `import` and contributes no partial, it
+// just declares a type outright, same as any single-file model would.)
+
+definition ticket {
+	// tickets.fga: `define project: [project]` -- pure-direct, no split
+	relation project: project
+	// tickets.fga: `define owner: [user]` -- pure-direct, no split
+	relation owner: user
+}

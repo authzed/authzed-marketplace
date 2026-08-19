@@ -1,0 +1,57 @@
+schemaFile: schema.zed
+relationships: |-
+  comment:feedback-001#author@user:charlie
+  comment:feedback-001#page@page:architecture-guide
+  organization:wiki-co#admin@user:alice
+  organization:wiki-co#editor@user:bob
+  organization:wiki-co#member__direct@user:diana
+  organization:wiki-co#viewer@user:charlie
+  page:architecture-guide#author@user:bob
+  page:architecture-guide#space@space:engineering
+  space:engineering#organization@organization:wiki-co
+  space:engineering#owner@user:bob
+assertions:
+  assertTrue:
+    - "space:engineering#can_view@user:alice"
+    - "space:engineering#can_edit@user:alice"
+    - "space:engineering#can_delete@user:alice"
+    - "space:engineering#can_manage_members@user:alice"
+    - "page:architecture-guide#can_view@user:alice"
+    - "page:architecture-guide#can_edit@user:alice"
+    - "page:architecture-guide#can_delete@user:alice"
+    - "page:architecture-guide#can_publish@user:alice"
+    - "comment:feedback-001#can_view@user:alice"
+    - "comment:feedback-001#can_edit@user:alice"
+    - "comment:feedback-001#can_delete@user:alice"
+    - "space:engineering#can_view@user:bob"
+    - "space:engineering#can_edit@user:bob"
+    - "space:engineering#can_manage_members@user:bob"
+    - "page:architecture-guide#can_view@user:bob"
+    - "page:architecture-guide#can_edit@user:bob"
+    - "page:architecture-guide#can_delete@user:bob"
+    - "comment:feedback-001#can_view@user:bob"
+    - "space:engineering#can_view@user:charlie"
+    - "page:architecture-guide#can_view@user:charlie"
+    - "comment:feedback-001#can_view@user:charlie"
+    - "comment:feedback-001#can_edit@user:charlie"
+    - "comment:feedback-001#can_delete@user:charlie"
+  assertFalse:
+    - "space:engineering#can_delete@user:bob"
+    - "page:architecture-guide#can_publish@user:bob"
+    - "comment:feedback-001#can_edit@user:bob"
+    - "comment:feedback-001#can_delete@user:bob"
+    - "space:engineering#can_edit@user:charlie"
+    - "space:engineering#can_delete@user:charlie"
+    - "space:engineering#can_manage_members@user:charlie"
+    - "page:architecture-guide#can_edit@user:charlie"
+    - "page:architecture-guide#can_delete@user:charlie"
+    - "page:architecture-guide#can_publish@user:charlie"
+    - "space:engineering#can_view@user:diana"
+    - "space:engineering#can_edit@user:diana"
+    - "space:engineering#can_delete@user:diana"
+    - "page:architecture-guide#can_view@user:diana"
+    - "page:architecture-guide#can_edit@user:diana"
+    - "page:architecture-guide#can_delete@user:diana"
+    - "comment:feedback-001#can_view@user:diana"
+    - "comment:feedback-001#can_edit@user:diana"
+    - "comment:feedback-001#can_delete@user:diana"

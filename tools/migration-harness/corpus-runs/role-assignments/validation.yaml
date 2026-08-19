@@ -1,0 +1,21 @@
+schemaFile: schema.zed
+relationships: |-
+  role:acme-project-admin#can_view_project@user:*
+  role:acme-project-admin#can_edit_project@user:*
+  project:openfga#role_assignment@role_assignment:acme-project-admin-openfga
+  role_assignment:acme-project-admin-openfga#role@role:acme-project-admin
+  project:java-sdk#role_assignment@role_assignment:acme-project-admin-java-sdk
+  role_assignment:acme-project-admin-java-sdk#role@role:acme-project-admin
+  role_assignment:acme-project-admin-openfga#assignee@user:anne
+  role_assignment:acme-project-admin-java-sdk#assignee@user:bob
+assertions:
+  assertTrue:
+    - "project:openfga#can_view@user:anne"
+    - "project:openfga#can_edit@user:anne"
+    - "project:java-sdk#can_view@user:bob"
+    - "project:java-sdk#can_edit@user:bob"
+  assertFalse:
+    - "project:openfga#can_view@user:bob"
+    - "project:openfga#can_edit@user:bob"
+    - "project:java-sdk#can_view@user:anne"
+    - "project:java-sdk#can_edit@user:anne"

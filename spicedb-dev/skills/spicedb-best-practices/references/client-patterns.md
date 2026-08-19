@@ -4,11 +4,26 @@ Language-specific patterns for connecting to and using SpiceDB client libraries.
 
 ## Language / SDK Comparison
 
+These are Authzed's **established, published** clients -- installed normally, from the
+registry, in every example below.
+
 | Language | Package | Import |
 |----------|---------|--------|
 | Go | `authzed-go` | `authzed "github.com/authzed/authzed-go/v1"` |
 | TypeScript | `authzed-node` | `import { v1 } from '@authzed/authzed-node'` |
 | Python | `authzed` | `from authzed.api.v1 import Client` |
+| C# | `Authzed.Net` | `using Authzed.Api.V1;` |
+
+> **There is a second, different family of clients, and they are not interchangeable.** The
+> `spicedb-client-integration` skill covers a **prototype** client set spanning seven
+> languages (the four above plus Java, Rust, and Ruby), which is unpublished, vendored at a
+> pinned commit, and labeled by its own repository "not for production use." It has a
+> different API from the packages tabled here -- different method names, its own
+> `Relationship`/`Filter`/`Transaction` types, its own consistency helpers -- so patterns do
+> not port between the two by renaming. Use the published packages above unless you
+> specifically need the prototype's API or one of the three languages only it covers. The
+> `/spicedb-dev:migrate-code` phase of an OpenFGA migration targets the prototype; everything
+> else in this plugin targets these.
 
 ---
 

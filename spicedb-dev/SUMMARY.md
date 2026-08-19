@@ -87,9 +87,15 @@ every permission.
 | New project, no existing auth | `/spicedb-dev:plan` |
 | Have a data model, need permission design | `/spicedb-dev:design-model` |
 | Have a permission model, need a schema | `/spicedb-dev:generate-schema` |
-| Have a schema, need implementation | `/spicedb-dev:implement-spicedb` |
+| Have a schema, need implementation (Go / TypeScript / Python / C#, using Authzed's published clients) | `/spicedb-dev:implement-spicedb` |
 | Inherited codebase, need coverage picture | `/spicedb-dev:audit-coverage` |
 | Need to validate an existing schema | `/spicedb-dev:validate-schema` |
+| Migrating from OpenFGA / Okta FGA | `/spicedb-dev:migrate` |
+| Migration schema converted, need to move relationship data | `/spicedb-dev:migrate-data` |
+| Migration schema converted, need to rewrite client code | `/spicedb-dev:migrate-code` |
+| Migration schema converted, need to convert test fixtures | `/spicedb-dev:migrate-tests` |
+| Migration converted, need to verify it against production traffic before cutover (dual-run, diff, replay, snapshot-to-assertions) | `/spicedb-dev:migrate-verify` |
+| Adding the **prototype** SpiceDB client -- or any client in Java, Rust, or Ruby | `spicedb-client-integration` skill (auto-loads; start with `references/installation.md`) |
 
 ---
 
@@ -105,16 +111,27 @@ every permission.
 - **implement-spicedb-checks** -- adds CheckPermission / LookupResources / BulkCheckPermission to code
 - **audit-coverage** -- coverage matrix for schema permissions vs code checks
 - **test-permissions** -- generates test fixtures and integration tests
+- **migrate** -- phase 0 and the migration's front door: runs the migration-analyzer agent over the model and the codebase, holds the single pre-flight gate, writes migration-plan.md and migration-map.json, routes into phase 1
+- **migrate-schema** -- converts a source authorization model to schema.zed and an identifier map; phases 1 and 2, reading migration-plan.md when present and holding a reduced gate inline only when run standalone without one
+- **migrate-data** -- phase 3: moves a live source store's relationship data into SpiceDB (extract, transform, load, verify) and emits the ID codec module; a pure consumer of migration-plan.md and migration-map.json, with no gate of its own
+- **migrate-code** -- phase 4, and not the last thing the plugin automates: phase 5 and the cutover harness both still have commands behind them, neither ordered against this one. Vendors the SpiceDB client into the project and rewrites OpenFGA call sites into SpiceDB client calls construct-by-construct, per code-mapping.md, importing phase 3's ID codec whenever object IDs are encoded; a pure consumer of migration-plan.md and migration-map.json, with no gate of its own
+- **migrate-tests** -- phase 5: converts a source system's test fixtures and assertions into SpiceDB validation YAML, validated with zed validate; a pure consumer of migration-plan.md and migration-map.json, with no gate of its own
+- **migrate-verify** -- not one of the six pipeline phases; implements the cutover playbook's "dual-write, shadow-read" step once phase 3 has passed verification. Emits a differential harness (dual-run, diff, replay, snapshot-to-assertions) into the customer's own project, in their language, that dual-runs SpiceDB beside the still-authoritative source system and turns confirmed agreements into regression tests; adds no row to the Phase status table
 
 ### Skills (auto-load by context)
 - **authorization-planner** -- entry point; routes to the right command or skill
 - **spicedb-schema-design** -- schema patterns, anti-patterns, design decisions
 - **spicedb-best-practices** -- client library usage, consistency models, error handling
 - **authorization-testing** -- test fixture patterns, integration testing
+- **migrating-to-spicedb** -- source-agnostic migration framework: phase pipeline (with per-phase build status), pre-flight gate, conversion-pack contract, and (once conversion is done) the cutover playbook and differential-harness contract
+- **openfga-to-spicedb** -- conversion pack for OpenFGA / Okta FGA / Auth0 FGA: schema mapping, blockers, naming normalization, data mapping, code mapping, test mapping, and the differential-harness source adapter
+- **spicedb-client-integration** -- general-purpose client integration for Go, Python, TypeScript, C#, Java, Rust, and Ruby: obtaining the prototype client and the vocabulary shared across all seven languages
 
 ### Agents (run autonomously)
 - **schema-validator** -- validates schema, checks for anti-patterns, suggests improvements
 - **checkpoint-identifier** -- data flow analysis to identify where checks should be added
+- **migration-analyzer** -- phase 0 of a migration: scans the source model and the whole
+  codebase, returns the Class A/B/C findings the pre-flight gate resolves
 
 ---
 

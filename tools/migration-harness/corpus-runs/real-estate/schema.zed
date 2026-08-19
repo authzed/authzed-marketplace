@@ -1,0 +1,68 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation broker: user
+	relation agent: user
+	relation appraiser: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission broker__perm = broker
+	permission agent__perm = agent
+	permission appraiser__perm = appraiser
+	permission member = (member__direct + admin + broker + agent + appraiser)
+	permission can_create_property = admin
+	permission can_create_neighborhood = admin
+}
+
+definition property {
+	relation organization: organization
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (organization->broker__perm + can_delete)
+	permission can_create_listing = (organization->agent__perm + organization->broker__perm + can_delete)
+	permission can_create_inspection = (organization->appraiser__perm + organization->broker__perm + can_delete)
+	permission can_view = (organization->member + can_edit)
+}
+
+definition listing {
+	relation organization: organization
+	relation property: property
+	relation listing_agent: user
+
+	permission org_admin = organization->admin__perm
+	permission org_broker = organization->broker__perm
+	permission can_delete = org_admin
+	permission can_create_transaction = (listing_agent + org_broker + can_delete)
+	permission can_close = (listing_agent + org_broker + can_delete)
+	permission can_edit = can_close
+	permission can_view = (organization->member + can_edit)
+}
+
+definition transaction {
+	relation listing: listing
+	relation buyer_agent: user
+	relation seller_agent: user
+
+	permission can_delete = listing->can_delete
+	permission can_edit = (buyer_agent + seller_agent + listing->can_edit)
+	permission can_view_financial = can_edit
+	permission can_view = (listing->can_view + can_edit)
+}
+
+definition inspection {
+	relation property: property
+	relation inspector: user
+
+	permission can_delete = property->can_delete
+	permission can_edit = (inspector + can_delete)
+	permission can_view = (property->can_view + can_edit)
+}
+
+definition neighborhood {
+	relation organization: organization
+
+	permission can_edit = organization->admin__perm
+	permission can_view = (organization->member + can_edit)
+}

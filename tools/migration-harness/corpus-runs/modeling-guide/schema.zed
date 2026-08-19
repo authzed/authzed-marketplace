@@ -1,0 +1,58 @@
+caveat time_based_grant(current_time timestamp, issued_at timestamp, valid_for duration) {
+	current_time < issued_at + valid_for
+}
+
+definition user {}
+
+definition application {}
+
+definition system {
+	relation super_admin: user with time_based_grant
+
+	permission super_admin__perm = super_admin
+}
+
+definition role {
+	relation assignee: user | group#member
+}
+
+definition organization {
+	relation system: system
+	relation admin__direct: user
+	relation can_edit_documents__direct: role#assignee | application
+	relation can_add_admin__direct: role#assignee | application
+	relation can_create_document__direct: role#assignee | application
+
+	permission admin = (admin__direct + system->super_admin__perm)
+	permission can_edit_documents = (can_edit_documents__direct + admin)
+	permission can_add_admin = (can_add_admin__direct + admin)
+	permission can_create_document = (can_create_document__direct + admin)
+}
+
+definition group {
+	relation member: user | group#member
+}
+
+definition folder {
+	relation organization: organization
+	relation parent: folder
+	relation owner: user
+	relation viewer: user | group#member
+	relation editor: user | group#member
+
+	permission viewer__perm = viewer
+	permission can_edit = (editor + owner + parent->can_edit + organization->can_edit_documents)
+	permission can_view = (viewer + can_edit)
+}
+
+definition document {
+	relation parent: folder
+	relation viewer__direct: user | user:*
+	relation owner: user | group#member
+	relation editor: user | group#member
+	relation published: document
+
+	permission viewer = (viewer__direct + parent->viewer__perm)
+	permission can_edit = (editor + owner + parent->can_edit)
+	permission can_view = ((viewer & published->viewer) + can_edit)
+}

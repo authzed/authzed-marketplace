@@ -1,0 +1,19 @@
+schemaFile: schema.zed
+relationships: |-
+  device:1#it_admin@user:beth
+  device:1#it_admin@user:diane
+  device:1#security_guard@user:anne
+  device:1#security_guard@user:charles
+  device:2#it_admin@device_group:group1#it_admin
+  device:2#security_guard@device_group:group1#security_guard
+  device:3#it_admin@device_group:group1#it_admin
+  device:3#security_guard@device_group:group1#security_guard
+  device_group:group1#it_admin@user:diane
+  device_group:group1#security_guard@user:charles
+assertions:
+  assertTrue:
+    - "device:1#can_view_recorded_video@user:anne"
+    - "device:2#can_rename_device@user:diane"
+  assertFalse:
+    - "device:1#it_admin@user:anne"
+    - "device:2#can_rename_device@user:charles"

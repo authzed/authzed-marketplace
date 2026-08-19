@@ -1,0 +1,33 @@
+definition user {}
+
+definition team {
+	relation member: user | team#member
+}
+
+definition organization {
+	relation member__direct: user
+	relation owner: user
+	relation repo_admin: user | organization#member
+	relation repo_reader: user | organization#member
+	relation repo_writer: user | organization#member
+
+	permission member = (member__direct + owner)
+	permission repo_admin__perm = repo_admin
+	permission repo_reader__perm = repo_reader
+	permission repo_writer__perm = repo_writer
+}
+
+definition repo {
+	relation admin__direct: user | team#member
+	relation maintainer__direct: user | team#member
+	relation owner: organization
+	relation reader__direct: user | team#member
+	relation triager__direct: user | team#member
+	relation writer__direct: user | team#member
+
+	permission admin = (admin__direct + owner->repo_admin__perm)
+	permission maintainer = (maintainer__direct + admin)
+	permission reader = (reader__direct + triager + owner->repo_reader__perm)
+	permission triager = (triager__direct + writer)
+	permission writer = (writer__direct + maintainer + owner->repo_writer__perm)
+}

@@ -1,0 +1,4409 @@
+{
+  "$schema_note": "Ground truth for the SpiceDB prototype clients, produced by scripts/extract_client_api.py. See that script's module docstring for extraction method. Re-run it against a fresh checkout when the pinned commit moves; the live_verification block requires manual re-verification (see task-1-report.md).",
+  "repo_url": "https://github.com/authzed/spicedb-clients-prototype",
+  "commit": "549c4e90e7a1488adcf268e0e0033e48d5b5f0a4",
+  "language_dirs_present": [
+    "spicedb-go",
+    "spicedb-python",
+    "spicedb-typescript",
+    "spicedb-csharp",
+    "spicedb-java",
+    "spicedb-ruby",
+    "spicedb-rust",
+    "spicedb-gen",
+    "proto-clients"
+  ],
+  "extracted_on": "2026-08-14",
+  "languages": {
+    "go": {
+      "language": "go",
+      "client_dir": "spicedb-go",
+      "constructors": [
+        {
+          "name": "NewPlaintext",
+          "file": "spicedb-go/client/client.go",
+          "line": 41,
+          "source_line": "func NewPlaintext(endpoint, presharedKey string) (*Client, error) {",
+          "extraction_pattern": "^func (New\\w+)\\("
+        },
+        {
+          "name": "NewSystemTLS",
+          "file": "spicedb-go/client/client.go",
+          "line": 47,
+          "source_line": "func NewSystemTLS(endpoint, presharedKey string) (*Client, error) {",
+          "extraction_pattern": "^func (New\\w+)\\("
+        },
+        {
+          "name": "NewWithOpts",
+          "file": "spicedb-go/client/client.go",
+          "line": 52,
+          "source_line": "func NewWithOpts(endpoint, presharedKey string, opts ...Option) (*Client, error) {",
+          "extraction_pattern": "^func (New\\w+)\\("
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "CheckOne",
+          "file": "spicedb-go/client/checks.go",
+          "line": 48,
+          "source_line": "func (c *Client) CheckOne(ctx context.Context, cs consistency.Strategy, permission string, r rel.Relationship) (bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "check_bulk": {
+          "name": "Check",
+          "file": "spicedb-go/client/checks.go",
+          "line": 18,
+          "source_line": "func (c *Client) Check(ctx context.Context, cs consistency.Strategy, permission string, rs ...rel.Relationship) ([]bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "lookup_resources": {
+          "name": "LookupResources",
+          "file": "spicedb-go/client/lookup.go",
+          "line": 18,
+          "source_line": "func (c *Client) LookupResources(ctx context.Context, cs consistency.Strategy, resourceType, permission, subjectType, subjectID string) iter.Seq2[string, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "lookup_subjects": {
+          "name": "LookupSubjects",
+          "file": "spicedb-go/client/lookup.go",
+          "line": 68,
+          "source_line": "func (c *Client) LookupSubjects(ctx context.Context, cs consistency.Strategy, resourceType, resourceID, permission, subjectType string) iter.Seq2[string, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "expand": {
+          "name": "ExpandPermissionTree",
+          "file": "spicedb-go/client/expand.go",
+          "line": 22,
+          "source_line": "func (c *Client) ExpandPermissionTree(ctx context.Context, cs consistency.Strategy, resourceType, resourceID, permission string) (*ExpandResult, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "read_relationships": {
+          "name": "ReadRelationships",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 39,
+          "source_line": "func (c *Client) ReadRelationships(ctx context.Context, cs consistency.Strategy, f rel.Filter) iter.Seq2[rel.Relationship, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "write_relationships": {
+          "name": "Write",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 21,
+          "source_line": "func (c *Client) Write(ctx context.Context, txn rel.Txn) (revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "delete_relationships": {
+          "name": "DeleteRelationships",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 82,
+          "source_line": "func (c *Client) DeleteRelationships(ctx context.Context, f rel.Filter) (revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        "watch": {
+          "name": "Updates",
+          "file": "spicedb-go/client/watch.go",
+          "line": 16,
+          "source_line": "func (c *Client) Updates(ctx context.Context, objectTypes []string, startRevision string) iter.Seq2[rel.Update, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        }
+      },
+      "public_methods": [
+        {
+          "name": "ImportRelationships",
+          "file": "spicedb-go/client/bulk.go",
+          "line": 22,
+          "source_line": "func (c *Client) ImportRelationships(ctx context.Context, rels iter.Seq[rel.Relationship]) (numLoaded uint64, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ExportRelationships",
+          "file": "spicedb-go/client/bulk.go",
+          "line": 62,
+          "source_line": "func (c *Client) ExportRelationships(ctx context.Context, cs consistency.Strategy, f *rel.Filter) iter.Seq2[rel.Relationship, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "Check",
+          "file": "spicedb-go/client/checks.go",
+          "line": 18,
+          "source_line": "func (c *Client) Check(ctx context.Context, cs consistency.Strategy, permission string, rs ...rel.Relationship) ([]bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "CheckOne",
+          "file": "spicedb-go/client/checks.go",
+          "line": 48,
+          "source_line": "func (c *Client) CheckOne(ctx context.Context, cs consistency.Strategy, permission string, r rel.Relationship) (bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "CheckAny",
+          "file": "spicedb-go/client/checks.go",
+          "line": 57,
+          "source_line": "func (c *Client) CheckAny(ctx context.Context, cs consistency.Strategy, permission string, rs ...rel.Relationship) (bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "CheckAll",
+          "file": "spicedb-go/client/checks.go",
+          "line": 71,
+          "source_line": "func (c *Client) CheckAll(ctx context.Context, cs consistency.Strategy, permission string, rs ...rel.Relationship) (bool, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "CheckIter",
+          "file": "spicedb-go/client/checks.go",
+          "line": 87,
+          "source_line": "func (c *Client) CheckIter(ctx context.Context, cs consistency.Strategy, permission string, rels iter.Seq[rel.Relationship]) iter.Seq2[bool, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ExpandPermissionTree",
+          "file": "spicedb-go/client/expand.go",
+          "line": 22,
+          "source_line": "func (c *Client) ExpandPermissionTree(ctx context.Context, cs consistency.Strategy, resourceType, resourceID, permission string) (*ExpandResult, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "RegisterRelationshipCounter",
+          "file": "spicedb-go/client/experimental.go",
+          "line": 20,
+          "source_line": "func (c *Client) RegisterRelationshipCounter(ctx context.Context, name string, f rel.Filter) error {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "CountRelationships",
+          "file": "spicedb-go/client/experimental.go",
+          "line": 34,
+          "source_line": "func (c *Client) CountRelationships(ctx context.Context, name string) (result *CountResult, stillCalculating bool, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "UnregisterRelationshipCounter",
+          "file": "spicedb-go/client/experimental.go",
+          "line": 55,
+          "source_line": "func (c *Client) UnregisterRelationshipCounter(ctx context.Context, name string) error {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "LookupResources",
+          "file": "spicedb-go/client/lookup.go",
+          "line": 18,
+          "source_line": "func (c *Client) LookupResources(ctx context.Context, cs consistency.Strategy, resourceType, permission, subjectType, subjectID string) iter.Seq2[string, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "LookupSubjects",
+          "file": "spicedb-go/client/lookup.go",
+          "line": 68,
+          "source_line": "func (c *Client) LookupSubjects(ctx context.Context, cs consistency.Strategy, resourceType, resourceID, permission, subjectType string) iter.Seq2[string, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "Write",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 21,
+          "source_line": "func (c *Client) Write(ctx context.Context, txn rel.Txn) (revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ReadRelationships",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 39,
+          "source_line": "func (c *Client) ReadRelationships(ctx context.Context, cs consistency.Strategy, f rel.Filter) iter.Seq2[rel.Relationship, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "DeleteRelationships",
+          "file": "spicedb-go/client/relationships.go",
+          "line": 82,
+          "source_line": "func (c *Client) DeleteRelationships(ctx context.Context, f rel.Filter) (revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ReadSchema",
+          "file": "spicedb-go/client/schema.go",
+          "line": 12,
+          "source_line": "func (c *Client) ReadSchema(ctx context.Context) (schema string, revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "WriteSchema",
+          "file": "spicedb-go/client/schema.go",
+          "line": 21,
+          "source_line": "func (c *Client) WriteSchema(ctx context.Context, schema string) (revision string, err error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ReflectSchema",
+          "file": "spicedb-go/client/schema.go",
+          "line": 75,
+          "source_line": "func (c *Client) ReflectSchema(ctx context.Context, cs consistency.Strategy) (*ReflectSchemaResult, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "ComputablePermissions",
+          "file": "spicedb-go/client/schema.go",
+          "line": 137,
+          "source_line": "func (c *Client) ComputablePermissions(ctx context.Context, cs consistency.Strategy, definitionName, relationName string) ([]RelationReference, string, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "DependentRelations",
+          "file": "spicedb-go/client/schema.go",
+          "line": 159,
+          "source_line": "func (c *Client) DependentRelations(ctx context.Context, cs consistency.Strategy, definitionName, permissionName string) ([]RelationReference, string, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "DiffSchema",
+          "file": "spicedb-go/client/schema.go",
+          "line": 198,
+          "source_line": "func (c *Client) DiffSchema(ctx context.Context, cs consistency.Strategy, comparisonSchema string) ([]SchemaDiff, string, error) {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        },
+        {
+          "name": "Updates",
+          "file": "spicedb-go/client/watch.go",
+          "line": 16,
+          "source_line": "func (c *Client) Updates(ctx context.Context, objectTypes []string, startRevision string) iter.Seq2[rel.Update, error] {",
+          "extraction_pattern": "^func \\(c \\*Client\\) (\\w+)\\("
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "rel.Relationship",
+          "fields": [
+            "ResourceType",
+            "ResourceID",
+            "ResourceRelation",
+            "SubjectType",
+            "SubjectID",
+            "SubjectRelation",
+            "CaveatName",
+            "CaveatContext",
+            "Expiration"
+          ]
+        },
+        "filter": {
+          "type": "rel.Filter",
+          "fields": [
+            "ResourceType",
+            "ResourceID",
+            "ResourceIDPrefix",
+            "Relation",
+            "SubjectType",
+            "SubjectID",
+            "SubjectRelation",
+            "V1Filter"
+          ]
+        },
+        "transaction": {
+          "type": "rel.Txn",
+          "methods": [
+            {
+              "name": "Preconditions",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 348,
+              "source_line": "func (t *Txn) Preconditions() []*v1.Precondition {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            },
+            {
+              "name": "Create",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 354,
+              "source_line": "func (t *Txn) Create(r Relationship) {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            },
+            {
+              "name": "Touch",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 363,
+              "source_line": "func (t *Txn) Touch(r Relationship) {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            },
+            {
+              "name": "Delete",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 371,
+              "source_line": "func (t *Txn) Delete(r Relationship) {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            },
+            {
+              "name": "MustNotMatch",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 379,
+              "source_line": "func (t *Txn) MustNotMatch(f Filter) {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            },
+            {
+              "name": "MustMatch",
+              "file": "spicedb-go/rel/rel.go",
+              "line": 387,
+              "source_line": "func (t *Txn) MustMatch(f Filter) {",
+              "extraction_pattern": "^func \\(t \\*Txn\\) (\\w+)\\("
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "Full",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 20,
+          "source_line": "func Full() Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        },
+        {
+          "name": "MinLatency",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 30,
+          "source_line": "func MinLatency() Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        },
+        {
+          "name": "AtLeast",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 40,
+          "source_line": "func AtLeast(revision string) Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        },
+        {
+          "name": "AtLeastOrFull",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 53,
+          "source_line": "func AtLeastOrFull(revision string) Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        },
+        {
+          "name": "AtLeastOrMinLatency",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 63,
+          "source_line": "func AtLeastOrMinLatency(revision string) Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        },
+        {
+          "name": "Snapshot",
+          "file": "spicedb-go/consistency/consistency.go",
+          "line": 71,
+          "source_line": "func Snapshot(revision string) Strategy {",
+          "extraction_pattern": "^func (\\w+)\\(.*\\) Strategy \\{"
+        }
+      ],
+      "error_handling": {
+        "style": "no typed error hierarchy: sentinel errors for input validation only (rel package); all gRPC failures are fmt.Errorf(\"spicedb: ...: %w\", err) wraps of the raw grpc/status error",
+        "sentinel_errors": [
+          {
+            "name": "ErrInvalidResource",
+            "file": "spicedb-go/rel/rel.go",
+            "line": 21,
+            "source_line": "ErrInvalidResource = fmt.Errorf(\"resource type, id, and relation are required\")",
+            "extraction_pattern": "^\\s*(Err\\w+) = fmt\\.Errorf"
+          },
+          {
+            "name": "ErrInvalidRelation",
+            "file": "spicedb-go/rel/rel.go",
+            "line": 23,
+            "source_line": "ErrInvalidRelation = fmt.Errorf(\"relation is required\")",
+            "extraction_pattern": "^\\s*(Err\\w+) = fmt\\.Errorf"
+          },
+          {
+            "name": "ErrInvalidSubject",
+            "file": "spicedb-go/rel/rel.go",
+            "line": 25,
+            "source_line": "ErrInvalidSubject = fmt.Errorf(\"subject type and id are required\")",
+            "extraction_pattern": "^\\s*(Err\\w+) = fmt\\.Errorf"
+          }
+        ],
+        "retry": {
+          "present": false,
+          "evidence": "grep for 'retry|backoff' across every non-test .go file in spicedb-go/client/ (bulk.go, checks.go, client.go, expand.go, experimental.go, lookup.go, relationships.go, schema.go, watch.go): 0 matches (outside DESIGN.md and Magefile.go, which are not source)",
+          "retry_or_backoff_hits_in_source": []
+        }
+      },
+      "iteration_style": "lazy pull-based iterators via Go 1.23 range-over-func (iter.Seq2[T, error]); pages are fetched from the server on demand as the caller ranges, not buffered up front"
+    },
+    "python": {
+      "language": "python",
+      "client_dir": "spicedb-python",
+      "extraction_method": "ast (stdlib parser, not regex)",
+      "constructors": [
+        {
+          "name": "SpiceDBClient.__init__",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 38,
+          "source_line": "def __init__(self, endpoint, token, *, insecure=False, max_retries=3)",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient' -> FunctionDef '__init__')",
+          "extraction_note": "unlike Go/C#/Rust/Ruby, there is no NewPlaintext/NewSystemTLS/NewWithOpts family -- one constructor, `insecure` is a bool kwarg"
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "check_permission",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 107,
+          "source_line": "async def check_permission(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "check_bulk": {
+          "name": "check_permissions",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 120,
+          "source_line": "async def check_permissions(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "lookup_resources": {
+          "name": "lookup_resources",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 222,
+          "source_line": "async def lookup_resources(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "lookup_subjects": {
+          "name": "lookup_subjects",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 282,
+          "source_line": "async def lookup_subjects(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "expand": {
+          "name": "expand_permission_tree",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 443,
+          "source_line": "async def expand_permission_tree(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "read_relationships": {
+          "name": "read_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 197,
+          "source_line": "async def read_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "write_relationships": {
+          "name": "write",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 321,
+          "source_line": "async def write(self, txn: Transaction) -> str:",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "delete_relationships": {
+          "name": "delete_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 334,
+          "source_line": "async def delete_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        "watch": {
+          "name": "watch",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 373,
+          "source_line": "async def watch(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        }
+      },
+      "public_methods": [
+        {
+          "name": "close",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 79,
+          "source_line": "async def close(self) -> None:",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "check_permission",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 107,
+          "source_line": "async def check_permission(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "check_permissions",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 120,
+          "source_line": "async def check_permissions(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "check_any",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 175,
+          "source_line": "async def check_any(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "check_all",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 185,
+          "source_line": "async def check_all(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "read_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 197,
+          "source_line": "async def read_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "lookup_resources",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 222,
+          "source_line": "async def lookup_resources(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "lookup_subjects",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 282,
+          "source_line": "async def lookup_subjects(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "write",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 321,
+          "source_line": "async def write(self, txn: Transaction) -> str:",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "delete_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 334,
+          "source_line": "async def delete_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "read_schema",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 351,
+          "source_line": "async def read_schema(self) -> str:",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "write_schema",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 361,
+          "source_line": "async def write_schema(self, schema: str) -> str:",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "watch",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 373,
+          "source_line": "async def watch(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "import_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 396,
+          "source_line": "async def import_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "export_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 413,
+          "source_line": "async def export_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "expand_permission_tree",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 443,
+          "source_line": "async def expand_permission_tree(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "register_relationship_counter",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 468,
+          "source_line": "async def register_relationship_counter(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "count_relationships",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 486,
+          "source_line": "async def count_relationships(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "unregister_relationship_counter",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 504,
+          "source_line": "async def unregister_relationship_counter(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "reflect_schema",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 522,
+          "source_line": "async def reflect_schema(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "diff_schema",
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 544,
+          "source_line": "async def diff_schema(",
+          "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "spicedb.types.Relationship",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation",
+            "caveat_name",
+            "caveat_context",
+            "expiration"
+          ]
+        },
+        "filter": {
+          "type": "spicedb.types.Filter",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_id_prefix",
+            "relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation"
+          ]
+        },
+        "transaction": {
+          "type": "spicedb.types.Transaction",
+          "methods": [
+            {
+              "name": "create",
+              "file": "spicedb-python/spicedb/types.py",
+              "line": 188,
+              "source_line": "def create(self, rel: Relationship) -> Transaction:",
+              "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+            },
+            {
+              "name": "touch",
+              "file": "spicedb-python/spicedb/types.py",
+              "line": 198,
+              "source_line": "def touch(self, rel: Relationship) -> Transaction:",
+              "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+            },
+            {
+              "name": "delete",
+              "file": "spicedb-python/spicedb/types.py",
+              "line": 208,
+              "source_line": "def delete(self, rel: Relationship) -> Transaction:",
+              "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+            },
+            {
+              "name": "must_not_match",
+              "file": "spicedb-python/spicedb/types.py",
+              "line": 218,
+              "source_line": "def must_not_match(self, f: Filter) -> Transaction:",
+              "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+            },
+            {
+              "name": "must_match",
+              "file": "spicedb-python/spicedb/types.py",
+              "line": 228,
+              "source_line": "def must_match(self, f: Filter) -> Transaction:",
+              "extraction_pattern": "ast.walk(ClassDef 'SpiceDBClient', FunctionDef|AsyncFunctionDef, name not starting with '_'); source_line via ast.get_source_segment"
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "full",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 18,
+          "source_line": "def full() -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "min_latency",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 23,
+          "source_line": "def min_latency() -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "at_least",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 28,
+          "source_line": "def at_least(revision: str) -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "at_least_or_full",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 33,
+          "source_line": "def at_least_or_full(revision: str) -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "at_least_or_min_latency",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 44,
+          "source_line": "def at_least_or_min_latency(revision: str) -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        },
+        {
+          "name": "snapshot",
+          "file": "spicedb-python/spicedb/consistency.py",
+          "line": 55,
+          "source_line": "def snapshot(revision: str) -> Consistency:",
+          "extraction_pattern": "ast.walk(FunctionDef, module scope); source_line via ast.get_source_segment"
+        }
+      ],
+      "error_handling": {
+        "style": "typed exception hierarchy (SpiceDBError subclasses), with automatic retry",
+        "exception_classes": [
+          {
+            "name": "SpiceDBError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 8,
+            "source_line": "class SpiceDBError(Exception)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "PermissionDeniedError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 12,
+            "source_line": "class PermissionDeniedError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "NotFoundError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 16,
+            "source_line": "class NotFoundError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "AlreadyExistsError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 20,
+            "source_line": "class AlreadyExistsError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "InvalidArgumentError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 24,
+            "source_line": "class InvalidArgumentError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "FailedPreconditionError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 28,
+            "source_line": "class FailedPreconditionError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "UnavailableError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 32,
+            "source_line": "class UnavailableError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          },
+          {
+            "name": "CancelledError",
+            "file": "spicedb-python/spicedb/errors.py",
+            "line": 36,
+            "source_line": "class CancelledError(SpiceDBError)",
+            "extraction_pattern": "ast.walk(ClassDef)"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "spicedb/client.py defines _with_retry() and _DEFAULT_MAX_RETRIES = 3; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 92,
+              "source_line": "async def _with_retry(self, fn: Any) -> Any:",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 93,
+              "source_line": "\"\"\"Call an async function with exponential backoff on transient errors.\"\"\"",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 160,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 331,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 346,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 358,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 368,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 463,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 484,
+              "source_line": "await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 501,
+              "source_line": "resp = await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 518,
+              "source_line": "await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 542,
+              "source_line": "return await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-python/spicedb/client.py",
+              "line": 558,
+              "source_line": "return await self._with_retry(_call)",
+              "extraction_pattern": "retry|backoff"
+            }
+          ]
+        }
+      },
+      "async_only": {
+        "value": true,
+        "evidence": "SpiceDBClient defines 24 async methods and 0 non-dunder sync methods (none); no second, sync client class exists anywhere in spicedb-python/spicedb/"
+      },
+      "check_signature": {
+        "permission_is_separate_argument": false,
+        "check_permission_args": [
+          "self",
+          "consistency",
+          "rel"
+        ],
+        "resource_relation_used_as_permission_evidence": {
+          "name": null,
+          "file": "spicedb-python/spicedb/client.py",
+          "line": 140,
+          "source_line": "permission=rel.resource_relation,",
+          "extraction_pattern": "permission=rel\\.resource_relation"
+        }
+      },
+      "iteration_style": "true async generators (`async def ... yield`, AsyncIterator[T]); pages are fetched from the server on demand, not buffered up front"
+    },
+    "typescript": {
+      "language": "typescript",
+      "client_dir": "spicedb-typescript",
+      "constructors": [
+        {
+          "name": "createSpiceDBClient",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 739,
+          "source_line": "export function createSpiceDBClient(",
+          "extraction_pattern": "^export function (createSpiceDBClient)\\("
+        },
+        {
+          "name": "constructor",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 85,
+          "source_line": "constructor(options: SpiceDBClientOptions) {",
+          "extraction_pattern": "^\\s*(constructor)\\(options: SpiceDBClientOptions\\)"
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "checkPermission",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 103,
+          "source_line": "async checkPermission(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "check_bulk": {
+          "name": "checkPermissions",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 140,
+          "source_line": "async checkPermissions(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "lookup_resources": {
+          "name": "lookupResources",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 286,
+          "source_line": "async *lookupResources(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "lookup_subjects": {
+          "name": "lookupSubjects",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 321,
+          "source_line": "async *lookupSubjects(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "expand": {
+          "name": "expandPermissionTree",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 358,
+          "source_line": "async expandPermissionTree(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "read_relationships": {
+          "name": "readRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 215,
+          "source_line": "async *readRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "write_relationships": {
+          "name": "write",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 245,
+          "source_line": "async write(txn: Transaction): Promise<string> {",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "delete_relationships": {
+          "name": "deleteRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 263,
+          "source_line": "async deleteRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        "watch": {
+          "name": "watch",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 653,
+          "source_line": "async *watch(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        }
+      },
+      "public_methods": [
+        {
+          "name": "checkPermission",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 103,
+          "source_line": "async checkPermission(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "checkPermissions",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 140,
+          "source_line": "async checkPermissions(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "checkAny",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 187,
+          "source_line": "async checkAny(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "checkAll",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 198,
+          "source_line": "async checkAll(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "readRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 215,
+          "source_line": "async *readRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "write",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 245,
+          "source_line": "async write(txn: Transaction): Promise<string> {",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "deleteRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 263,
+          "source_line": "async deleteRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "lookupResources",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 286,
+          "source_line": "async *lookupResources(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "lookupSubjects",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 321,
+          "source_line": "async *lookupSubjects(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "expandPermissionTree",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 358,
+          "source_line": "async expandPermissionTree(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "importBulkRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 390,
+          "source_line": "async importBulkRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "exportBulkRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 416,
+          "source_line": "async *exportBulkRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "readSchema",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 448,
+          "source_line": "async readSchema(): Promise<{ schema: string; revision: string }> {",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "writeSchema",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 465,
+          "source_line": "async writeSchema(schema: string): Promise<string> {",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "reflectSchema",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 477,
+          "source_line": "async reflectSchema(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "computablePermissions",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 513,
+          "source_line": "async computablePermissions(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "dependentRelations",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 540,
+          "source_line": "async dependentRelations(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "diffSchema",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 566,
+          "source_line": "async diffSchema(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "experimentalRegisterRelationshipCounter",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 592,
+          "source_line": "async experimentalRegisterRelationshipCounter(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "experimentalCountRelationships",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 610,
+          "source_line": "async experimentalCountRelationships(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "experimentalUnregisterRelationshipCounter",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 636,
+          "source_line": "async experimentalUnregisterRelationshipCounter(name: string): Promise<void> {",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        },
+        {
+          "name": "watch",
+          "file": "spicedb-typescript/src/client.ts",
+          "line": 653,
+          "source_line": "async *watch(",
+          "extraction_pattern": "^\\s{2}(?:async \\*?)?(\\w+)\\("
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "Relationship (interface)",
+          "fields": [
+            "resourceType",
+            "resourceId",
+            "resourceRelation",
+            "subjectType",
+            "subjectId",
+            "subjectRelation",
+            "caveatName",
+            "caveatContext",
+            "expiration"
+          ]
+        },
+        "filter": {
+          "type": "RelationshipFilterOptions (interface)",
+          "fields": [
+            "resourceType",
+            "resourceId",
+            "resourceIdPrefix",
+            "resourceRelation",
+            "subjectType",
+            "subjectId",
+            "subjectRelation"
+          ]
+        },
+        "transaction": {
+          "type": "Transaction (class)",
+          "methods": [
+            {
+              "name": "create",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 184,
+              "source_line": "create(rel: Relationship): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            },
+            {
+              "name": "touch",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 197,
+              "source_line": "touch(rel: Relationship): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            },
+            {
+              "name": "delete",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 210,
+              "source_line": "delete(rel: Relationship): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            },
+            {
+              "name": "mustNotMatch",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 224,
+              "source_line": "mustNotMatch(filter: RelationshipFilterOptions): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            },
+            {
+              "name": "mustMatch",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 238,
+              "source_line": "mustMatch(filter: RelationshipFilterOptions): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            },
+            {
+              "name": "withMetadata",
+              "file": "spicedb-typescript/src/types.ts",
+              "line": 251,
+              "source_line": "withMetadata(meta: JsonObject): this {",
+              "extraction_pattern": "^\\s{2}(\\w+)\\("
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "full",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 12,
+          "source_line": "export function full(): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        },
+        {
+          "name": "minLatency",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 22,
+          "source_line": "export function minLatency(): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        },
+        {
+          "name": "atLeast",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 34,
+          "source_line": "export function atLeast(revision: string): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        },
+        {
+          "name": "atLeastOrFull",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 50,
+          "source_line": "export function atLeastOrFull(revision: string): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        },
+        {
+          "name": "atLeastOrMinLatency",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 64,
+          "source_line": "export function atLeastOrMinLatency(revision: string): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        },
+        {
+          "name": "snapshot",
+          "file": "spicedb-typescript/src/consistency.ts",
+          "line": 77,
+          "source_line": "export function snapshot(revision: string): Consistency {",
+          "extraction_pattern": "^export function (\\w+)\\(.*\\): Consistency \\{"
+        }
+      ],
+      "error_handling": {
+        "style": "typed error hierarchy (SpiceDBError subclasses extending Error), with automatic retry",
+        "error_classes": [
+          {
+            "name": "SpiceDBError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 6,
+            "source_line": "export class SpiceDBError extends Error {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "PermissionDeniedError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 16,
+            "source_line": "export class PermissionDeniedError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "NotFoundError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 26,
+            "source_line": "export class NotFoundError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "AlreadyExistsError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 36,
+            "source_line": "export class AlreadyExistsError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "InvalidArgumentError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 46,
+            "source_line": "export class InvalidArgumentError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "CancelledError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 56,
+            "source_line": "export class CancelledError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "FailedPreconditionError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 66,
+            "source_line": "export class FailedPreconditionError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          },
+          {
+            "name": "UnavailableError",
+            "file": "spicedb-typescript/src/errors.ts",
+            "line": 76,
+            "source_line": "export class UnavailableError extends SpiceDBError {",
+            "extraction_pattern": "^export class (\\w+Error) extends (\\w+)"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "client.ts defines withRetry() and DEFAULT_MAX_RETRIES = 3; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 107,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 144,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 246,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 266,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 362,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 393,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 449,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 466,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 481,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 517,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 544,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 570,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 596,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 613,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 637,
+              "source_line": "return this.withRetry(async () => {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 711,
+              "source_line": "// Retry Logic",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-typescript/src/client.ts",
+              "line": 714,
+              "source_line": "private async withRetry<T>(fn: () => Promise<T>): Promise<T> {",
+              "extraction_pattern": "retry|backoff|Retry|Backoff"
+            }
+          ]
+        }
+      },
+      "iteration_style": "true async generators (`async *method()`, AsyncIterableIterator<T>); pages are fetched from the server on demand, not buffered up front"
+    },
+    "csharp": {
+      "language": "csharp",
+      "client_dir": "spicedb-csharp",
+      "constructors": [
+        {
+          "name": "CreatePlaintext",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 47,
+          "source_line": "public static SpiceDBClient CreatePlaintext(string endpoint, string presharedKey)",
+          "extraction_pattern": "public static SpiceDBClient (Create\\w+)\\("
+        },
+        {
+          "name": "CreateSystemTls",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 59,
+          "source_line": "public static SpiceDBClient CreateSystemTls(string endpoint, string presharedKey)",
+          "extraction_pattern": "public static SpiceDBClient (Create\\w+)\\("
+        },
+        {
+          "name": "CreateFromChannel",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 70,
+          "source_line": "public static SpiceDBClient CreateFromChannel(GrpcChannel channel, string presharedKey)",
+          "extraction_pattern": "public static SpiceDBClient (Create\\w+)\\("
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "CheckPermissionAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 142,
+          "source_line": "public async Task<bool> CheckPermissionAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "check_bulk": {
+          "name": "CheckPermissionsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 104,
+          "source_line": "public async Task<bool[]> CheckPermissionsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "lookup_resources": {
+          "name": "LookupResourcesAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 288,
+          "source_line": "public async IAsyncEnumerable<string> LookupResourcesAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "lookup_subjects": {
+          "name": "LookupSubjectsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 341,
+          "source_line": "public async IAsyncEnumerable<string> LookupSubjectsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "expand": {
+          "name": "ExpandPermissionTreeAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 572,
+          "source_line": "public async Task<ExpandResult> ExpandPermissionTreeAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "read_relationships": {
+          "name": "ReadRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 211,
+          "source_line": "public async IAsyncEnumerable<Relationship> ReadRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "write_relationships": {
+          "name": "WriteAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 186,
+          "source_line": "public async Task<string> WriteAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "delete_relationships": {
+          "name": "DeleteRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 252,
+          "source_line": "public async Task<string> DeleteRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        "watch": {
+          "name": "UpdatesAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 698,
+          "source_line": "public async IAsyncEnumerable<RelationshipUpdate> UpdatesAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        }
+      },
+      "public_methods": [
+        {
+          "name": "DisposeAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 89,
+          "source_line": "public ValueTask DisposeAsync()",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "CheckPermissionsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 104,
+          "source_line": "public async Task<bool[]> CheckPermissionsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "CheckPermissionAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 142,
+          "source_line": "public async Task<bool> CheckPermissionAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "CheckAnyAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 155,
+          "source_line": "public async Task<bool> CheckAnyAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "CheckAllAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 168,
+          "source_line": "public async Task<bool> CheckAllAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "WriteAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 186,
+          "source_line": "public async Task<string> WriteAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ReadRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 211,
+          "source_line": "public async IAsyncEnumerable<Relationship> ReadRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "DeleteRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 252,
+          "source_line": "public async Task<string> DeleteRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "LookupResourcesAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 288,
+          "source_line": "public async IAsyncEnumerable<string> LookupResourcesAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "LookupSubjectsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 341,
+          "source_line": "public async IAsyncEnumerable<string> LookupSubjectsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ReadSchemaAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 382,
+          "source_line": "public async Task<(string Schema, string Revision)> ReadSchemaAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "WriteSchemaAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 397,
+          "source_line": "public async Task<string> WriteSchemaAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ReflectSchemaAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 416,
+          "source_line": "public async Task<ReflectSchemaResult> ReflectSchemaAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ComputablePermissionsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 478,
+          "source_line": "public async Task<(IReadOnlyList<RelationReference> Permissions, string Revision)> ComputablePermissionsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "DependentRelationsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 510,
+          "source_line": "public async Task<(IReadOnlyList<RelationReference> Relations, string Revision)> DependentRelationsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "DiffSchemaAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 543,
+          "source_line": "public async Task<(IReadOnlyList<SchemaDiff> Diffs, string Revision)> DiffSchemaAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ExpandPermissionTreeAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 572,
+          "source_line": "public async Task<ExpandResult> ExpandPermissionTreeAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ImportRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 612,
+          "source_line": "public async Task<ulong> ImportRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ExportRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 651,
+          "source_line": "public async IAsyncEnumerable<Relationship> ExportRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "UpdatesAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 698,
+          "source_line": "public async IAsyncEnumerable<RelationshipUpdate> UpdatesAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ExperimentalRegisterRelationshipCounterAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 733,
+          "source_line": "public async Task ExperimentalRegisterRelationshipCounterAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ExperimentalCountRelationshipsAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 762,
+          "source_line": "public async Task<(CountResult? Result, bool StillCalculating)> ExperimentalCountRelationshipsAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        },
+        {
+          "name": "ExperimentalUnregisterRelationshipCounterAsync",
+          "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+          "line": 793,
+          "source_line": "public async Task ExperimentalUnregisterRelationshipCounterAsync(",
+          "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "Relationship (sealed record)",
+          "fields": [
+            "ResourceType",
+            "ResourceID",
+            "ResourceRelation",
+            "SubjectType",
+            "SubjectID",
+            "SubjectRelation",
+            "CaveatName",
+            "CaveatContext",
+            "Expiration"
+          ]
+        },
+        "filter": {
+          "type": "Filter (sealed record)",
+          "fields": [
+            "ResourceType",
+            "ResourceID",
+            "ResourceIDPrefix",
+            "Relation",
+            "SubjectType",
+            "SubjectID",
+            "SubjectRelation"
+          ]
+        },
+        "transaction": {
+          "type": "Transaction (sealed class)",
+          "methods": [
+            {
+              "name": "Create",
+              "file": "spicedb-csharp/SpiceDB.Client/Transaction.cs",
+              "line": 31,
+              "source_line": "public void Create(Relationship relationship)",
+              "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+            },
+            {
+              "name": "Touch",
+              "file": "spicedb-csharp/SpiceDB.Client/Transaction.cs",
+              "line": 45,
+              "source_line": "public void Touch(Relationship relationship)",
+              "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+            },
+            {
+              "name": "Delete",
+              "file": "spicedb-csharp/SpiceDB.Client/Transaction.cs",
+              "line": 58,
+              "source_line": "public void Delete(Relationship relationship)",
+              "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+            },
+            {
+              "name": "MustNotMatch",
+              "file": "spicedb-csharp/SpiceDB.Client/Transaction.cs",
+              "line": 71,
+              "source_line": "public void MustNotMatch(Filter filter)",
+              "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+            },
+            {
+              "name": "MustMatch",
+              "file": "spicedb-csharp/SpiceDB.Client/Transaction.cs",
+              "line": 84,
+              "source_line": "public void MustMatch(Filter filter)",
+              "extraction_pattern": "^\\s{4}public\\s+(?:static\\s+)?(?:async\\s+)?\\S.*?\\s(\\w+)\\("
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "Full",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 36,
+          "source_line": "public static ConsistencyStrategy Full() =>",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        },
+        {
+          "name": "MinLatency",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 46,
+          "source_line": "public static ConsistencyStrategy MinLatency() =>",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        },
+        {
+          "name": "AtLeast",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 58,
+          "source_line": "public static ConsistencyStrategy AtLeast(string revision)",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        },
+        {
+          "name": "Snapshot",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 74,
+          "source_line": "public static ConsistencyStrategy Snapshot(string revision)",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        },
+        {
+          "name": "AtLeastOrFull",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 90,
+          "source_line": "public static ConsistencyStrategy AtLeastOrFull(string? revision)",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        },
+        {
+          "name": "AtLeastOrMinLatency",
+          "file": "spicedb-csharp/SpiceDB.Client/Consistency.cs",
+          "line": 102,
+          "source_line": "public static ConsistencyStrategy AtLeastOrMinLatency(string? revision)",
+          "extraction_pattern": "public static ConsistencyStrategy (\\w+)\\("
+        }
+      ],
+      "error_handling": {
+        "style": "typed exception hierarchy (SpiceDBException subclasses), with automatic retry",
+        "exception_classes": [
+          {
+            "name": "PermissionDeniedException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 18,
+            "source_line": "public sealed class PermissionDeniedException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "NotFoundException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 25,
+            "source_line": "public sealed class NotFoundException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "AlreadyExistsException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 32,
+            "source_line": "public sealed class AlreadyExistsException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "InvalidArgumentException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 39,
+            "source_line": "public sealed class InvalidArgumentException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "FailedPreconditionException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 46,
+            "source_line": "public sealed class FailedPreconditionException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "UnavailableException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 53,
+            "source_line": "public sealed class UnavailableException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "CancelledException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 60,
+            "source_line": "public sealed class CancelledException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "ResourceExhaustedException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 67,
+            "source_line": "public sealed class ResourceExhaustedException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          },
+          {
+            "name": "DeadlineExceededException",
+            "file": "spicedb-csharp/SpiceDB.Client/Errors.cs",
+            "line": 74,
+            "source_line": "public sealed class DeadlineExceededException : SpiceDBException",
+            "extraction_pattern": "public sealed class (\\w+Exception) : (\\w+)"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "SpiceDBClient.cs defines RetryAsync() and MaxRetryAttempts = 5; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 24,
+              "source_line": "private const int MaxRetryAttempts = 5;",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Backoff",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 25,
+              "source_line": "private static readonly TimeSpan InitialBackoff = TimeSpan.FromMilliseconds(100);",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 118,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 197,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 261,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 385,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 404,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 422,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 486,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 518,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 550,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 581,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 742,
+              "source_line": "await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 769,
+              "source_line": "var resp = await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 800,
+              "source_line": "await RetryAsync(async () =>",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 848,
+              "source_line": "/// Retries an async operation with exponential backoff for transient gRPC errors.",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 850,
+              "source_line": "private static async Task<T> RetryAsync<T>(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 854,
+              "source_line": "var backoff = InitialBackoff;",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 861,
+              "source_line": "catch (RpcException ex) when (attempt < MaxRetryAttempts && ErrorMapper.IsTransient(ex))",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 863,
+              "source_line": "await Task.Delay(backoff, cancellationToken);",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs",
+              "line": 864,
+              "source_line": "backoff *= 2;",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            }
+          ]
+        }
+      },
+      "cancellation_token_placement": {
+        "claim": "CancellationToken is placed before the trailing `params Relationship[]` array",
+        "confirmed_sites": [
+          {
+            "cancellation_token_line": 107,
+            "cancellation_token_text": "CancellationToken cancellationToken = default,",
+            "params_array_line": 108,
+            "params_array_text": "params Relationship[] relationships)"
+          },
+          {
+            "cancellation_token_line": 158,
+            "cancellation_token_text": "CancellationToken cancellationToken = default,",
+            "params_array_line": 159,
+            "params_array_text": "params Relationship[] relationships)"
+          },
+          {
+            "cancellation_token_line": 171,
+            "cancellation_token_text": "CancellationToken cancellationToken = default,",
+            "params_array_line": 172,
+            "params_array_text": "params Relationship[] relationships)"
+          }
+        ],
+        "note": "only the params-array overloads (CheckPermissionsAsync, CheckAnyAsync, CheckAllAsync) need this -- C# requires `params` to be the last formal parameter, so a positional CancellationToken cannot follow it. The single-relationship CheckPermissionAsync overload has no params array and places CancellationToken last, as normal .NET convention dictates."
+      },
+      "iteration_style": "true lazy async streams (`async IAsyncEnumerable<T>` with `yield return`); pages are fetched from the server on demand, not buffered up front"
+    },
+    "java": {
+      "language": "java",
+      "client_dir": "spicedb-java",
+      "constructors": [
+        {
+          "name": "createPlaintext",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 76,
+          "source_line": "public static SpiceDBClient createPlaintext(String endpoint, String presharedKey) {",
+          "extraction_pattern": "public static SpiceDBClient (create\\w*)\\("
+        },
+        {
+          "name": "createSystemTls",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 84,
+          "source_line": "public static SpiceDBClient createSystemTls(String endpoint, String presharedKey) {",
+          "extraction_pattern": "public static SpiceDBClient (create\\w*)\\("
+        },
+        {
+          "name": "create",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 97,
+          "source_line": "public static SpiceDBClient create(",
+          "extraction_pattern": "public static SpiceDBClient (create\\w*)\\("
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "checkPermission",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 125,
+          "source_line": "public boolean checkPermission(Consistency consistency, String permission, Relationship r) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "check_bulk": {
+          "name": "checkPermissions",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 134,
+          "source_line": "public List<Boolean> checkPermissions(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "lookup_resources": {
+          "name": "lookupResources",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 263,
+          "source_line": "public Stream<String> lookupResources(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "lookup_subjects": {
+          "name": "lookupSubjects",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 339,
+          "source_line": "public Stream<String> lookupSubjects(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "expand": {
+          "name": "expandPermissionTree",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 560,
+          "source_line": "public ExpandResult expandPermissionTree(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "read_relationships": {
+          "name": "readRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 221,
+          "source_line": "public Stream<Relationship> readRelationships(Consistency consistency, Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "write_relationships": {
+          "name": "write",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 195,
+          "source_line": "public String write(Transaction txn) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "delete_relationships": {
+          "name": "deleteRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 233,
+          "source_line": "public String deleteRelationships(Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        "watch": {
+          "name": "updates",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 734,
+          "source_line": "public Stream<Update> updates(List<String> objectTypes, String startRevision) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        }
+      },
+      "public_methods": [
+        {
+          "name": "withInsecure",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 113,
+          "source_line": "public static ClientOption withInsecure() {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "checkPermission",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 125,
+          "source_line": "public boolean checkPermission(Consistency consistency, String permission, Relationship r) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "checkPermissions",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 134,
+          "source_line": "public List<Boolean> checkPermissions(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "checkAny",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 168,
+          "source_line": "public boolean checkAny(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "checkAll",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 178,
+          "source_line": "public boolean checkAll(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "write",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 195,
+          "source_line": "public String write(Transaction txn) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "readRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 221,
+          "source_line": "public Stream<Relationship> readRelationships(Consistency consistency, Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "deleteRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 233,
+          "source_line": "public String deleteRelationships(Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "lookupResources",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 263,
+          "source_line": "public Stream<String> lookupResources(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "lookupSubjects",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 339,
+          "source_line": "public Stream<String> lookupSubjects(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "readSchema",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 382,
+          "source_line": "public SchemaResult readSchema() {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "writeSchema",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 389,
+          "source_line": "public String writeSchema(String schema) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "reflectSchema",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 422,
+          "source_line": "public ReflectSchemaResult reflectSchema(Consistency consistency) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "computablePermissions",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 474,
+          "source_line": "public ComputablePermissionsResult computablePermissions(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "dependentRelations",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 499,
+          "source_line": "public DependentRelationsResult dependentRelations(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "diffSchema",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 532,
+          "source_line": "public DiffSchemaResult diffSchema(Consistency consistency, String comparisonSchema) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "expandPermissionTree",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 560,
+          "source_line": "public ExpandResult expandPermissionTree(",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "importRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 586,
+          "source_line": "public long importRelationships(Iterable<Relationship> relationships) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "exportRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 653,
+          "source_line": "public Stream<Relationship> exportRelationships(Consistency consistency, Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "updates",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 734,
+          "source_line": "public Stream<Update> updates(List<String> objectTypes, String startRevision) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "experimentalRegisterRelationshipCounter",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 782,
+          "source_line": "public void experimentalRegisterRelationshipCounter(String name, Filter filter) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "experimentalCountRelationships",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 800,
+          "source_line": "public CountResult experimentalCountRelationships(String name) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "experimentalUnregisterRelationshipCounter",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 820,
+          "source_line": "public void experimentalUnregisterRelationshipCounter(String name) {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        },
+        {
+          "name": "close",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+          "line": 834,
+          "source_line": "public void close() {",
+          "extraction_pattern": "^  public (\\S.*)$"
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "Relationship (record)",
+          "fields": [
+            "resourceType",
+            "resourceID",
+            "resourceRelation",
+            "subjectType",
+            "subjectID",
+            "subjectRelation",
+            "caveatName",
+            "caveatContext",
+            "expiration"
+          ]
+        },
+        "filter": {
+          "type": "Filter (record)",
+          "fields": [
+            "resourceType",
+            "resourceID",
+            "resourceIDPrefix",
+            "relation",
+            "subjectType",
+            "subjectID",
+            "subjectRelation"
+          ]
+        },
+        "transaction": {
+          "type": "Transaction",
+          "methods": [
+            {
+              "name": "create",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 46,
+              "source_line": "public void create(Relationship r) {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "touch",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 51,
+              "source_line": "public void touch(Relationship r) {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "delete",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 56,
+              "source_line": "public void delete(Relationship r) {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "mustNotMatch",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 64,
+              "source_line": "public void mustNotMatch(Filter f) {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "mustMatch",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 72,
+              "source_line": "public void mustMatch(Filter f) {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "mutations",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 77,
+              "source_line": "public List<Mutation> mutations() {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "preconditions",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 82,
+              "source_line": "public List<Precondition> preconditions() {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            },
+            {
+              "name": "isEmpty",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Transaction.java",
+              "line": 87,
+              "source_line": "public boolean isEmpty() {",
+              "extraction_pattern": "^  public (\\S.*)$"
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "full",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 33,
+          "source_line": "public static Consistency full() {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        },
+        {
+          "name": "minLatency",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 42,
+          "source_line": "public static Consistency minLatency() {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        },
+        {
+          "name": "atLeast",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 54,
+          "source_line": "public static Consistency atLeast(String revision) {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        },
+        {
+          "name": "snapshot",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 70,
+          "source_line": "public static Consistency snapshot(String revision) {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        },
+        {
+          "name": "atLeastOrFull",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 87,
+          "source_line": "public static Consistency atLeastOrFull(String revision) {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        },
+        {
+          "name": "atLeastOrMinLatency",
+          "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/Consistency.java",
+          "line": 101,
+          "source_line": "public static Consistency atLeastOrMinLatency(String revision) {",
+          "extraction_pattern": "public static Consistency (\\w+)\\("
+        }
+      ],
+      "error_handling": {
+        "style": "typed exception hierarchy (SpiceDBException subclasses extending RuntimeException), with automatic retry",
+        "exception_classes": [
+          {
+            "name": "AlreadyExistsException",
+            "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/errors/AlreadyExistsException.java",
+            "line": 4,
+            "source_line": "public class AlreadyExistsException extends SpiceDBException {",
+            "extraction_pattern": "public class (\\w+Exception) extends (\\w+)"
+          },
+          {
+            "name": "InvalidArgumentException",
+            "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/errors/InvalidArgumentException.java",
+            "line": 4,
+            "source_line": "public class InvalidArgumentException extends SpiceDBException {",
+            "extraction_pattern": "public class (\\w+Exception) extends (\\w+)"
+          },
+          {
+            "name": "NotFoundException",
+            "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/errors/NotFoundException.java",
+            "line": 4,
+            "source_line": "public class NotFoundException extends SpiceDBException {",
+            "extraction_pattern": "public class (\\w+Exception) extends (\\w+)"
+          },
+          {
+            "name": "PermissionDeniedException",
+            "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/errors/PermissionDeniedException.java",
+            "line": 4,
+            "source_line": "public class PermissionDeniedException extends SpiceDBException {",
+            "extraction_pattern": "public class (\\w+Exception) extends (\\w+)"
+          },
+          {
+            "name": "SpiceDBException",
+            "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/errors/SpiceDBException.java",
+            "line": 9,
+            "source_line": "public class SpiceDBException extends RuntimeException {",
+            "extraction_pattern": "public class (\\w+Exception) extends (\\w+)"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "SpiceDBClient.java defines withRetry() and MAX_RETRIES = 3; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 146,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 207,
+              "source_line": "withRetry(() -> permissionsStub.writeRelationships(reqBuilder.build()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 237,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 314,
+              "source_line": "var serverStream = withRetry(() -> permissionsStub.lookupResources(reqBuilder.build()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 347,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 384,
+              "source_line": "withRetry(() -> schemaStub.readSchema(ReadSchemaRequest.getDefaultInstance()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 391,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 424,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 477,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 502,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 534,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 563,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 692,
+              "source_line": "withRetry(() -> permissionsStub.exportBulkRelationships(reqBuilder.build()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 743,
+              "source_line": "var serverStream = withRetry(() -> watchStub.watch(reqBuilder.build()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 783,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 802,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 821,
+              "source_line": "withRetry(",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 858,
+              "source_line": "/** Retry with exponential backoff for transient gRPC errors. */",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 860,
+              "source_line": "private interface RetryableCall<T> {",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 864,
+              "source_line": "private <T> T withRetry(RetryableCall<T> call) {",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 865,
+              "source_line": "long backoff = INITIAL_BACKOFF_MS;",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 874,
+              "source_line": "Thread.sleep(backoff);",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 879,
+              "source_line": "backoff *= 2;",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            },
+            {
+              "name": "Retry",
+              "file": "spicedb-java/lib/src/main/java/com/authzed/spicedb/SpiceDBClient.java",
+              "line": 923,
+              "source_line": "withRetry(() -> permissionsStub.readRelationships(reqBuilder.build()));",
+              "extraction_pattern": "[Rr]etry|[Bb]ackoff"
+            }
+          ]
+        }
+      },
+      "iteration_style": "java.util.stream.Stream backed by a lazy Iterator that fetches pages on demand (Spliterators.spliteratorUnknownSize over a custom Iterator); not a single up-front buffer, though each page is buffered into a small internal list"
+    },
+    "rust": {
+      "language": "rust",
+      "client_dir": "spicedb-rust",
+      "constructors": [
+        {
+          "name": "new_plaintext",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 83,
+          "source_line": "pub async fn new_plaintext(",
+          "extraction_pattern": "pub async fn (new_\\w+)\\("
+        },
+        {
+          "name": "new_system_tls",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 93,
+          "source_line": "pub async fn new_system_tls(",
+          "extraction_pattern": "pub async fn (new_\\w+)\\("
+        },
+        {
+          "name": "builder",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 101,
+          "source_line": "pub fn builder(endpoint: impl Into<String>, token: impl Into<String>) -> SpiceDBClientBuilder {",
+          "extraction_pattern": "pub fn (builder)\\("
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "check_permission",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 121,
+          "source_line": "pub async fn check_permission(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "check_bulk": {
+          "name": "check_permissions",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 140,
+          "source_line": "pub async fn check_permissions(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "lookup_resources": {
+          "name": "lookup_resources",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 401,
+          "source_line": "pub async fn lookup_resources(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "lookup_subjects": {
+          "name": "lookup_subjects",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 466,
+          "source_line": "pub async fn lookup_subjects(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "expand": {
+          "name": "expand_permission_tree",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 746,
+          "source_line": "pub async fn expand_permission_tree(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "read_relationships": {
+          "name": "read_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 306,
+          "source_line": "pub async fn read_relationships(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "write_relationships": {
+          "name": "write",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 244,
+          "source_line": "pub async fn write(&self, txn: &Transaction) -> Result<String, SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "delete_relationships": {
+          "name": "delete_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 362,
+          "source_line": "pub async fn delete_relationships(&self, filter: &Filter) -> Result<String, SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        "watch": {
+          "name": "updates",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 887,
+          "source_line": "pub async fn updates(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        }
+      },
+      "public_methods": [
+        {
+          "name": "check_permission",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 121,
+          "source_line": "pub async fn check_permission(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "check_permissions",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 140,
+          "source_line": "pub async fn check_permissions(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "check_any",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 212,
+          "source_line": "pub async fn check_any(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "check_all",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 225,
+          "source_line": "pub async fn check_all(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "write",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 244,
+          "source_line": "pub async fn write(&self, txn: &Transaction) -> Result<String, SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "read_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 306,
+          "source_line": "pub async fn read_relationships(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "delete_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 362,
+          "source_line": "pub async fn delete_relationships(&self, filter: &Filter) -> Result<String, SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "lookup_resources",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 401,
+          "source_line": "pub async fn lookup_resources(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "lookup_subjects",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 466,
+          "source_line": "pub async fn lookup_subjects(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "read_schema",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 523,
+          "source_line": "pub async fn read_schema(&self) -> Result<(String, String), SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "write_schema",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 542,
+          "source_line": "pub async fn write_schema(&self, schema: &str) -> Result<String, SpiceDBError> {",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "reflect_schema",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 563,
+          "source_line": "pub async fn reflect_schema(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "computable_permissions",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 638,
+          "source_line": "pub async fn computable_permissions(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "dependent_relations",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 676,
+          "source_line": "pub async fn dependent_relations(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "diff_schema",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 714,
+          "source_line": "pub async fn diff_schema(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "expand_permission_tree",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 746,
+          "source_line": "pub async fn expand_permission_tree(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "import_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 786,
+          "source_line": "pub async fn import_relationships(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "export_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 827,
+          "source_line": "pub async fn export_relationships(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "updates",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 887,
+          "source_line": "pub async fn updates(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "experimental_register_relationship_counter",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 956,
+          "source_line": "pub async fn experimental_register_relationship_counter(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "experimental_count_relationships",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 987,
+          "source_line": "pub async fn experimental_count_relationships(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        },
+        {
+          "name": "experimental_unregister_relationship_counter",
+          "file": "spicedb-rust/src/client.rs",
+          "line": 1034,
+          "source_line": "pub async fn experimental_unregister_relationship_counter(",
+          "extraction_pattern": "^\\s{4}pub (?:async )?fn (\\w+)\\("
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "Relationship (struct)",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation",
+            "caveat_name",
+            "caveat_context",
+            "expiration"
+          ]
+        },
+        "filter": {
+          "type": "Filter (struct)",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_id_prefix",
+            "relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation"
+          ]
+        },
+        "transaction": {
+          "type": "Transaction (struct)",
+          "methods": [
+            {
+              "name": "new",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 413,
+              "source_line": "pub fn new() -> Self {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "create",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 419,
+              "source_line": "pub fn create(&mut self, relationship: &Relationship) {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "touch",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 426,
+              "source_line": "pub fn touch(&mut self, relationship: &Relationship) {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "delete",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 432,
+              "source_line": "pub fn delete(&mut self, relationship: &Relationship) {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "must_not_match",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 438,
+              "source_line": "pub fn must_not_match(&mut self, filter: Filter) {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "must_match",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 446,
+              "source_line": "pub fn must_match(&mut self, filter: Filter) {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "updates",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 454,
+              "source_line": "pub fn updates(&self) -> &[(UpdateOperation, Relationship)] {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "preconditions",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 459,
+              "source_line": "pub fn preconditions(&self) -> &[Precondition] {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "is_empty",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 464,
+              "source_line": "pub fn is_empty(&self) -> bool {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            },
+            {
+              "name": "len",
+              "file": "spicedb-rust/src/types.rs",
+              "line": 469,
+              "source_line": "pub fn len(&self) -> usize {",
+              "extraction_pattern": "^\\s{4}pub fn (\\w+)\\("
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "full",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 52,
+          "source_line": "pub fn full() -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        },
+        {
+          "name": "min_latency",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 58,
+          "source_line": "pub fn min_latency() -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        },
+        {
+          "name": "at_least",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 64,
+          "source_line": "pub fn at_least(revision: impl Into<String>) -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        },
+        {
+          "name": "snapshot",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 69,
+          "source_line": "pub fn snapshot(revision: impl Into<String>) -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        },
+        {
+          "name": "at_least_or_full",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 77,
+          "source_line": "pub fn at_least_or_full(revision: Option<impl Into<String>>) -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        },
+        {
+          "name": "at_least_or_min_latency",
+          "file": "spicedb-rust/src/consistency.rs",
+          "line": 88,
+          "source_line": "pub fn at_least_or_min_latency(revision: Option<impl Into<String>>) -> Strategy {",
+          "extraction_pattern": "pub fn (\\w+)\\(.*\\) -> Strategy \\{"
+        }
+      ],
+      "error_handling": {
+        "style": "typed error enum (SpiceDBError variants via thiserror), with automatic retry",
+        "error_variants": [
+          {
+            "name": "PermissionDenied",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 14,
+            "source_line": "PermissionDenied(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "NotFound",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 18,
+            "source_line": "NotFound(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "AlreadyExists",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 22,
+            "source_line": "AlreadyExists(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "InvalidArgument",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 26,
+            "source_line": "InvalidArgument(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "FailedPrecondition",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 30,
+            "source_line": "FailedPrecondition(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "Unavailable",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 34,
+            "source_line": "Unavailable(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "Cancelled",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 38,
+            "source_line": "Cancelled(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          },
+          {
+            "name": "Transport",
+            "file": "spicedb-rust/src/error.rs",
+            "line": 42,
+            "source_line": "Transport(String),",
+            "extraction_pattern": "^\\s*(\\w+)\\((?:String|i32)\\),"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "client.rs defines retry() and MAX_RETRIES = 5; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 33,
+              "source_line": "/// Maximum number of retry attempts for transient gRPC errors.",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 36,
+              "source_line": "/// Base delay for exponential backoff (in milliseconds).",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 48,
+              "source_line": "/// are automatically retried with exponential backoff.",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 173,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 278,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 316,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 365,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 414,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 475,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 525,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 544,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 568,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 645,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 683,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 720,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 754,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 844,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 961,
+              "source_line": "self.retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 992,
+              "source_line": ".retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 1038,
+              "source_line": "self.retry(|| async {",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 1055,
+              "source_line": "// Retry with exponential backoff",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 1058,
+              "source_line": "/// Retries a gRPC call with exponential backoff for transient errors.",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 1063,
+              "source_line": "async fn retry<F, Fut, T>(&self, f: F) -> Result<tonic::Response<T>, SpiceDBError>",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-rust/src/client.rs",
+              "line": 1239,
+              "source_line": "fn test_retry_constants() {",
+              "extraction_pattern": "retry|backoff"
+            }
+          ]
+        }
+      },
+      "streaming_vs_buffering": {
+        "claim": "Rust buffers into Vec rather than returning a Stream",
+        "actual_return_types": [
+          {
+            "method": "read_relationships",
+            "file": "spicedb-rust/src/client.rs",
+            "signature_line": 306,
+            "return_type_line_text": ") -> Result<Vec<Relationship>, SpiceDBError> {",
+            "returns_vec_buffered": true
+          },
+          {
+            "method": "lookup_resources",
+            "file": "spicedb-rust/src/client.rs",
+            "signature_line": 401,
+            "return_type_line_text": "    pub async fn lookup_resources(",
+            "returns_vec_buffered": false
+          },
+          {
+            "method": "lookup_subjects",
+            "file": "spicedb-rust/src/client.rs",
+            "signature_line": 466,
+            "return_type_line_text": "    pub async fn lookup_subjects(",
+            "returns_vec_buffered": false
+          },
+          {
+            "method": "export_relationships",
+            "file": "spicedb-rust/src/client.rs",
+            "signature_line": 827,
+            "return_type_line_text": ") -> Result<Vec<Relationship>, SpiceDBError> {",
+            "returns_vec_buffered": true
+          },
+          {
+            "method": "updates",
+            "file": "spicedb-rust/src/client.rs",
+            "signature_line": 887,
+            "return_type_line_text": ") -> Result<Vec<Update>, SpiceDBError> {",
+            "returns_vec_buffered": true
+          }
+        ],
+        "doc_comments_claiming_stream_return": [
+          {
+            "name": "impl Stream<Item",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 44,
+            "source_line": "/// Streaming operations return `impl Stream<Item = Result<T, SpiceDBError>>`.",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "Returns a stream of",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 298,
+            "source_line": "/// Returns a stream of relationships matching the given filter.",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "impl Stream<Item",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 305,
+            "source_line": "/// Returns `impl Stream<Item = Result<Relationship, SpiceDBError>>`.",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "Returns a stream of",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 396,
+            "source_line": "/// Returns a stream of resource IDs that the subject has the given",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "Returns a stream of",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 460,
+            "source_line": "/// Returns a stream of subject IDs that have the given permission on the",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "Returns a stream of",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 822,
+            "source_line": "/// Returns a stream of all relationships matching the optional filter,",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          },
+          {
+            "name": "Returns a stream of",
+            "file": "spicedb-rust/src/client.rs",
+            "line": 882,
+            "source_line": "/// Returns a stream of relationship changes from SpiceDB's watch API,",
+            "extraction_pattern": "impl Stream<Item|Returns a stream of"
+          }
+        ],
+        "note": "every streaming-shaped method (read_relationships, lookup_resources, lookup_subjects, export_relationships, updates/watch) returns `Result<Vec<T>, SpiceDBError>` and fully drains the server stream inside the method before returning. The module- and method-level doc comments (client.rs) say 'Returns impl Stream<Item = ...>' -- that is stale/aspirational documentation; the compiled signature is Vec."
+      },
+      "iteration_style": "eagerly buffered: entire result set collected into a Vec<T> before returning"
+    },
+    "ruby": {
+      "language": "ruby",
+      "client_dir": "spicedb-ruby",
+      "note": "not discussed anywhere in the design spec's Sec.13 -- derived entirely from reading spicedb-ruby/lib/spicedb/*.rb",
+      "constructors": [
+        {
+          "name": "new_plaintext",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 50,
+          "source_line": "def self.new_plaintext(endpoint, token, &block)",
+          "extraction_pattern": "def self\\.(new_\\w+)\\("
+        },
+        {
+          "name": "new_system_tls",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 72,
+          "source_line": "def self.new_system_tls(endpoint, token, &block)",
+          "extraction_pattern": "def self\\.(new_\\w+)\\("
+        }
+      ],
+      "entry_points": {
+        "check_single": {
+          "name": "check_permission",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 115,
+          "source_line": "def check_permission(consistency, permission, relationship)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "check_bulk": {
+          "name": "check_permissions",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 126,
+          "source_line": "def check_permissions(consistency, permission, *relationships)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "lookup_resources": {
+          "name": "lookup_resources",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 225,
+          "source_line": "def lookup_resources(consistency, resource_type, permission, subject_type, subject_id)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "lookup_subjects": {
+          "name": "lookup_subjects",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 253,
+          "source_line": "def lookup_subjects(consistency, resource_type, resource_id, permission, subject_type)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "expand": {
+          "name": "expand_permission_tree",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 326,
+          "source_line": "def expand_permission_tree(consistency, resource_type, resource_id, permission)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "read_relationships": {
+          "name": "read_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 180,
+          "source_line": "def read_relationships(consistency, filter)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "write_relationships": {
+          "name": "write",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 167,
+          "source_line": "def write(transaction)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "delete_relationships": {
+          "name": "delete_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 202,
+          "source_line": "def delete_relationships(filter)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        "watch": {
+          "name": "updates",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 371,
+          "source_line": "def updates(object_types, start_revision: nil)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        }
+      },
+      "public_methods": [
+        {
+          "name": "close",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 103,
+          "source_line": "def close",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "check_permission",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 115,
+          "source_line": "def check_permission(consistency, permission, relationship)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "check_permissions",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 126,
+          "source_line": "def check_permissions(consistency, permission, *relationships)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "check_any",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 146,
+          "source_line": "def check_any(consistency, permission, *relationships)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "check_all",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 156,
+          "source_line": "def check_all(consistency, permission, *relationships)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "write",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 167,
+          "source_line": "def write(transaction)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "read_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 180,
+          "source_line": "def read_relationships(consistency, filter)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "delete_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 202,
+          "source_line": "def delete_relationships(filter)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "lookup_resources",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 225,
+          "source_line": "def lookup_resources(consistency, resource_type, permission, subject_type, subject_id)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "lookup_subjects",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 253,
+          "source_line": "def lookup_subjects(consistency, resource_type, resource_id, permission, subject_type)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "read_schema",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 268,
+          "source_line": "def read_schema",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "write_schema",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 276,
+          "source_line": "def write_schema(schema)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "reflect_schema",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 284,
+          "source_line": "def reflect_schema(consistency)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "computable_permissions",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 294,
+          "source_line": "def computable_permissions(consistency, definition_name, relation_name)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "dependent_relations",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 304,
+          "source_line": "def dependent_relations(consistency, definition_name, permission_name)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "diff_schema",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 313,
+          "source_line": "def diff_schema(consistency, comparison_schema)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "expand_permission_tree",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 326,
+          "source_line": "def expand_permission_tree(consistency, resource_type, resource_id, permission)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "import_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 337,
+          "source_line": "def import_relationships(relationships)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "export_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 347,
+          "source_line": "def export_relationships(consistency, filter = nil)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "updates",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 371,
+          "source_line": "def updates(object_types, start_revision: nil)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "experimental_register_relationship_counter",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 387,
+          "source_line": "def experimental_register_relationship_counter(name, filter)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "experimental_count_relationships",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 396,
+          "source_line": "def experimental_count_relationships(name)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        },
+        {
+          "name": "experimental_unregister_relationship_counter",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 404,
+          "source_line": "def experimental_unregister_relationship_counter(name)",
+          "extraction_pattern": "^\\s{4}def (\\w+)"
+        }
+      ],
+      "types": {
+        "relationship": {
+          "type": "SpiceDB::Relationship (Data.define)",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation",
+            "caveat_name",
+            "caveat_context",
+            "expiration"
+          ]
+        },
+        "filter": {
+          "type": "SpiceDB::Filter (Data.define)",
+          "fields": [
+            "resource_type",
+            "resource_id",
+            "resource_id_prefix",
+            "relation",
+            "subject_type",
+            "subject_id",
+            "subject_relation"
+          ]
+        },
+        "transaction": {
+          "type": "SpiceDB::Transaction",
+          "methods": [
+            {
+              "name": "create",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 32,
+              "source_line": "def create(relationship)",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            },
+            {
+              "name": "touch",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 42,
+              "source_line": "def touch(relationship)",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            },
+            {
+              "name": "delete",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 51,
+              "source_line": "def delete(relationship)",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            },
+            {
+              "name": "must_not_match",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 60,
+              "source_line": "def must_not_match(filter)",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            },
+            {
+              "name": "must_match",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 69,
+              "source_line": "def must_match(filter)",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            },
+            {
+              "name": "empty?",
+              "file": "spicedb-ruby/lib/spicedb/transaction.rb",
+              "line": 77,
+              "source_line": "def empty?",
+              "extraction_pattern": "^\\s{4}def (\\w+[?!]?)"
+            }
+          ]
+        }
+      },
+      "consistency_helpers": [
+        {
+          "name": "full",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 36,
+          "source_line": "def full",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        },
+        {
+          "name": "min_latency",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 43,
+          "source_line": "def min_latency",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        },
+        {
+          "name": "at_least",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 51,
+          "source_line": "def at_least(revision)",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        },
+        {
+          "name": "snapshot",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 58,
+          "source_line": "def snapshot(revision)",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        },
+        {
+          "name": "at_least_or_full",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 67,
+          "source_line": "def at_least_or_full(revision)",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        },
+        {
+          "name": "at_least_or_min_latency",
+          "file": "spicedb-ruby/lib/spicedb/consistency.rb",
+          "line": 80,
+          "source_line": "def at_least_or_min_latency(revision)",
+          "extraction_pattern": "^\\s*def (\\w+)(?:\\(|$)"
+        }
+      ],
+      "error_handling": {
+        "style": "typed exception hierarchy (SpiceDB::Error subclasses < StandardError), with automatic retry",
+        "exception_classes": [
+          {
+            "name": "PermissionDeniedError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 8,
+            "source_line": "class PermissionDeniedError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "NotFoundError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 11,
+            "source_line": "class NotFoundError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "AlreadyExistsError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 14,
+            "source_line": "class AlreadyExistsError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "InvalidArgumentError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 17,
+            "source_line": "class InvalidArgumentError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "FailedPreconditionError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 20,
+            "source_line": "class FailedPreconditionError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "UnavailableError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 23,
+            "source_line": "class UnavailableError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "CancelledError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 26,
+            "source_line": "class CancelledError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "DeadlineExceededError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 29,
+            "source_line": "class DeadlineExceededError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          },
+          {
+            "name": "ResourceExhaustedError",
+            "file": "spicedb-ruby/lib/spicedb/errors.rb",
+            "line": 32,
+            "source_line": "class ResourceExhaustedError < Error; end",
+            "extraction_pattern": "class (\\w+Error) < (\\w+)"
+          }
+        ],
+        "retry": {
+          "present": true,
+          "evidence": "client.rb defines with_retry() and MAX_RETRIES = 3; used by every non-streaming call",
+          "retry_or_backoff_hits_in_source": [
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 130,
+              "source_line": "with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 168,
+              "source_line": "with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 184,
+              "source_line": "page, new_cursor, count = with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 205,
+              "source_line": "rev, complete = with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 229,
+              "source_line": "ids, new_cursor, count = with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 255,
+              "source_line": "with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 269,
+              "source_line": "with_retry { call_read_schema }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 277,
+              "source_line": "with_retry { call_write_schema(schema) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 285,
+              "source_line": "with_retry { call_reflect_schema(consistency) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 295,
+              "source_line": "with_retry { call_computable_permissions(consistency, definition_name, relation_name) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 305,
+              "source_line": "with_retry { call_dependent_relations(consistency, definition_name, permission_name) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 314,
+              "source_line": "with_retry { call_diff_schema(consistency, comparison_schema) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 327,
+              "source_line": "with_retry { call_expand_permission_tree(consistency, resource_type, resource_id, permission) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 338,
+              "source_line": "with_retry { call_import_relationships(relationships) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 351,
+              "source_line": "page, new_cursor, count = with_retry do",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 388,
+              "source_line": "with_retry { call_register_relationship_counter(name, filter) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 397,
+              "source_line": "with_retry { call_count_relationships(name) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 405,
+              "source_line": "with_retry { call_unregister_relationship_counter(name) }",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "backoff",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 411,
+              "source_line": "# Retries the block with exponential backoff for transient gRPC errors.",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 412,
+              "source_line": "def with_retry(max_retries: MAX_RETRIES)",
+              "extraction_pattern": "retry|backoff"
+            },
+            {
+              "name": "retry",
+              "file": "spicedb-ruby/lib/spicedb/client.rb",
+              "line": 421,
+              "source_line": "retry",
+              "extraction_pattern": "retry|backoff"
+            }
+          ]
+        }
+      },
+      "iteration_style": "Ruby Enumerator.new with a lazy yielder block; pages are fetched from the server on demand as the caller iterates, not buffered up front",
+      "enumerator_construction_sites": [
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 181,
+          "source_line": "Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        },
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 226,
+          "source_line": "Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        },
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 254,
+          "source_line": "Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        },
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 348,
+          "source_line": "Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        },
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 372,
+          "source_line": "Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        },
+        {
+          "name": "Enumerator.new",
+          "file": "spicedb-ruby/lib/spicedb/client.rb",
+          "line": 849,
+          "source_line": "requests = Enumerator.new do |yielder|",
+          "extraction_pattern": "Enumerator\\.new"
+        }
+      ]
+    }
+  },
+  "spicedb_gen": {
+    "supported_languages": [
+      "go",
+      "java",
+      "python",
+      "typescript"
+    ],
+    "detail": [
+      {
+        "package": "golang",
+        "registered_at": {
+          "name": "golang",
+          "file": "spicedb-gen/cmd/spicedb-gen/main.go",
+          "line": 14,
+          "source_line": "_ \"github.com/authzed/spicedb-clients/spicedb-gen/golang\"",
+          "extraction_pattern": "_ \"github\\.com/authzed/spicedb-clients/spicedb-gen/(\\w+)\""
+        },
+        "language_key": {
+          "name": "go",
+          "file": "spicedb-gen/golang/generator.go",
+          "line": 26,
+          "source_line": "return \"go\"",
+          "extraction_pattern": "return \"(\\w+)\""
+        }
+      },
+      {
+        "package": "java",
+        "registered_at": {
+          "name": "java",
+          "file": "spicedb-gen/cmd/spicedb-gen/main.go",
+          "line": 15,
+          "source_line": "_ \"github.com/authzed/spicedb-clients/spicedb-gen/java\"",
+          "extraction_pattern": "_ \"github\\.com/authzed/spicedb-clients/spicedb-gen/(\\w+)\""
+        },
+        "language_key": {
+          "name": "java",
+          "file": "spicedb-gen/java/generator.go",
+          "line": 27,
+          "source_line": "return \"java\"",
+          "extraction_pattern": "return \"(\\w+)\""
+        }
+      },
+      {
+        "package": "python",
+        "registered_at": {
+          "name": "python",
+          "file": "spicedb-gen/cmd/spicedb-gen/main.go",
+          "line": 16,
+          "source_line": "_ \"github.com/authzed/spicedb-clients/spicedb-gen/python\"",
+          "extraction_pattern": "_ \"github\\.com/authzed/spicedb-clients/spicedb-gen/(\\w+)\""
+        },
+        "language_key": {
+          "name": "python",
+          "file": "spicedb-gen/python/generator.go",
+          "line": 26,
+          "source_line": "func (g *Generator) Language() string { return \"python\" }",
+          "extraction_pattern": "return \"(\\w+)\""
+        }
+      },
+      {
+        "package": "typescript",
+        "registered_at": {
+          "name": "typescript",
+          "file": "spicedb-gen/cmd/spicedb-gen/main.go",
+          "line": 17,
+          "source_line": "_ \"github.com/authzed/spicedb-clients/spicedb-gen/typescript\"",
+          "extraction_pattern": "_ \"github\\.com/authzed/spicedb-clients/spicedb-gen/(\\w+)\""
+        },
+        "language_key": {
+          "name": "typescript",
+          "file": "spicedb-gen/typescript/generator.go",
+          "line": 26,
+          "source_line": "return \"typescript\"",
+          "extraction_pattern": "return \"(\\w+)\""
+        }
+      }
+    ],
+    "note": "spec \u00a713 claims Go, TypeScript, Java, and Python -- matches exactly. No csharp/, ruby/, or rust/ package exists under spicedb-gen/."
+  },
+  "claims_verification": {
+    "claim_1_go_no_typed_errors_no_retry": {
+      "spec_text": "Go has no typed error hierarchy and no retry.",
+      "verdict": "confirmed",
+      "evidence": [
+        "spicedb-go/rel/rel.go:19-25 -- exactly 3 sentinel errors (ErrInvalidResource, ErrInvalidRelation, ErrInvalidSubject), all fmt.Errorf() plain errors, no custom error type or Is/As-matchable struct",
+        "every gRPC-facing call site (checks.go, relationships.go, lookup.go, expand.go, watch.go, schema.go, bulk.go) wraps failures as fmt.Errorf(\"spicedb: ...: %w\", err) -- the raw grpc/status error, unwrapped into no SpiceDB-specific type",
+        "grep for retry|backoff across spicedb-go/client/*.go and spicedb-go/consistency/*.go (excluding _test.go): 0 matches",
+        "go.mod has no grpc-retry / backoff dependency of any kind",
+        "live: CheckOne against an unreachable port returned in 24.4ms (single attempt, no backoff) and the error's Go type was the untyped *errors.errorString"
+      ]
+    },
+    "claim_2_python_async_only_permission_from_resource_relation": {
+      "spec_text": "Python is async-only and derives the permission from Relationship.resource_relation rather than taking it as a separate argument, unlike every other language.",
+      "verdict": "confirmed",
+      "evidence": [
+        "spicedb-python/spicedb/client.py:107-118 -- check_permission(self, consistency, rel, *, context=None) has NO permission parameter at all",
+        "spicedb-python/spicedb/client.py:140 -- permission=rel.resource_relation, inside check_permissions()'s proto item construction",
+        "spicedb-python/spicedb/types.py:19 -- Relationship.resource_relation is a required dataclass field",
+        "every other language's check method takes permission as an explicit string argument: Go checks.go:18 CheckOne(ctx, cs, permission string, r); TS types.ts:78-86 CheckRequest.permission; C# SpiceDBClient.cs:142-150 CheckPermissionAsync(..., string permission, ...); Java SpiceDBClient.java:125 checkPermission(Consistency, String permission, Relationship); Rust client.rs:121-126 check_permission(&self, ..., permission: &str, ...); Ruby client.rb:115 check_permission(consistency, permission, relationship)",
+        "spicedb-python/spicedb/client.py -- every method in SpiceDBClient is `async def`; no plain `def` methods besides dunders, and no second sync client class exists anywhere in the package",
+        "live: the SAME resource/subject checked with resource_relation='view' (True) vs. 'edit' (False, a permission alice lacks) proves the field is actually read, not merely present and ignored"
+      ]
+    },
+    "claim_3_csharp_cancellationtoken_before_params": {
+      "spec_text": "C# places CancellationToken before its params array.",
+      "verdict": "confirmed",
+      "evidence": [
+        "spicedb-csharp/SpiceDB.Client/SpiceDBClient.cs:104-108 -- CheckPermissionsAsync(ConsistencyStrategy consistency, string permission, CancellationToken cancellationToken = default, params Relationship[] relationships)",
+        "same pattern at CheckAnyAsync:155-159 and CheckAllAsync:168-172",
+        "necessity, not arbitrary style: C# requires `params` to be the last formal parameter, so a CancellationToken with a positional default cannot follow it on any overload that also takes params",
+        "contrast confirms the divergence is scoped correctly: the single-relationship CheckPermissionAsync overload (no params array) at lines 142-146 places CancellationToken LAST, the normal .NET convention",
+        "live: `dotnet run` compiled and executed CheckPermissionsAsync(Full(), \"view\", default, rel) successfully with this exact parameter order"
+      ]
+    },
+    "claim_4_rust_buffers_vec_not_stream": {
+      "spec_text": "Rust buffers into Vec rather than returning a Stream.",
+      "verdict": "confirmed",
+      "evidence": [
+        "spicedb-rust/src/client.rs:306-310 read_relationships(...) -> Result<Vec<Relationship>, SpiceDBError>",
+        "spicedb-rust/src/client.rs:401-408 lookup_resources(...) -> Result<Vec<String>, SpiceDBError>",
+        "spicedb-rust/src/client.rs:466-473 lookup_subjects(...) -> Result<Vec<String>, SpiceDBError>",
+        "spicedb-rust/src/client.rs:827-831 export_relationships(...) -> Result<Vec<Relationship>, SpiceDBError>",
+        "spicedb-rust/src/client.rs:887-891 updates(...) [watch] -> Result<Vec<Update>, SpiceDBError>",
+        "every one of these methods fully drains the server-side gRPC stream inside a `loop { ... stream.message().await ... }` before returning",
+        "live: `let rels: Vec<Relationship> = client.read_relationships(...).await?;` compiles and runs as a plain Vec assignment against a live server",
+        "surprising secondary finding: client.rs's own doc comments say the API streams, contradicting the compiled Vec signature -- 7 lines total (see languages.rust.streaming_vs_buffering.doc_comments_claiming_stream_return in this same JSON for the full, mechanically re-derivable list rather than a hand-picked subset). Two use the literal generic-typed phrase verbatim: line 44 (module-level doc) and line 305 (read_relationships's doc block), both 'Returns `impl Stream<Item = Result<T, SpiceDBError>>`'. The other five (298, 396, 460, 822, 882) use softer descriptive prose to the same effect -- 'Returns a stream of relationships...', 'Returns a stream of resource IDs...' -- without repeating that exact generic-typed phrase. Either way, Rust is the one language in this repo where the client's own comments disagree with its own code on this point"
+      ]
+    }
+  },
+  "no_counterpart": {
+    "service_inventory": {
+      "note": "the raw .proto source (not generated code) is what this enumerates, walking every .proto file under authzed/api/ recursively -- v1/ and materialize/v0/ both included, so a fourth package added later would also be picked up automatically",
+      "command": "grep -rn '^service ' proto-clients/spicedb-rust-proto/proto/authzed/api",
+      "services": [
+        {
+          "name": "RelationshipsService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/materialize/v0/relationships.proto",
+          "line": 13,
+          "source_line": "service RelationshipsService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "ExperimentalCountRelationshipsByFilter"
+          ]
+        },
+        {
+          "name": "WatchPermissionsService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/materialize/v0/watchpermissions.proto",
+          "line": 10,
+          "source_line": "service WatchPermissionsService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "WatchPermissions"
+          ]
+        },
+        {
+          "name": "WatchPermissionSetsService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/materialize/v0/watchpermissionsets.proto",
+          "line": 12,
+          "source_line": "service WatchPermissionSetsService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "WatchPermissionSets",
+            "LookupPermissionSets",
+            "DownloadPermissionSets"
+          ]
+        },
+        {
+          "name": "ExperimentalService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/v1/experimental_service.proto",
+          "line": 19,
+          "source_line": "service ExperimentalService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "BulkImportRelationships",
+            "BulkExportRelationships",
+            "BulkCheckPermission",
+            "ExperimentalReflectSchema",
+            "ExperimentalComputablePermissions",
+            "ExperimentalDependentRelations",
+            "ExperimentalDiffSchema",
+            "ExperimentalRegisterRelationshipCounter",
+            "ExperimentalCountRelationships",
+            "ExperimentalUnregisterRelationshipCounter"
+          ]
+        },
+        {
+          "name": "PermissionsService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/v1/permission_service.proto",
+          "line": 20,
+          "source_line": "service PermissionsService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "ReadRelationships",
+            "WriteRelationships",
+            "DeleteRelationships",
+            "CheckPermission",
+            "CheckBulkPermissions",
+            "ExpandPermissionTree",
+            "LookupResources",
+            "LookupSubjects",
+            "ImportBulkRelationships",
+            "ExportBulkRelationships"
+          ]
+        },
+        {
+          "name": "SchemaService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/v1/schema_service.proto",
+          "line": 16,
+          "source_line": "service SchemaService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "ReadSchema",
+            "WriteSchema",
+            "ReflectSchema",
+            "ComputablePermissions",
+            "DependentRelations",
+            "DiffSchema"
+          ]
+        },
+        {
+          "name": "WatchService",
+          "file": "proto-clients/spicedb-rust-proto/proto/authzed/api/v1/watch_service.proto",
+          "line": 16,
+          "source_line": "service WatchService {",
+          "extraction_pattern": "^service (\\w+)",
+          "rpc_methods": [
+            "Watch"
+          ]
+        }
+      ],
+      "count": 7
+    },
+    "materialize_usage_check": {
+      "command": "grep -rli materialize <client-dir>, excluding .venv/node_modules/bin/obj/target/build/dist/.git",
+      "hits_by_client": {
+        "spicedb-go": [],
+        "spicedb-python": [],
+        "spicedb-typescript": [],
+        "spicedb-csharp": [],
+        "spicedb-java": [],
+        "spicedb-ruby": [],
+        "spicedb-rust": []
+      },
+      "total_hits": 0
+    },
+    "confirmed_from_spec": [
+      {
+        "operation": "OpenFGA store CRUD (CreateStore/GetStore/ListStores/DeleteStore)",
+        "verdict": "confirmed no counterpart",
+        "evidence": "SpiceDB's vendored proto source defines 7 gRPC services total (RelationshipsService, WatchPermissionsService, WatchPermissionSetsService, ExperimentalService, PermissionsService, SchemaService, WatchService) -- see service_inventory above, derived by walking proto-clients/spicedb-rust-proto/proto/authzed/api/ recursively, not asserted from a partial read. None of the 7 model multi-tenant stores; a SpiceDB deployment is a single logical backend with one schema and one relationship graph. The 3 materialize/v0 services (grep -rli materialize <client-dir>, excluding .venv/node_modules/bin/obj/target/build/dist/.git -> 0 hits across all 7 idiomatic clients' hand-written source) are wrapped by none of the 7 language clients either way, so they don't change this verdict."
+      },
+      {
+        "operation": "AuthZEN",
+        "verdict": "confirmed no counterpart",
+        "evidence": "no AuthZEN-related message, service, or proto file anywhere under proto-clients/ or any spicedb-* client directory"
+      },
+      {
+        "operation": "OpenFGA Permissions Index",
+        "verdict": "confirmed no counterpart",
+        "evidence": "no Index-related service or message in the SpiceDB proto surface (v1 or materialize/v0)"
+      }
+    ],
+    "additional_gaps_found": [
+      {
+        "operation": "OpenFGA Check's contextual_tuples (ephemeral, request-scoped relationship tuples supplied only for that one check, never persisted)",
+        "verdict": "no SpiceDB counterpart",
+        "evidence": "CheckPermissionRequest (proto-clients/spicedb-go-proto/gen/authzed/api/v1/permission_service.pb.go:1048-1066) has fields Consistency, Resource, Permission, Subject, Context, WithTracing -- `Context` is caveat-evaluation context (named values fed into a caveat expression), not relationship tuples. There is no field anywhere in CheckPermissionRequest or CheckBulkPermissionsRequestItem for supplying extra, non-persisted relationships at check time. The narrower claim this extraction can actually support: of the 7 services that exist, none -- including the 3 materialize/v0 services (RelationshipsService.ExperimentalCountRelationshipsByFilter, WatchPermissionsService.WatchPermissions, WatchPermissionSetsService.{WatchPermissionSets,LookupPermissionSets,DownloadPermissionSets} -- see service_inventory[].rpc_methods above) -- accepts ephemeral relationship tuples on any RPC. A migrating check site that relies on OpenFGA's contextual_tuples for a what-if check has no direct target -- it must actually Write the relationship (transactionally, durably) before checking, which is a materially different operation."
+      },
+      {
+        "operation": "OpenFGA authorization_model_id pinning (checking against a specific, immutable historical model while a newer one is live)",
+        "verdict": "no SpiceDB counterpart",
+        "evidence": "WriteSchema (spicedb-go/client/schema.go:20-27) replaces the schema outright; CheckPermissionRequest has no schema/model-id field to pin a check to an older schema version the way OpenFGA's Check accepts an authorization_model_id. SpiceDB's ReflectSchema/DiffSchema (schema.go:75-213) let you read or diff the CURRENT schema and compare against an arbitrary comparison string, but there is no server-side registry of past schemas addressable by ID for live checks. The narrower claim this extraction can actually support: none of the 7 services -- including the 3 materialize/v0 ones, whose RPCs are all watch/lookup/download operations over the current materialized state, not schema-version selectors -- exposes a model-id/schema-version parameter anywhere. ZedTokens pin relationship-data revisions, not schema versions -- the two are orthogonal. A migrated codebase that assumed it could keep checking against an old model while rolling out a new one has no equivalent mechanism."
+      }
+    ],
+    "note_for_task_8": "these five items (3 from the spec + 2 found here) are the complete no-counterpart list this extraction turned up; Task 8's command should halt on all five rather than only the spec's original three. The service inventory above is the complete, mechanically-derived list of what exists -- 7, not 4 -- so a later reader can verify 'no counterpart' was checked against everything, not a partial reading of the proto tree."
+  },
+  "live_verification": {
+    "verified_on": "2026-08-14",
+    "verified_against_commit": "549c4e90e7a1488adcf268e0e0033e48d5b5f0a4",
+    "spicedb_version": "v1.56.0 (spicedb serve-testing)",
+    "method": "manual: cloned repo, started `spicedb serve-testing` on a scratch port, wrote a schema and one relationship via `zed`, then built and ran a small program per language against the vendored client source (path-referenced, not published packages). All 7 languages were verified by execution; none were static-only.",
+    "languages_verified_by_execution": [
+      "go",
+      "python",
+      "typescript",
+      "csharp",
+      "java",
+      "rust",
+      "ruby"
+    ],
+    "languages_verified_statically_only": [],
+    "per_language_results": {
+      "go": {
+        "check_result": "CheckOne(view, alice) = true",
+        "error_on_missing_permission": "spicedb: check item 0: relation/permission `nonexistent_permission` not found under definition `document` (Go type: *errors.errorString -- confirms no typed error hierarchy)",
+        "no_retry_timing": "CheckOne against an unreachable port (nothing listening) returned in 24.4ms -- a single immediate failure, not the multi-second delay a retry-with-backoff implementation would produce"
+      },
+      "python": {
+        "check_result_view": "check_permission(consistency.full(), rel with resource_relation='view') = True",
+        "check_result_edit": "the SAME resource/subject with resource_relation='edit' (a permission alice does not have) = False -- proves the permission checked is read from Relationship.resource_relation, since check_permission takes no separate permission argument at all",
+        "retry_timing": "check_permission against an unreachable port with max_retries=3 raised UnavailableError (typed) after 0.705s -- matches the exponential backoff formula in client.py exactly: sleep(0.1*2^0) + sleep(0.1*2^1) + sleep(0.1*2^2) = 0.1 + 0.2 + 0.4 = 0.7s"
+      },
+      "typescript": {
+        "check_result": "checkPermission(full(), {...permission: 'view'...}) = true",
+        "consistency_helpers": "minLatency() and atLeastOrFull('') both constructed and returned the expected Consistency proto shape -- confirms the spec's cited names are TypeScript's actual names"
+      },
+      "csharp": {
+        "compiled_and_ran": "CheckPermissionsAsync(Full(), \"view\", default, rel) compiles and runs with CancellationToken positioned before the trailing `params Relationship[]` array, returning [True]",
+        "single_overload_contrast": "CheckPermissionAsync(Full(), \"view\", rel, default) -- the non-params overload -- places CancellationToken last as normal .NET convention, confirming the divergence is specific to params-array overloads"
+      },
+      "java": {
+        "check_result": "checkPermission(Consistency.full(), \"view\", rel) = true",
+        "stream_result": "lookupResources(...).toList() = [\"readme\"] via a live java.util.stream.Stream"
+      },
+      "rust": {
+        "compiled_and_ran": "`let rels: Vec<Relationship> = client.read_relationships(...).await?;` and `let ids: Vec<String> = client.lookup_resources(...).await?;` both compile and run as plain Vec assignments -- no Stream/.next()/poll_next() usage needed, confirming the buffered return type is real, not just documented wrong"
+      },
+      "ruby": {
+        "check_result": "check_permission(Consistency.full, 'view', rel) = true",
+        "enumerator_result": "read_relationships(...).class == Enumerator; .to_a == [\"document:readme#viewer@user:alice\"]"
+      },
+      "spicedb_gen": {
+        "ran": "spicedb-gen --schema test-schema.zed --lang typescript --out permissions.ts",
+        "result": "generated a real TypedClient wrapper (User/Document factories, .view/.edit/.delete permission accessors) with 0 exit code",
+        "rejection_test": "spicedb-gen --schema test-schema.zed --lang ruby --out permissions.rb -> exit 2, stderr: unknown language \"ruby\"; registered languages: go java python typescript -- live confirmation of the exact supported-language set"
+      }
+    },
+    "toolchains_available_in_this_environment": {
+      "go": "go1.26.1",
+      "python": "3.12.3 via uv",
+      "node": "v26.0.0, pnpm 10.32.1",
+      "dotnet": "10.0.201",
+      "java": "OpenJDK 25.0.2, Gradle 9.4.0 (no Maven, not needed)",
+      "rust": "cargo 1.94.0 / rustc 1.94.0",
+      "ruby": "system Ruby is 2.6.10 (Apple-bundled), below the gem's required >= 3.2; Homebrew ruby 4.0.2 (/opt/homebrew/opt/ruby/bin) was used instead"
+    }
+  }
+}

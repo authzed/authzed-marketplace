@@ -1,0 +1,79 @@
+definition user {}
+
+definition organization {
+	relation member__direct: user
+	permission member = (member__direct + admin + store_manager)
+
+	relation admin: user
+	permission admin__perm = admin
+
+	relation store_manager: user
+	permission store_manager__perm = store_manager
+
+	permission can_create_store = admin
+}
+
+definition store {
+	relation organization: organization
+	relation owner: user
+
+	relation manager__direct: user
+	permission manager = (manager__direct + owner + organization->store_manager__perm)
+
+	relation staff__direct: user
+	permission staff = (staff__direct + manager)
+
+	permission organization_admin = organization->admin__perm
+
+	permission can_delete = (owner + organization_admin)
+	permission can_create_product = (manager + organization_admin)
+	permission can_create_customer = (staff + can_edit)
+	permission can_create_order = (staff + can_edit)
+	permission can_edit = (manager + can_delete)
+	permission can_view = (staff + can_edit)
+}
+
+definition product {
+	relation store: store
+	relation creator: user
+	relation viewer: user
+
+	permission can_delete = (store->manager + store->organization_admin)
+	permission can_manage_inventory = (store->staff + store->organization_admin)
+	permission can_create_review = store->can_view
+	permission can_edit = (creator + can_manage_inventory)
+	permission can_view = (viewer + can_edit)
+}
+
+definition customer {
+	relation store: store
+
+	relation account_owner: user
+	permission account_owner__perm = account_owner
+
+	permission can_delete = store->organization_admin
+	permission can_edit = (account_owner + store->manager + can_delete)
+	permission can_view = (store->staff + can_edit)
+}
+
+definition review {
+	relation product: product
+	relation author: user
+
+	permission can_delete = (author + product->can_delete)
+	permission can_edit = author
+	permission can_view = (product->can_view + can_edit)
+}
+
+definition order {
+	relation store: store
+	relation customer: customer
+	relation placed_by: user
+
+	permission can_delete = store->organization_admin
+	permission can_refund = (store->manager + can_delete)
+	permission can_cancel = (customer->account_owner__perm + placed_by + can_refund)
+	permission can_fulfill = (store->staff + can_delete)
+	permission can_edit = can_fulfill
+	permission can_view = (customer->account_owner__perm + placed_by + can_edit)
+}

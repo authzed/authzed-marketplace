@@ -1,0 +1,51 @@
+// RECOMMENDED encoding (corrected on owner review -- see schema-mapping.md's "Temporal
+// access: caveat vs. native expiration", "The gate decision" section). This pack's default
+// for a temporal-access condition is native expiration, not the caveat form in schema.zed:
+// zero per-check CEL evaluation, GC reclaims expired rows, and expiry is enforced
+// identically on all four read paths (Check, ReadRelationships, LookupResources,
+// LookupSubjects), all verified live below and in schema-mapping.md.
+//
+// schema.zed (the caveat form) remains the only artifact this store's harness ritual
+// validates -- not because it is the better production choice, but because it is the only
+// one this pack's own tooling (zed validate / the migration-harness) can verify end to end.
+// This file is verified the way any harness-unreachable recommendation must be: directly
+// against a live server, below and in schema-mapping.md, never by a green harness run.
+//
+// This form deploys directly via `zed schema write` (no compile step) and was verified end
+// to end on a live SpiceDB v1.56.0 server: `use expiration` is required (dropping it fails
+// WriteSchema with "could not lookup caveat `expiration` ... not found", verified), and it
+// is one of the few `use` flags accepted by both `WriteSchema` and zed v0.31.1's own local
+// parser, so `zed validate` on this file directly also succeeds.
+//
+// The real cost of choosing this over the caveat form -- not a tooling limitation, a
+// genuine scope narrowing the user should consciously accept: it cannot reproduce this
+// store's own time-varying check assertions, because native expiration has no
+// caller-suppliable "as of" time anywhere in the API (verified from source and live) --
+// only the real wall clock at request time. There is no way to express "true 10 minutes
+// into this grant, false 2 hours into it" this way, nor to answer "was this valid as of
+// last Tuesday." A source model whose call sites genuinely need that stays on the caveat
+// form. See the schema-mapping.md section above for the full evidence and the gate
+// decision this choice belongs to.
+
+use expiration
+
+definition user {}
+
+definition document {
+	relation viewer: user | user with expiration
+}
+
+// Illustrative writes for this store's own fixture data (issued_at + valid_for,
+// computed once at conversion time instead of carried forward as two live parameters).
+// Verified live with TOUCH (not CREATE -- an expired-but-not-yet-GC'd relationship makes
+// CREATE fail):
+//
+//   zed relationship touch document:1 viewer user:bob
+//   zed relationship touch document:1 viewer user:anne --expiration-time 2023-01-01T01:00:00Z   # issued_at (00:00:00Z) + 1h
+//   zed relationship touch document:2 viewer user:anne --expiration-time 2023-01-01T00:00:05Z   # issued_at (00:00:00Z) + 5s
+//
+// Both of anne's grants are already expired relative to any real clock past 2023, so on a
+// live server today `document:1#viewer@user:anne` and `document:2#viewer@user:anne` both
+// check false and are absent from `zed relationship read` -- confirmed live, and consistent
+// with "gone from every read path the instant the timestamp passes, independent of GC" (see
+// schema-mapping.md).

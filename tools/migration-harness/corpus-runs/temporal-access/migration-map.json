@@ -1,0 +1,16 @@
+{
+  "types": {
+    "user": "user",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {},
+    "document": {
+      "viewer": "viewer"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

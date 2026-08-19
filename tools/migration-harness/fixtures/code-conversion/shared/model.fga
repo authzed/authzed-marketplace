@@ -1,0 +1,22 @@
+model
+  schema 1.1
+
+type user
+
+type group
+  relations
+    define member: [user]
+
+type folder
+  relations
+    define owner: [user]
+
+type document
+  relations
+    define parent: [folder]
+    define writer: [user] or owner from parent
+    define viewer: [user, group#member, user with is_active] or writer
+
+condition is_active(active: bool) {
+  active
+}

@@ -21,10 +21,10 @@ schema: |-
   definition document {
     /**
      * users can be made readers of specific documents,
-     * either directly, or only if they have a valid IP,
-     * or only if they aren't rate limited.
+     * either directly, or only if they're connecting from an approved
+     * office network, or only if they aren't rate limited.
      */
-    relation reader: user | user with has_valid_ip | user with not_rate_limited
+    relation reader: user | user with from_office_network | user with not_rate_limited
 
     /**
      * if a user has the reader relationship to a specific document,
@@ -34,11 +34,13 @@ schema: |-
   }
 
   /**
-   * only allowed if the IP address is within the allowed CIDR range.
-   * cidr is provided when writing the relation; user_ip is provided at CheckPermission time.
+   * only allowed if the connection is coming from within the office's
+   * registered subnet.
+   * office_subnet is provided when writing the relation; connecting_from
+   * is provided at CheckPermission time.
    */
-  caveat has_valid_ip(user_ip ipaddress, cidr string) {
-    user_ip.in_cidr(cidr)
+  caveat from_office_network(connecting_from ipaddress, office_subnet string) {
+    connecting_from.in_cidr(office_subnet)
   }
 
   /**
@@ -52,19 +54,19 @@ schema: |-
 relationships: |-
   document:firstdoc#reader@user:fred
   document:firstdoc#reader@user:tom[not_rate_limited:{"allowed_max":100}]
-  document:firstdoc#reader@user:alice[has_valid_ip:{"cidr":"1.2.3.0/24"}]
+  document:firstdoc#reader@user:alice[from_office_network:{"office_subnet":"10.20.30.0/24"}]
 
 assertions:
   assertTrue:
     - 'document:firstdoc#view@user:tom with {"current": 1}'
     - "document:firstdoc#view@user:fred"
-    - 'document:firstdoc#view@user:alice with {"user_ip": "1.2.3.4"}'
+    - 'document:firstdoc#view@user:alice with {"connecting_from": "10.20.30.9"}'
   assertCaveated:
     - "document:firstdoc#view@user:tom"
     - "document:firstdoc#view@user:alice"
   assertFalse:
     - 'document:firstdoc#view@user:tom with {"current": 500}'
-    - 'document:firstdoc#view@user:alice with {"user_ip": "8.8.8.8"}'
+    - 'document:firstdoc#view@user:alice with {"connecting_from": "203.0.113.5"}'
 
 validation:
   document:firstdoc#view:

@@ -1,0 +1,84 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation accountant__direct: user
+	relation auditor__direct: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission accountant = (accountant__direct + admin)
+	permission auditor = (auditor__direct + accountant)
+	permission member = (member__direct + auditor)
+	permission can_create_account = accountant
+	permission can_create_payment = accountant
+}
+
+definition account {
+	relation organization: organization
+
+	permission can_edit = organization->accountant
+	permission can_view = (organization->auditor + can_edit)
+}
+
+definition contact {
+	relation organization: organization
+	relation owner: user
+
+	permission owner__perm = owner
+	permission can_edit = (owner + organization->accountant)
+	permission can_view = can_edit
+}
+
+definition invoice {
+	relation organization: organization
+	relation creator: user
+	relation contact: contact
+
+	permission can_void = organization->admin__perm
+	permission can_approve = can_void
+	permission can_edit = (creator + organization->accountant + can_approve)
+	permission can_view = (contact->owner__perm + organization->auditor + can_edit)
+}
+
+definition expense {
+	relation organization: organization
+	relation submitter: user
+
+	permission can_approve = organization->accountant
+	permission can_edit = (submitter + can_approve)
+	permission can_view = (organization->auditor + can_edit)
+}
+
+definition payment {
+	relation organization: organization
+
+	permission can_edit = organization->accountant
+	permission can_view = (organization->auditor + can_edit)
+}
+
+definition journal_entry {
+	relation organization: organization
+	relation creator: user
+
+	permission can_post = organization->admin__perm
+	permission can_edit = (creator + organization->accountant + can_post)
+	permission can_view = (organization->auditor + can_edit)
+}
+
+definition purchase_order {
+	relation organization: organization
+	relation requester: user
+	relation approver: user
+
+	permission can_approve = (approver + organization->admin__perm)
+	permission can_edit = (requester + can_approve + organization->accountant)
+	permission can_view = can_edit
+}
+
+definition financial_statement {
+	relation organization: organization
+
+	permission can_edit = organization->admin__perm
+	permission can_view = (organization->auditor + can_edit)
+}

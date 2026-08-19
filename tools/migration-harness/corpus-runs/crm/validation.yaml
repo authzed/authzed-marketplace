@@ -1,0 +1,64 @@
+schemaFile: schema.zed
+relationships: |-
+  account:mega-corp#organization@organization:acme
+  account:mega-corp#owner@user:charlie
+  contact:john-doe#account@account:mega-corp
+  contact:john-doe#owner@user:charlie
+  engagement:call-001#organization@organization:acme
+  engagement:call-001#owner@user:charlie
+  lead:new-prospect#organization@organization:acme
+  lead:new-prospect#owner@user:charlie
+  note:meeting-notes#organization@organization:acme
+  note:meeting-notes#owner@user:charlie
+  opportunity:big-deal#account@account:mega-corp
+  opportunity:big-deal#owner@user:charlie
+  organization:acme#admin@user:alice
+  organization:acme#sales_manager@user:bob
+  organization:acme#sales_rep@user:charlie
+  task:follow-up#organization@organization:acme
+  task:follow-up#owner@user:charlie
+assertions:
+  assertTrue:
+    - "account:mega-corp#can_view@user:alice"
+    - "account:mega-corp#can_edit@user:alice"
+    - "account:mega-corp#can_delete@user:alice"
+    - "opportunity:big-deal#can_view@user:alice"
+    - "opportunity:big-deal#can_edit@user:alice"
+    - "opportunity:big-deal#can_delete@user:alice"
+    - "account:mega-corp#can_view@user:bob"
+    - "account:mega-corp#can_edit@user:bob"
+    - "account:mega-corp#can_view@user:charlie"
+    - "account:mega-corp#can_edit@user:charlie"
+    - "contact:john-doe#can_view@user:charlie"
+    - "contact:john-doe#can_edit@user:charlie"
+    - "lead:new-prospect#can_view@user:charlie"
+    - "lead:new-prospect#can_edit@user:charlie"
+    - "lead:new-prospect#can_convert@user:charlie"
+    - "lead:new-prospect#can_view@user:bob"
+    - "lead:new-prospect#can_convert@user:bob"
+    - "opportunity:big-deal#can_view@user:charlie"
+    - "opportunity:big-deal#can_edit@user:charlie"
+    - "opportunity:big-deal#can_close@user:charlie"
+    - "opportunity:big-deal#can_view@user:bob"
+    - "opportunity:big-deal#can_edit@user:bob"
+    - "opportunity:big-deal#can_close@user:bob"
+    - "engagement:call-001#can_view@user:charlie"
+    - "engagement:call-001#can_edit@user:charlie"
+    - "engagement:call-001#can_view@user:bob"
+    - "note:meeting-notes#can_view@user:charlie"
+    - "note:meeting-notes#can_edit@user:charlie"
+    - "note:meeting-notes#can_delete@user:charlie"
+    - "note:meeting-notes#can_view@user:bob"
+    - "task:follow-up#can_view@user:charlie"
+    - "task:follow-up#can_edit@user:charlie"
+    - "task:follow-up#can_complete@user:charlie"
+    - "task:follow-up#can_view@user:bob"
+  assertFalse:
+    - "account:mega-corp#can_delete@user:bob"
+    - "account:mega-corp#can_delete@user:charlie"
+    - "opportunity:big-deal#can_delete@user:bob"
+    - "engagement:call-001#can_edit@user:bob"
+    - "note:meeting-notes#can_edit@user:bob"
+    - "note:meeting-notes#can_delete@user:bob"
+    - "task:follow-up#can_edit@user:bob"
+    - "task:follow-up#can_complete@user:bob"

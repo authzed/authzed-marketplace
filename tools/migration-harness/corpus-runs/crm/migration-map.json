@@ -1,0 +1,88 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "account": "account",
+    "contact": "contact",
+    "lead": "lead",
+    "opportunity": "opportunity",
+    "engagement": "engagement",
+    "note": "note",
+    "task": "task"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "admin": "admin",
+      "sales_manager": "sales_manager",
+      "sales_rep": "sales_rep"
+    },
+    "account": {
+      "organization": "organization",
+      "owner": "owner",
+      "organization_admin": "organization_admin",
+      "organization_sales_manager": "organization_sales_manager",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_create_contact": "can_create_contact",
+      "can_create_opportunity": "can_create_opportunity",
+      "can_view": "can_view"
+    },
+    "contact": {
+      "account": "account",
+      "owner": "owner",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "lead": {
+      "organization": "organization",
+      "owner": "owner",
+      "can_delete": "can_delete",
+      "can_convert": "can_convert",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "opportunity": {
+      "account": "account",
+      "owner": "owner",
+      "can_delete": "can_delete",
+      "can_close": "can_close",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "engagement": {
+      "organization": "organization",
+      "owner": "owner",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "note": {
+      "organization": "organization",
+      "owner": "owner",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "task": {
+      "organization": "organization",
+      "owner": "owner",
+      "can_edit": "can_edit",
+      "can_complete": "can_complete",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+// Converted from shared/model.fga by hand, following code-mapping.md's own worked
+// schema example (document/folder/group, writer/viewer) plus one addition: the
+// `is_active` caveat, carrying the `user with is_active` conditioned type restriction
+// on document#viewer through to a real SpiceDB caveat. Everything else here is the
+// exact schema code-mapping.md's "one running example" section already shows,
+// including the writer__direct/viewer__direct relation split and the folder-owner
+// alias permission that avoids the arrow-references-relation lint.
+use typechecking
+
+definition user {}
+
+definition group {
+	relation member: user
+}
+
+definition folder {
+	relation owner: user
+
+	// Alias so document.writer's arrow can target a permission instead of a bare
+	// relation, avoiding the arrow-references-relation lint. No stored tuple or call
+	// site is renamed by this alias -- it is schema-internal.
+	permission owner__perm = owner
+}
+
+definition document {
+	relation parent: folder
+	relation writer__direct: user
+	relation viewer__direct: user | group#member | user with is_active
+
+	permission writer = (writer__direct + parent->owner__perm)
+	permission viewer = (viewer__direct + writer)
+}
+
+caveat is_active(active bool) {
+  active
+}

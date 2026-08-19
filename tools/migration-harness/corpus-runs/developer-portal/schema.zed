@@ -1,0 +1,47 @@
+definition user {}
+
+definition organization {
+	relation member: user
+	permission member__perm = member
+
+	relation admin: user
+	permission admin__perm = admin
+
+	relation application: application
+	permission application__perm = application
+
+	permission can_remove_member = admin
+	permission can_invite_member = admin
+	permission can_view_member = (admin + member)
+	permission can_create_application = admin
+}
+
+definition application {
+	relation organization: organization
+
+	relation writer__direct: user
+	permission writer = (writer__direct + organization->admin__perm)
+
+	permission reader = (writer + organization->member__perm)
+
+	permission can_view = (reader + writer)
+	permission can_edit = writer
+	permission can_delete = writer
+	permission can_create_credentials = writer
+	permission can_delete_credentials = writer
+	permission can_configure_component = writer
+}
+
+definition component {
+	relation organization: organization
+
+	relation reader__direct: application
+	permission reader = (reader__direct & organization->application__perm)
+
+	relation writer__direct: application
+	permission writer = (writer__direct & organization->application__perm)
+
+	permission can_view = (reader + writer)
+	permission can_write = writer
+	permission can_delete = organization->admin__perm
+}

@@ -1,0 +1,8 @@
+definition user {}
+
+definition doc {
+	relation owner: user
+	relation viewer__direct: user | user:*
+
+	permission viewer = (viewer__direct + owner)
+}

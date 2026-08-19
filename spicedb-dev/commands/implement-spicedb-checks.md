@@ -78,18 +78,31 @@ Based on operation type and language, generate appropriate code.
 
 #### Consistency Model
 
-Use `AtLeastAsFresh` when a ZedToken is available from a prior write (read-your-writes
-pattern), or `MinimizeLatency` for general checks.
+Classify the check being generated, per call site, before picking a consistency:
 
-**WARNING:** Do NOT use `FullyConsistent` in normal request paths -- it bypasses the cache
-and does not scale. Reserve it for admin/audit operations only.
+- **Independent** -- no write earlier in this request, or the request immediately before it,
+  feeds this check's answer. Use `MinimizeLatency`.
+- **Dependent (read-after-write)** -- a write earlier in this request (or the request just
+  before it) produced the relationship this check depends on -- e.g. create a resource, grant
+  a relationship on it, then check a permission derived from that grant.
+  1. Thread the ZedToken that write returned -- `AtLeastAsFresh`.
+  2. If no ZedToken is reachable at this call site at all, use `FullyConsistent` and leave a
+     `TODO` noting that a threaded ZedToken should replace it once one becomes reachable.
+  3. **Never fall back to `MinimizeLatency` here.** Verified live against `spicedb
+     serve-testing`: a `MinimizeLatency` check fired immediately after the write it depends on
+     returns the stale, pre-write answer in the large majority of trials at a sub-millisecond
+     write-to-check gap -- comfortably inside the gap between two ordinary HTTP requests. See
+     `skills/spicedb-best-practices/references/consistency-deep-dive.md` for the full
+     ZedToken-routing pattern.
+
+**WARNING:** `FullyConsistent` bypasses the cache and is materially more expensive per call --
+it is the correct, safe choice for an un-threadable dependent check (above), not a default for
+request paths generally. Reserve it otherwise for admin/audit operations.
 
 **Go consistency pattern:**
 ```go
-// Use AtLeastAsFresh when a ZedToken is available from a prior write
-// (read-your-writes pattern), or MinimizeLatency for general checks.
-// WARNING: Do NOT use FullyConsistent in normal request paths -- it bypasses
-// the cache and does not scale. Reserve it for admin/audit operations only.
+// dependsOnPriorWrite: this check's answer depends on a write this request (or
+// the immediately preceding one) made. See "Consistency Model" above.
 consistency := &v1.Consistency{
     Requirement: &v1.Consistency_MinimizeLatency{MinimizeLatency: true},
 }
@@ -97,28 +110,42 @@ if zedToken != nil {
     consistency = &v1.Consistency{
         Requirement: &v1.Consistency_AtLeastAsFresh{AtLeastAsFresh: zedToken},
     }
+} else if dependsOnPriorWrite {
+    // TODO: thread a ZedToken from the write this check depends on once one is
+    // reachable here. FullyConsistent is the correct, if costlier, stand-in --
+    // never MinimizeLatency: verified live to return the stale, pre-write
+    // answer on a check fired immediately after its dependent write.
+    consistency = &v1.Consistency{
+        Requirement: &v1.Consistency_FullyConsistent{FullyConsistent: true},
+    }
 }
 ```
 
 **TypeScript consistency pattern:**
 ```typescript
-// Use atLeastAsFresh when a ZedToken is available from a prior write
-// (read-your-writes pattern), or minimizeLatency for general checks.
-// WARNING: Do NOT use fullyConsistent in normal request paths -- it bypasses
-// the cache and does not scale. Reserve it for admin/audit operations only.
+// dependsOnPriorWrite: this check's answer depends on a write this request (or
+// the immediately preceding one) made. See "Consistency Model" above.
 const consistency = zedToken
     ? { requirement: { oneofKind: 'atLeastAsFresh' as const, atLeastAsFresh: zedToken } }
-    : { requirement: { oneofKind: 'minimizeLatency' as const, minimizeLatency: true } };
+    : dependsOnPriorWrite
+        // TODO: thread a ZedToken from the write this check depends on once one
+        // is reachable here. fullyConsistent is the correct, if costlier,
+        // stand-in -- never minimizeLatency on this path.
+        ? { requirement: { oneofKind: 'fullyConsistent' as const, fullyConsistent: true } }
+        : { requirement: { oneofKind: 'minimizeLatency' as const, minimizeLatency: true } };
 ```
 
 **Python consistency pattern:**
 ```python
-# Use at_least_as_fresh when a ZedToken is available from a prior write
-# (read-your-writes pattern), or minimize_latency for general checks.
-# WARNING: Do NOT use fully_consistent in normal request paths -- it bypasses
-# the cache and does not scale. Reserve it for admin/audit operations only.
+# depends_on_prior_write: this check's answer depends on a write this request
+# (or the immediately preceding one) made. See "Consistency Model" above.
 if zed_token:
     consistency = Consistency(at_least_as_fresh=zed_token)
+elif depends_on_prior_write:
+    # TODO: thread a ZedToken from the write this check depends on once one is
+    # reachable here. fully_consistent is the correct, if costlier, stand-in --
+    # never minimize_latency on this path.
+    consistency = Consistency(fully_consistent=True)
 else:
     consistency = Consistency(minimize_latency=True)
 ```
@@ -177,6 +204,10 @@ To support read-your-writes:
 2. Return the serialized token in an HTTP response header (e.g., `X-SpiceDB-Token`).
 3. On the next request, read the header and pass it as `AtLeastAsFresh` in `CheckPermission`.
 4. Store ZedTokens in your database as `text`/`varchar(1024)` if you need cross-request consistency.
+5. **If a call site depends on a preceding write and no ZedToken can be threaded to it,
+   pass `FullyConsistent`, never a bare "no token" fallback to `MinimizeLatency`** -- see
+   "Consistency Model," above, for why, and for the `dependsOnPriorWrite`/`FullyConsistent`
+   branch the examples below add for exactly this case.
 
 ### CheckPermission
 
@@ -188,20 +219,27 @@ import (
     "google.golang.org/grpc/status"
 )
 
-func (s *Service) GetDocument(ctx context.Context, userID, documentID string, zedToken *v1.ZedToken) (*Document, error) {
+// dependsOnPriorWrite: true when this call's answer depends on a write this
+// request (or the immediately preceding one) made -- e.g. this call is
+// confirming a grant the caller just created. See "Consistency Model," above.
+func (s *Service) GetDocument(ctx context.Context, userID, documentID string, zedToken *v1.ZedToken, dependsOnPriorWrite bool) (*Document, error) {
     // Use a stable, immutable identifier as the SpiceDB object ID.
     // Prefer the OIDC 'sub' field over email -- emails contain '@' and can change.
     // See: skills/spicedb-best-practices references/client-patterns.md
 
-    // Use AtLeastAsFresh when a ZedToken is available (read-your-writes pattern),
-    // or MinimizeLatency for general checks.
-    // WARNING: Do NOT use FullyConsistent in normal paths -- bypasses cache, doesn't scale.
     consistency := &v1.Consistency{
         Requirement: &v1.Consistency_MinimizeLatency{MinimizeLatency: true},
     }
     if zedToken != nil {
         consistency = &v1.Consistency{
             Requirement: &v1.Consistency_AtLeastAsFresh{AtLeastAsFresh: zedToken},
+        }
+    } else if dependsOnPriorWrite {
+        // TODO: thread a ZedToken from the write this check depends on once one
+        // is reachable here. Never MinimizeLatency on this path -- verified live
+        // to return the stale, pre-write answer immediately after the write.
+        consistency = &v1.Consistency{
+            Requirement: &v1.Consistency_FullyConsistent{FullyConsistent: true},
         }
     }
 
@@ -237,16 +275,19 @@ func (s *Service) GetDocument(ctx context.Context, userID, documentID string, ze
 ```typescript
 import { v1 } from '@authzed/authzed-node';
 
-async function getDocument(userId: string, documentId: string, zedToken?: v1.ZedToken): Promise<Document> {
+// dependsOnPriorWrite: true when this call's answer depends on a write this
+// request (or the immediately preceding one) made. See "Consistency Model," above.
+async function getDocument(userId: string, documentId: string, zedToken?: v1.ZedToken, dependsOnPriorWrite = false): Promise<Document> {
     // Use a stable, immutable identifier as the SpiceDB object ID.
     // Prefer the OIDC 'sub' field over email -- emails contain '@' and can change.
 
-    // Use atLeastAsFresh when a ZedToken is available (read-your-writes pattern),
-    // or minimizeLatency for general checks.
-    // WARNING: Do NOT use fullyConsistent in normal paths -- bypasses cache, doesn't scale.
     const consistency = zedToken
         ? { requirement: { oneofKind: 'atLeastAsFresh' as const, atLeastAsFresh: zedToken } }
-        : { requirement: { oneofKind: 'minimizeLatency' as const, minimizeLatency: true } };
+        : dependsOnPriorWrite
+            // TODO: thread a ZedToken from the write this check depends on once
+            // one is reachable here. Never minimizeLatency on this path.
+            ? { requirement: { oneofKind: 'fullyConsistent' as const, fullyConsistent: true } }
+            : { requirement: { oneofKind: 'minimizeLatency' as const, minimizeLatency: true } };
 
     const response = await client.checkPermission({
         resource: { objectType: 'document', objectId: documentId },
@@ -274,15 +315,19 @@ from authzed.api.v1 import (
     CheckPermissionResponse,
 )
 
-def get_document(user_id: str, document_id: str, zed_token=None) -> Document:
+def get_document(user_id: str, document_id: str, zed_token=None, depends_on_prior_write: bool = False) -> Document:
     # Use a stable, immutable identifier as the SpiceDB object ID.
     # Prefer the OIDC 'sub' field over email -- emails contain '@' and can change.
-
-    # Use at_least_as_fresh when a ZedToken is available (read-your-writes pattern),
-    # or minimize_latency for general checks.
-    # WARNING: Do NOT use fully_consistent in normal paths -- bypasses cache, doesn't scale.
+    #
+    # depends_on_prior_write: True when this call's answer depends on a write
+    # this request (or the immediately preceding one) made. See "Consistency
+    # Model," above.
     if zed_token:
         consistency = Consistency(at_least_as_fresh=zed_token)
+    elif depends_on_prior_write:
+        # TODO: thread a ZedToken from the write this check depends on once one
+        # is reachable here. Never minimize_latency on this path.
+        consistency = Consistency(fully_consistent=True)
     else:
         consistency = Consistency(minimize_latency=True)
 

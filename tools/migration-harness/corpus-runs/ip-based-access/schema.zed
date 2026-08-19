@@ -1,0 +1,19 @@
+caveat in_company_network(user_ip ipaddress, ip_range string) {
+	user_ip.in_cidr(ip_range)
+}
+
+definition user {}
+
+definition organization {
+	relation member: user
+	relation ip_based_access_policy: organization#member with in_company_network
+
+	permission ip_based_access_policy__perm = ip_based_access_policy
+}
+
+definition document {
+	relation organization: organization
+	relation viewer: user
+
+	permission can_view = (viewer & organization->ip_based_access_policy__perm)
+}
