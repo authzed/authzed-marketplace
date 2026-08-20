@@ -26,4 +26,4 @@ Then install any plugin from it:
 
 | Plugin | Description |
 | --- | --- |
-| [spicedb-dev](./spicedb-dev) | Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing |
+| [spicedb-dev](./spicedb-dev) | Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, etc.) to SpiceDB |
