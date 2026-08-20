@@ -1,0 +1,77 @@
+schemaFile: schema.zed
+relationships: |-
+  link:checkout-page#creator@user:bob
+  link:checkout-page#organization@organization:payments-co
+  organization:payments-co#admin@user:alice
+  organization:payments-co#finance_manager@user:bob
+  organization:payments-co#member__direct@user:diana
+  organization:payments-co#viewer@user:charlie
+  payment:txn-001#creator@user:bob
+  payment:txn-001#organization@organization:payments-co
+  payout:payout-001#organization@organization:payments-co
+  refund:refund-001#organization@organization:payments-co
+  subscription:plan-monthly#creator@user:bob
+  subscription:plan-monthly#organization@organization:payments-co
+assertions:
+  assertTrue:
+    - "link:checkout-page#can_view@user:alice"
+    - "link:checkout-page#can_edit@user:alice"
+    - "link:checkout-page#can_delete@user:alice"
+    - "payment:txn-001#can_view@user:alice"
+    - "payment:txn-001#can_edit@user:alice"
+    - "payment:txn-001#can_delete@user:alice"
+    - "payment:txn-001#can_refund@user:alice"
+    - "payout:payout-001#can_view@user:alice"
+    - "payout:payout-001#can_approve@user:alice"
+    - "refund:refund-001#can_view@user:alice"
+    - "refund:refund-001#can_approve@user:alice"
+    - "subscription:plan-monthly#can_view@user:alice"
+    - "subscription:plan-monthly#can_edit@user:alice"
+    - "subscription:plan-monthly#can_cancel@user:alice"
+    - "subscription:plan-monthly#can_delete@user:alice"
+    - "link:checkout-page#can_view@user:bob"
+    - "link:checkout-page#can_edit@user:bob"
+    - "payment:txn-001#can_view@user:bob"
+    - "payment:txn-001#can_edit@user:bob"
+    - "payment:txn-001#can_refund@user:bob"
+    - "payout:payout-001#can_view@user:bob"
+    - "refund:refund-001#can_view@user:bob"
+    - "subscription:plan-monthly#can_view@user:bob"
+    - "subscription:plan-monthly#can_edit@user:bob"
+    - "subscription:plan-monthly#can_cancel@user:bob"
+    - "link:checkout-page#can_view@user:charlie"
+    - "payment:txn-001#can_view@user:charlie"
+    - "refund:refund-001#can_view@user:charlie"
+    - "subscription:plan-monthly#can_view@user:charlie"
+  assertFalse:
+    - "link:checkout-page#can_delete@user:bob"
+    - "payment:txn-001#can_delete@user:bob"
+    - "payout:payout-001#can_approve@user:bob"
+    - "refund:refund-001#can_approve@user:bob"
+    - "subscription:plan-monthly#can_delete@user:bob"
+    - "link:checkout-page#can_edit@user:charlie"
+    - "link:checkout-page#can_delete@user:charlie"
+    - "payment:txn-001#can_edit@user:charlie"
+    - "payment:txn-001#can_delete@user:charlie"
+    - "payment:txn-001#can_refund@user:charlie"
+    - "payout:payout-001#can_view@user:charlie"
+    - "payout:payout-001#can_approve@user:charlie"
+    - "refund:refund-001#can_approve@user:charlie"
+    - "subscription:plan-monthly#can_edit@user:charlie"
+    - "subscription:plan-monthly#can_cancel@user:charlie"
+    - "subscription:plan-monthly#can_delete@user:charlie"
+    - "link:checkout-page#can_view@user:diana"
+    - "link:checkout-page#can_edit@user:diana"
+    - "link:checkout-page#can_delete@user:diana"
+    - "payment:txn-001#can_view@user:diana"
+    - "payment:txn-001#can_edit@user:diana"
+    - "payment:txn-001#can_delete@user:diana"
+    - "payment:txn-001#can_refund@user:diana"
+    - "payout:payout-001#can_view@user:diana"
+    - "payout:payout-001#can_approve@user:diana"
+    - "refund:refund-001#can_view@user:diana"
+    - "refund:refund-001#can_approve@user:diana"
+    - "subscription:plan-monthly#can_view@user:diana"
+    - "subscription:plan-monthly#can_edit@user:diana"
+    - "subscription:plan-monthly#can_cancel@user:diana"
+    - "subscription:plan-monthly#can_delete@user:diana"

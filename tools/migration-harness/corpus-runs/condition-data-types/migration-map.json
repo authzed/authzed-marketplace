@@ -1,0 +1,16 @@
+{
+  "types": {
+    "user": "user",
+    "datatype_test": "datatype_test"
+  },
+  "permissions": {
+    "user": {},
+    "datatype_test": {
+      "is_valid": "is_valid"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

@@ -1,0 +1,16 @@
+definition user {}
+
+definition device_group {
+	relation it_admin: user
+	relation security_guard: user
+}
+
+definition device {
+	relation it_admin: user | device_group#it_admin
+	relation security_guard: user | device_group#security_guard
+
+	// spicedb-ignore-warning: relation-name-references-parent
+	permission can_rename_device = it_admin
+	permission can_view_live_video = (it_admin + security_guard)
+	permission can_view_recorded_video = (it_admin + security_guard)
+}

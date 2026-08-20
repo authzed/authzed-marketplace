@@ -1,0 +1,125 @@
+{
+  "types": {
+    "user": "user",
+    "team": "team",
+    "role": "role",
+    "org": "org",
+    "asset-category": "asset_category",
+    "asset": "asset"
+  },
+  "permissions": {
+    "user": {},
+    "team": {
+      "member": "member"
+    },
+    "role": {
+      "assignee": "assignee"
+    },
+    "org": {
+      "asset_category_creator": "asset_category_creator",
+      "asset_commenter": "asset_commenter",
+      "asset_creator": "asset_creator",
+      "asset_editor": "asset_editor",
+      "asset_viewer": "asset_viewer",
+      "member": "member",
+      "owner": "owner",
+      "role_assigner": "role_assigner",
+      "role_creator": "role_creator",
+      "team_assigner": "team_assigner",
+      "team_creator": "team_creator"
+    },
+    "asset-category": {
+      "asset_creator": "asset_creator",
+      "commenter": "commenter",
+      "editor": "editor",
+      "org": "org",
+      "viewer": "viewer"
+    },
+    "asset": {
+      "category": "category",
+      "comment": "comment",
+      "edit": "edit",
+      "view": "view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "asset": {
+      "comment": {
+        "relation": "comment__direct",
+        "permission": "comment"
+      },
+      "edit": {
+        "relation": "edit__direct",
+        "permission": "edit"
+      },
+      "view": {
+        "relation": "view__direct",
+        "permission": "view"
+      }
+    },
+    "asset-category": {
+      "asset_creator": {
+        "relation": "asset_creator__direct",
+        "permission": "asset_creator"
+      },
+      "commenter": {
+        "relation": "commenter__direct",
+        "permission": "commenter"
+      },
+      "editor": {
+        "relation": "editor__direct",
+        "permission": "editor"
+      },
+      "viewer": {
+        "relation": "viewer__direct",
+        "permission": "viewer"
+      }
+    },
+    "org": {
+      "asset_category_creator": {
+        "relation": "asset_category_creator__direct",
+        "permission": "asset_category_creator"
+      },
+      "asset_commenter": {
+        "relation": "asset_commenter__direct",
+        "permission": "asset_commenter"
+      },
+      "asset_creator": {
+        "relation": "asset_creator__direct",
+        "permission": "asset_creator"
+      },
+      "asset_editor": {
+        "relation": "asset_editor__direct",
+        "permission": "asset_editor"
+      },
+      "asset_viewer": {
+        "relation": "asset_viewer__direct",
+        "permission": "asset_viewer"
+      },
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      },
+      "role_assigner": {
+        "relation": "role_assigner__direct",
+        "permission": "role_assigner"
+      },
+      "role_creator": {
+        "relation": "role_creator__direct",
+        "permission": "role_creator"
+      },
+      "team_assigner": {
+        "relation": "team_assigner__direct",
+        "permission": "team_assigner"
+      },
+      "team_creator": {
+        "relation": "team_creator__direct",
+        "permission": "team_creator"
+      }
+    }
+  }
+}

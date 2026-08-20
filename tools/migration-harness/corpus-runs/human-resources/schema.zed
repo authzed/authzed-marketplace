@@ -1,0 +1,120 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation hr_manager: user
+	permission hr_manager__perm = hr_manager
+
+	relation member__direct: user
+	permission member = (member__direct + admin + hr_manager)
+
+	permission can_manage_employees = (admin + hr_manager)
+	permission can_view_sensitive_data = (admin + hr_manager)
+}
+
+definition company {
+	relation organization: organization
+
+	relation admin__direct: user
+	permission admin = (admin__direct + organization->admin__perm)
+
+	relation member__direct: user
+	permission member = (member__direct + organization->member)
+
+	permission can_manage_employees = organization->can_manage_employees
+	permission can_view_sensitive_data = (organization->can_view_sensitive_data + can_manage_employees)
+	permission can_edit = (admin + can_manage_employees)
+	permission can_view = (member + can_edit)
+}
+
+definition group {
+	relation organization: organization
+	relation manager: user
+	relation member: user
+
+	permission can_manage = (manager + organization->admin__perm)
+	permission can_view = (member + can_manage)
+}
+
+definition team {
+	relation organization: organization
+
+	relation manager: user
+	permission manager__perm = manager
+
+	relation member: user
+	permission member__perm = member
+
+	// spicedb-ignore-warning: relation-name-references-parent
+	relation parent_team: team
+
+	permission can_manage = (manager + organization->admin__perm)
+	permission can_view = (member + parent_team->member__perm + can_manage)
+}
+
+definition location {
+	relation organization: organization
+
+	permission can_edit = organization->admin__perm
+	permission can_view = (organization->member + can_edit)
+}
+
+definition employee {
+	relation company: company
+	relation assignee: user
+
+	relation manager: user
+	permission manager__perm = manager
+
+	relation team: team
+
+	permission company_can_manage_employees = company->can_manage_employees
+	permission company_can_view_sensitive_data = company->can_view_sensitive_data
+
+	relation hr_admin__direct: user
+	permission hr_admin = (hr_admin__direct + company_can_manage_employees)
+
+	permission team_manager = team->manager__perm
+
+	permission can_terminate = company_can_manage_employees
+	permission can_edit = (hr_admin + can_terminate)
+	permission can_view_sensitive = (assignee + company_can_view_sensitive_data + can_edit)
+	permission can_view = (manager + team_manager + can_view_sensitive)
+}
+
+definition employment {
+	relation employee: employee
+	relation viewer: user
+
+	permission can_edit = employee->can_edit
+	permission can_view_sensitive = employee->can_view_sensitive
+	permission can_view = (viewer + employee->manager__perm + can_view_sensitive + can_edit)
+}
+
+definition benefit {
+	relation employee: employee
+	relation viewer: user
+
+	permission can_edit = employee->can_edit
+	permission can_view_sensitive = employee->can_view_sensitive
+	permission can_view = (viewer + can_view_sensitive + can_edit)
+}
+
+definition payroll_run {
+	relation organization: organization
+
+	permission can_approve = organization->admin__perm
+	permission can_view = (organization->hr_manager__perm + can_approve)
+}
+
+definition time_off {
+	relation employee: employee
+	relation requester: user
+	relation approver: user
+
+	permission can_cancel = (requester + employee->company_can_manage_employees)
+	permission can_approve = (approver + employee->company_can_manage_employees)
+	permission can_view = (employee->manager__perm + can_approve + can_cancel)
+}

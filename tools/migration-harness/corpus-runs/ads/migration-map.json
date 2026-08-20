@@ -1,0 +1,74 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "campaign": "campaign",
+    "ad_group": "ad_group",
+    "ad": "ad0",
+    "creative": "creative",
+    "report": "report"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "admin": "admin",
+      "campaign_manager": "campaign_manager",
+      "analyst": "analyst",
+      "can_create_report": "can_create_report"
+    },
+    "campaign": {
+      "organization": "organization",
+      "owner": "owner",
+      "organization_admin": "organization_admin",
+      "organization_campaign_manager": "organization_campaign_manager",
+      "organization_analyst": "organization_analyst",
+      "can_delete": "can_delete",
+      "can_publish": "can_publish",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "ad_group": {
+      "campaign": "campaign",
+      "owner": "owner",
+      "organization_admin": "organization_admin",
+      "organization_campaign_manager": "organization_campaign_manager",
+      "organization_analyst": "organization_analyst",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "ad": {
+      "ad_group": "ad_group",
+      "creator": "creator",
+      "can_delete": "can_delete",
+      "can_approve": "can_approve",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "creative": {
+      "organization": "organization",
+      "creator": "creator",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "report": {
+      "organization": "organization",
+      "can_delete": "can_delete",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

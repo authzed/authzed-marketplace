@@ -253,9 +253,9 @@ caveat not_expired(expiration timestamp) {
     expiration > now()
 }
 
-// Good: Simple IP check (user_ip is ipaddress type, passed as context at check time)
-caveat ip_allowed(user_ip ipaddress, cidr string) {
-    user_ip.in_cidr(cidr)
+// Good: Simple IP allowlist check (ipaddress/list<string> are context at check time)
+caveat ip_allowed(user_ip ipaddress, allowed_cidrs list<string>) {
+    allowed_cidrs.exists(c, user_ip.in_cidr(c))
 }
 
 relation temp_viewer: user with not_expired

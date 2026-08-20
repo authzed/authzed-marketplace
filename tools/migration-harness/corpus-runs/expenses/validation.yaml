@@ -1,0 +1,13 @@
+schemaFile: schema.zed
+relationships: |-
+  report:daniel-chair1#submitter@employee:daniel
+  employee:daniel#manager@employee:matt
+  employee:matt#manager@employee:sam
+  employee:sam#manager@employee:emily
+  report:sam-chair1#submitter@employee:sam
+assertions:
+  assertTrue:
+    - "employee:daniel#can_manage@employee:matt"
+    - "report:daniel-chair1#approver@employee:emily"
+  assertFalse:
+    - "report:daniel-chair1#approver@employee:daniel"

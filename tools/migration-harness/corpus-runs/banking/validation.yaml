@@ -1,0 +1,19 @@
+schemaFile: schema.zed
+relationships: |-
+  account:123#account_manager@employee:bob
+  account:123#bank@bank:acme
+  account:123#delegate@customer:peter
+  account:123#owner@customer:anne
+  bank:acme#account_manager@employee:bob
+  bank:acme#customer@customer:anne
+  bank:acme#customer@customer:peter
+  bank:acme#transfer_limit_policy@bank:acme#account_manager[transfer_limit_policy:{"transfer_cap":1000}]
+  bank:acme#transfer_limit_policy@bank:acme#customer[transfer_limit_policy:{"transfer_cap":100}]
+assertions:
+  assertTrue:
+    - 'account:123#can_make_bank_transfer@customer:anne with {"transaction_amount":10,"new_transaction_limit_approved":0}'
+    - 'account:123#can_make_bank_transfer@customer:peter with {"transaction_amount":10,"new_transaction_limit_approved":0}'
+    - 'account:123#can_make_bank_transfer@customer:anne with {"transaction_amount":1000,"new_transaction_limit_approved":1000}'
+    - 'account:123#can_make_bank_transfer@employee:bob with {"transaction_amount":1000,"new_transaction_limit_approved":0}'
+  assertFalse:
+    - 'account:123#can_make_bank_transfer@customer:anne with {"transaction_amount":1000,"new_transaction_limit_approved":0}'

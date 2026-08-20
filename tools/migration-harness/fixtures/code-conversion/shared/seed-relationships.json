@@ -1,0 +1,6 @@
+[
+  { "resourceType": "folder", "resourceId": "1", "relation": "owner", "subjectType": "user", "subjectId": "bob" },
+  { "resourceType": "group", "resourceId": "eng", "relation": "member", "subjectType": "user", "subjectId": "anne" },
+  { "resourceType": "document", "resourceId": "1", "relation": "parent", "subjectType": "folder", "subjectId": "1" },
+  { "resourceType": "document", "resourceId": "1", "relation": "viewer", "subjectType": "group", "subjectId": "eng", "subjectRelation": "member" }
+]

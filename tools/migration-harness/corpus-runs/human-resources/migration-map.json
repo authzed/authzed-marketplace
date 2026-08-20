@@ -1,0 +1,123 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "company": "company",
+    "group": "group",
+    "team": "team",
+    "location": "location",
+    "employee": "employee",
+    "employment": "employment",
+    "benefit": "benefit",
+    "payroll_run": "payroll_run",
+    "time_off": "time_off"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "admin": "admin",
+      "hr_manager": "hr_manager",
+      "can_manage_employees": "can_manage_employees",
+      "can_view_sensitive_data": "can_view_sensitive_data"
+    },
+    "company": {
+      "organization": "organization",
+      "admin": "admin",
+      "member": "member",
+      "can_manage_employees": "can_manage_employees",
+      "can_view_sensitive_data": "can_view_sensitive_data",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "group": {
+      "organization": "organization",
+      "manager": "manager",
+      "member": "member",
+      "can_manage": "can_manage",
+      "can_view": "can_view"
+    },
+    "team": {
+      "organization": "organization",
+      "manager": "manager",
+      "member": "member",
+      "parent_team": "parent_team",
+      "can_manage": "can_manage",
+      "can_view": "can_view"
+    },
+    "location": {
+      "organization": "organization",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "employee": {
+      "company": "company",
+      "assignee": "assignee",
+      "manager": "manager",
+      "team": "team",
+      "company_can_manage_employees": "company_can_manage_employees",
+      "company_can_view_sensitive_data": "company_can_view_sensitive_data",
+      "hr_admin": "hr_admin",
+      "team_manager": "team_manager",
+      "can_terminate": "can_terminate",
+      "can_edit": "can_edit",
+      "can_view_sensitive": "can_view_sensitive",
+      "can_view": "can_view"
+    },
+    "employment": {
+      "employee": "employee",
+      "viewer": "viewer",
+      "can_edit": "can_edit",
+      "can_view_sensitive": "can_view_sensitive",
+      "can_view": "can_view"
+    },
+    "benefit": {
+      "employee": "employee",
+      "viewer": "viewer",
+      "can_edit": "can_edit",
+      "can_view_sensitive": "can_view_sensitive",
+      "can_view": "can_view"
+    },
+    "payroll_run": {
+      "organization": "organization",
+      "can_approve": "can_approve",
+      "can_view": "can_view"
+    },
+    "time_off": {
+      "employee": "employee",
+      "requester": "requester",
+      "approver": "approver",
+      "can_cancel": "can_cancel",
+      "can_approve": "can_approve",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "company": {
+      "admin": {
+        "relation": "admin__direct",
+        "permission": "admin"
+      },
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    },
+    "employee": {
+      "hr_admin": {
+        "relation": "hr_admin__direct",
+        "permission": "hr_admin"
+      }
+    },
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation plant_manager: user
+	relation engineer: user
+	relation quality_inspector: user
+	relation operator: user
+	relation procurement: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission plant_manager__perm = plant_manager
+	permission engineer__perm = engineer
+	permission quality_inspector__perm = quality_inspector
+	permission procurement__perm = procurement
+	permission member = (member__direct + admin + plant_manager + engineer + quality_inspector + operator + procurement)
+	permission can_create_part = (engineer + procurement + admin)
+	permission can_create_supplier = (procurement + admin)
+	permission can_create_quality_report = (quality_inspector + admin)
+}
+
+definition production_line {
+	relation organization: organization
+	relation supervisor: user
+
+	permission org_admin = organization->admin__perm
+	permission org_plant_manager = organization->plant_manager__perm
+	permission org_engineer = organization->engineer__perm
+	permission can_delete = org_admin
+	permission can_edit = (supervisor + org_plant_manager + can_delete)
+	permission can_create_work_order = can_edit
+	permission can_create_machine = (org_engineer + can_edit)
+	permission can_view = (organization->member + can_edit)
+}
+
+definition machine {
+	relation production_line: production_line
+	relation assigned_operator: user
+
+	permission org_engineer = production_line->org_engineer
+	permission can_delete = (org_engineer + production_line->can_delete)
+	permission can_edit = (assigned_operator + production_line->can_edit + can_delete)
+	permission can_view = (production_line->can_view + can_edit)
+}
+
+definition work_order {
+	relation production_line: production_line
+	relation creator: user
+	relation assignee: user
+
+	permission can_delete = production_line->can_delete
+	permission can_approve = production_line->can_edit
+	permission can_edit = (creator + assignee + can_approve)
+	permission can_view = (production_line->can_view + can_edit)
+}
+
+definition quality_report {
+	relation organization: organization
+	relation inspector: user
+
+	permission can_delete = organization->admin__perm
+	permission can_approve = (organization->quality_inspector__perm + can_delete)
+	permission can_edit = (inspector + can_approve)
+	permission can_view = (organization->member + can_edit)
+}
+
+definition part {
+	relation organization: organization
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (organization->engineer__perm + organization->procurement__perm + can_delete)
+	permission can_view = (organization->member + can_edit)
+}
+
+definition supplier {
+	relation organization: organization
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (organization->procurement__perm + can_delete)
+	permission can_view = (organization->member + can_edit)
+}

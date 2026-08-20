@@ -1,0 +1,58 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation finance_manager: user
+	permission finance_manager__perm = finance_manager
+
+	relation viewer: user
+	permission viewer__perm = viewer
+
+	relation member__direct: user
+	permission member = (member__direct + admin + finance_manager + viewer)
+}
+
+definition link {
+	relation organization: organization
+	relation creator: user
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (creator + organization->finance_manager__perm + can_delete)
+	permission can_view = (organization->viewer__perm + can_edit)
+}
+
+definition payment {
+	relation organization: organization
+	relation creator: user
+
+	permission can_delete = organization->admin__perm
+	permission can_refund = (organization->finance_manager__perm + can_delete)
+	permission can_edit = can_refund
+	permission can_view = (creator + organization->viewer__perm + can_edit)
+}
+
+definition payout {
+	relation organization: organization
+
+	permission can_approve = organization->admin__perm
+	permission can_view = (organization->finance_manager__perm + can_approve)
+}
+
+definition refund {
+	relation organization: organization
+
+	permission can_approve = organization->admin__perm
+	permission can_view = (organization->viewer__perm + organization->finance_manager__perm + can_approve)
+}
+
+definition subscription {
+	relation organization: organization
+	relation creator: user
+
+	permission can_delete = organization->admin__perm
+	permission can_cancel = (organization->finance_manager__perm + can_delete)
+	permission can_edit = can_cancel
+	permission can_view = (creator + organization->viewer__perm + can_edit)
+}

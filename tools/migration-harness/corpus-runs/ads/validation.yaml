@@ -1,0 +1,94 @@
+schemaFile: schema.zed
+relationships: |-
+  ad0:banner-001#ad_group@ad_group:us-targeting
+  ad0:banner-001#creator@user:bob
+  ad_group:us-targeting#campaign@campaign:summer-sale
+  ad_group:us-targeting#owner@user:bob
+  ad_group:us-targeting#owner@user:erin
+  campaign:summer-sale#organization@organization:adtech
+  campaign:summer-sale#owner@user:bob
+  creative:video-spot#creator@user:bob
+  creative:video-spot#organization@organization:adtech
+  organization:adtech#admin@user:alice
+  organization:adtech#analyst@user:charlie
+  organization:adtech#campaign_manager@user:bob
+  organization:adtech#member__direct@user:diana
+  report:q1-performance#organization@organization:adtech
+assertions:
+  assertTrue:
+    - "organization:adtech#can_create_report@user:alice"
+    - "organization:adtech#can_create_report@user:bob"
+    - "campaign:summer-sale#can_view@user:alice"
+    - "campaign:summer-sale#can_edit@user:alice"
+    - "campaign:summer-sale#can_delete@user:alice"
+    - "campaign:summer-sale#can_publish@user:alice"
+    - "campaign:summer-sale#can_view@user:bob"
+    - "campaign:summer-sale#can_edit@user:bob"
+    - "campaign:summer-sale#can_view@user:charlie"
+    - "ad_group:us-targeting#can_view@user:alice"
+    - "ad_group:us-targeting#can_edit@user:alice"
+    - "ad_group:us-targeting#can_delete@user:alice"
+    - "ad_group:us-targeting#can_view@user:bob"
+    - "ad_group:us-targeting#can_edit@user:bob"
+    - "ad_group:us-targeting#can_view@user:charlie"
+    - "ad_group:us-targeting#can_view@user:erin"
+    - "ad_group:us-targeting#can_edit@user:erin"
+    - "ad0:banner-001#can_view@user:alice"
+    - "ad0:banner-001#can_edit@user:alice"
+    - "ad0:banner-001#can_delete@user:alice"
+    - "ad0:banner-001#can_approve@user:alice"
+    - "ad0:banner-001#can_view@user:bob"
+    - "ad0:banner-001#can_edit@user:bob"
+    - "ad0:banner-001#can_view@user:charlie"
+    - "ad0:banner-001#can_view@user:erin"
+    - "ad0:banner-001#can_edit@user:erin"
+    - "creative:video-spot#can_view@user:alice"
+    - "creative:video-spot#can_edit@user:alice"
+    - "creative:video-spot#can_delete@user:alice"
+    - "creative:video-spot#can_view@user:bob"
+    - "creative:video-spot#can_edit@user:bob"
+    - "creative:video-spot#can_view@user:charlie"
+    - "report:q1-performance#can_view@user:alice"
+    - "report:q1-performance#can_delete@user:alice"
+    - "report:q1-performance#can_view@user:bob"
+    - "report:q1-performance#can_view@user:charlie"
+  assertFalse:
+    - "organization:adtech#can_create_report@user:charlie"
+    - "organization:adtech#can_create_report@user:diana"
+    - "campaign:summer-sale#can_delete@user:bob"
+    - "campaign:summer-sale#can_publish@user:bob"
+    - "campaign:summer-sale#can_edit@user:charlie"
+    - "campaign:summer-sale#can_delete@user:charlie"
+    - "campaign:summer-sale#can_publish@user:charlie"
+    - "campaign:summer-sale#can_view@user:diana"
+    - "campaign:summer-sale#can_edit@user:diana"
+    - "campaign:summer-sale#can_delete@user:diana"
+    - "campaign:summer-sale#can_publish@user:diana"
+    - "ad_group:us-targeting#can_delete@user:bob"
+    - "ad_group:us-targeting#can_edit@user:charlie"
+    - "ad_group:us-targeting#can_delete@user:charlie"
+    - "ad_group:us-targeting#can_view@user:diana"
+    - "ad_group:us-targeting#can_edit@user:diana"
+    - "ad_group:us-targeting#can_delete@user:diana"
+    - "ad_group:us-targeting#can_delete@user:erin"
+    - "ad0:banner-001#can_delete@user:bob"
+    - "ad0:banner-001#can_approve@user:bob"
+    - "ad0:banner-001#can_edit@user:charlie"
+    - "ad0:banner-001#can_delete@user:charlie"
+    - "ad0:banner-001#can_approve@user:charlie"
+    - "ad0:banner-001#can_view@user:diana"
+    - "ad0:banner-001#can_edit@user:diana"
+    - "ad0:banner-001#can_delete@user:diana"
+    - "ad0:banner-001#can_approve@user:diana"
+    - "ad0:banner-001#can_delete@user:erin"
+    - "ad0:banner-001#can_approve@user:erin"
+    - "creative:video-spot#can_delete@user:bob"
+    - "creative:video-spot#can_edit@user:charlie"
+    - "creative:video-spot#can_delete@user:charlie"
+    - "creative:video-spot#can_view@user:diana"
+    - "creative:video-spot#can_edit@user:diana"
+    - "creative:video-spot#can_delete@user:diana"
+    - "report:q1-performance#can_delete@user:bob"
+    - "report:q1-performance#can_delete@user:charlie"
+    - "report:q1-performance#can_view@user:diana"
+    - "report:q1-performance#can_delete@user:diana"

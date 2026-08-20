@@ -1,0 +1,82 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "course": "course",
+    "class": "class",
+    "content": "content",
+    "collection": "collection",
+    "activity": "activity"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "admin": "admin",
+      "instructor": "instructor",
+      "student": "student"
+    },
+    "course": {
+      "organization": "organization",
+      "owner": "owner",
+      "enrolled_instructor": "enrolled_instructor",
+      "enrolled_student": "enrolled_student",
+      "organization_admin": "organization_admin",
+      "organization_instructor": "organization_instructor",
+      "organization_student": "organization_student",
+      "can_delete": "can_delete",
+      "can_publish": "can_publish",
+      "can_edit": "can_edit",
+      "can_create_class": "can_create_class",
+      "can_create_content": "can_create_content",
+      "can_view": "can_view"
+    },
+    "class": {
+      "course": "course",
+      "instructor": "instructor",
+      "student": "student",
+      "organization_admin": "organization_admin",
+      "organization_instructor": "organization_instructor",
+      "can_delete": "can_delete",
+      "can_enroll": "can_enroll",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "content": {
+      "course": "course",
+      "author": "author",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "collection": {
+      "organization": "organization",
+      "owner": "owner",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "activity": {
+      "class": "class",
+      "creator": "creator",
+      "assignee": "assignee",
+      "can_delete": "can_delete",
+      "can_grade": "can_grade",
+      "can_edit": "can_edit",
+      "can_view": "can_view",
+      "can_submit": "can_submit"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

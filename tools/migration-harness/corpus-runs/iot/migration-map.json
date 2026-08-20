@@ -1,0 +1,25 @@
+{
+  "types": {
+    "user": "user",
+    "device_group": "device_group",
+    "device": "device"
+  },
+  "permissions": {
+    "user": {},
+    "device_group": {
+      "it_admin": "it_admin",
+      "security_guard": "security_guard"
+    },
+    "device": {
+      "it_admin": "it_admin",
+      "security_guard": "security_guard",
+      "can_rename_device": "can_rename_device",
+      "can_view_live_video": "can_view_live_video",
+      "can_view_recorded_video": "can_view_recorded_video"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

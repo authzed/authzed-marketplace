@@ -1,0 +1,20 @@
+schemaFile: schema.zed
+relationships: |-
+  repo:openfga/openfga#owner@organization:openfga
+  organization:openfga#repo_admin@organization:openfga#member
+  organization:openfga#member__direct@user:erik
+  repo:openfga/openfga#admin__direct@team:openfga/core#member
+  repo:openfga/openfga#reader__direct@user:anne
+  repo:openfga/openfga#writer__direct@user:beth
+  team:openfga/core#member@user:charles
+  team:openfga/core#member@team:openfga/backend#member
+  team:openfga/backend#member@user:diane
+assertions:
+  assertTrue:
+    - "repo:openfga/openfga#reader@user:anne"
+    - "repo:openfga/openfga#writer@user:charles"
+    - "repo:openfga/openfga#admin@user:diane"
+    - "repo:openfga/openfga#reader@user:erik"
+  assertFalse:
+    - "repo:openfga/openfga#triager@user:anne"
+    - "repo:openfga/openfga#admin@user:beth"

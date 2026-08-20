@@ -1,0 +1,27 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "group": "group",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "can_access_docs": "can_access_docs"
+    },
+    "group": {
+      "organization": "organization",
+      "member": "member"
+    },
+    "document": {
+      "organization": "organization",
+      "can_access": "can_access"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

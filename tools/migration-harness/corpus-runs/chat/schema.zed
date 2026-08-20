@@ -1,0 +1,42 @@
+definition user {}
+
+definition organization {
+	relation member__direct: user
+	relation admin: user
+
+	permission member = (member__direct + admin)
+	permission admin__perm = admin
+}
+
+definition group {
+	relation organization: organization
+	relation member: user
+
+	permission can_manage = organization->admin__perm
+	permission can_view = (member + can_manage)
+}
+
+definition conversation {
+	relation organization: organization
+	relation owner: user
+	relation member__direct: user | group#member
+
+	permission organization_admin = organization->admin__perm
+	permission member = (member__direct + owner)
+	permission can_delete = (owner + organization_admin)
+	permission can_edit = can_delete
+	permission can_add_member = can_delete
+	permission can_remove_member = can_delete
+	permission can_post = (member + can_edit)
+	permission can_view = can_post
+}
+
+definition message {
+	relation conversation: conversation
+	relation sender: user
+
+	permission can_view = (sender + conversation->can_view)
+	permission can_edit = sender
+	permission can_delete = (sender + conversation->organization_admin)
+	permission can_reply = conversation->can_view
+}

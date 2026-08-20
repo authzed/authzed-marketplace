@@ -1,0 +1,53 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation supervisor: user
+	relation agent: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission supervisor__perm = supervisor
+	permission agent__perm = agent
+	permission member = (member__direct + admin + supervisor + agent)
+}
+
+definition call {
+	relation organization: organization
+	relation participant: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_supervisor = organization->supervisor__perm
+	permission organization_agent = organization->agent__perm
+	permission can_delete = organization_admin
+	permission can_edit = (organization_supervisor + can_delete)
+	permission can_create_comment = can_view
+	permission can_create_recording = can_edit
+	permission can_view = (participant + organization_agent + can_edit)
+}
+
+definition contact {
+	relation organization: organization
+	relation owner: user
+
+	permission can_delete = (organization->supervisor__perm + organization->admin__perm)
+	permission can_edit = (owner + organization->agent__perm + can_delete)
+	permission can_view = can_edit
+}
+
+definition comment {
+	relation call: call
+	relation author: user
+
+	permission can_delete = (author + call->organization_admin)
+	permission can_edit = (call->organization_supervisor + can_delete)
+	permission can_view = (call->organization_agent + can_edit)
+}
+
+definition recording {
+	relation call: call
+
+	permission can_delete = call->organization_admin
+	permission can_edit = (call->organization_supervisor + can_delete)
+	permission can_view = can_edit
+}

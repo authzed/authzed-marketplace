@@ -1,0 +1,102 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "team": "team",
+    "collection": "collection",
+    "ticket": "ticket",
+    "comment": "comment",
+    "attachment": "attachment",
+    "contact": "contact"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "agent": "agent",
+      "member": "member"
+    },
+    "team": {
+      "organization": "organization",
+      "member": "member",
+      "lead": "lead",
+      "can_manage": "can_manage",
+      "can_view": "can_view"
+    },
+    "collection": {
+      "organization": "organization",
+      "parent_collection": "parent_collection",
+      "owner": "owner",
+      "organization_admin": "organization_admin",
+      "organization_agent": "organization_agent",
+      "viewer": "viewer",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_create_ticket": "can_create_ticket",
+      "can_view": "can_view"
+    },
+    "ticket": {
+      "collection": "collection",
+      "assignee": "assignee",
+      "assigned_team": "assigned_team",
+      "creator": "creator",
+      "reporter": "reporter",
+      "organization_admin": "organization_admin",
+      "organization_agent": "organization_agent",
+      "viewer": "viewer",
+      "editor": "editor",
+      "team_lead": "team_lead",
+      "can_delete": "can_delete",
+      "can_assign": "can_assign",
+      "can_close": "can_close",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "comment": {
+      "ticket": "ticket",
+      "author": "author",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "attachment": {
+      "ticket": "ticket",
+      "uploader": "uploader",
+      "can_delete": "can_delete",
+      "can_view": "can_view"
+    },
+    "contact": {
+      "organization": "organization",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "collection": {
+      "viewer": {
+        "relation": "viewer__direct",
+        "permission": "viewer"
+      }
+    },
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    },
+    "ticket": {
+      "editor": {
+        "relation": "editor__direct",
+        "permission": "editor"
+      },
+      "viewer": {
+        "relation": "viewer__direct",
+        "permission": "viewer"
+      }
+    }
+  }
+}

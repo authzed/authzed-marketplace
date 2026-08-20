@@ -1,0 +1,82 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "hotel": "hotel",
+    "room": "room",
+    "reservation": "reservation",
+    "guest": "guest",
+    "service": "service"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "revenue_manager": "revenue_manager",
+      "member": "member",
+      "can_create_hotel": "can_create_hotel",
+      "can_create_guest": "can_create_guest"
+    },
+    "hotel": {
+      "organization": "organization",
+      "general_manager": "general_manager",
+      "front_desk": "front_desk",
+      "housekeeping": "housekeeping",
+      "concierge": "concierge",
+      "org_admin": "org_admin",
+      "org_revenue_manager": "org_revenue_manager",
+      "staff": "staff",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_create_room": "can_create_room",
+      "can_create_reservation": "can_create_reservation",
+      "can_create_service": "can_create_service",
+      "can_view_revenue": "can_view_revenue",
+      "can_view": "can_view"
+    },
+    "room": {
+      "hotel": "hotel",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "reservation": {
+      "hotel": "hotel",
+      "guest": "guest",
+      "can_delete": "can_delete",
+      "can_cancel": "can_cancel",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "guest": {
+      "organization": "organization",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "service": {
+      "hotel": "hotel",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "hotel": {
+      "staff": {
+        "relation": "staff__direct",
+        "permission": "staff"
+      }
+    },
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

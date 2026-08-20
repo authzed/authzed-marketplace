@@ -1,0 +1,35 @@
+{
+  "types": {
+    "user": "user",
+    "role": "role",
+    "role_assignment": "role_assignment",
+    "organization": "organization",
+    "project": "project"
+  },
+  "permissions": {
+    "user": {},
+    "role": {
+      "can_edit_project": "can_edit_project",
+      "can_view_project": "can_view_project"
+    },
+    "role_assignment": {
+      "assignee": "assignee",
+      "role": "role",
+      "can_view_project": "can_view_project",
+      "can_edit_project": "can_edit_project"
+    },
+    "organization": {
+      "admin": "admin"
+    },
+    "project": {
+      "organization": "organization",
+      "role_assignment": "role_assignment",
+      "can_view": "can_view",
+      "can_edit": "can_edit"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

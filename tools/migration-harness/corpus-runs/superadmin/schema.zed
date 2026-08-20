@@ -1,0 +1,46 @@
+caveat non_expired_time_grant(current_time timestamp, issued_at timestamp, valid_for duration) {
+	current_time < issued_at + valid_for
+}
+
+definition user {}
+
+definition employee {}
+
+definition application {}
+
+definition system {
+	relation admin: employee | application
+
+	permission admin__perm = admin
+}
+
+definition organization {
+	relation system: system
+	relation admin__direct: user
+	relation member: user
+	relation helpdesk_member: employee with non_expired_time_grant
+
+	permission admin = (admin__direct + system->admin__perm)
+	permission can_create_project = (admin + member)
+	permission helpdesk_member__perm = helpdesk_member
+}
+
+definition project {
+	relation organization: organization
+	relation owner: user
+	relation editor__direct: user
+	relation viewer__direct: user
+
+	permission editor = (editor__direct + owner + organization->admin)
+	permission viewer = (viewer__direct + editor + organization->helpdesk_member__perm)
+}
+
+definition task {
+	relation project: project
+	relation owner: user
+	relation editor__direct: user
+	relation viewer__direct: user
+
+	permission editor = (editor__direct + project->editor)
+	permission viewer = (viewer__direct + editor + project->viewer)
+}

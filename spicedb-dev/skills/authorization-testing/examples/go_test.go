@@ -6,7 +6,7 @@
 //
 // For isolated parallel tests, start SpiceDB with serve-testing:
 //   spicedb serve-testing
-// Each unique preshared key gets its own isolated empty datastore.
+// Each unique client-supplied token gets its own isolated empty datastore.
 package authz_test
 
 import (
@@ -126,7 +126,7 @@ func TestPermissionRevocation(t *testing.T) {
 func setupTestClient(t *testing.T) *authzed.Client {
 	t.Helper()
 
-	// Use unique preshared key per test for serve-testing isolation
+	// Use a unique token per test for serve-testing isolation
 	token := os.Getenv("SPICEDB_TOKEN")
 	if token == "" {
 		token = "test-" + t.Name()

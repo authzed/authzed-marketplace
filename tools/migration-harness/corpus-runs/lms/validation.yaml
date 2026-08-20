@@ -1,0 +1,99 @@
+schemaFile: schema.zed
+relationships: |-
+  activity:homework-1#assignee@user:charlie
+  activity:homework-1#class@class:section-a
+  activity:homework-1#creator@user:bob
+  class:section-a#course@course:intro-cs
+  class:section-a#instructor@user:bob
+  class:section-a#student@user:charlie
+  collection:cs-fundamentals#organization@organization:university
+  collection:cs-fundamentals#owner@user:bob
+  content:lecture-slides#author@user:bob
+  content:lecture-slides#course@course:intro-cs
+  course:intro-cs#enrolled_instructor@user:bob
+  course:intro-cs#enrolled_student@user:charlie
+  course:intro-cs#organization@organization:university
+  course:intro-cs#owner@user:bob
+  organization:university#admin@user:alice
+  organization:university#instructor@user:bob
+  organization:university#member__direct@user:diana
+  organization:university#student@user:charlie
+assertions:
+  assertTrue:
+    - "course:intro-cs#can_view@user:alice"
+    - "course:intro-cs#can_edit@user:alice"
+    - "course:intro-cs#can_delete@user:alice"
+    - "course:intro-cs#can_publish@user:alice"
+    - "class:section-a#can_view@user:alice"
+    - "class:section-a#can_edit@user:alice"
+    - "class:section-a#can_delete@user:alice"
+    - "class:section-a#can_enroll@user:alice"
+    - "content:lecture-slides#can_view@user:alice"
+    - "content:lecture-slides#can_edit@user:alice"
+    - "content:lecture-slides#can_delete@user:alice"
+    - "collection:cs-fundamentals#can_view@user:alice"
+    - "collection:cs-fundamentals#can_edit@user:alice"
+    - "collection:cs-fundamentals#can_delete@user:alice"
+    - "activity:homework-1#can_view@user:alice"
+    - "activity:homework-1#can_edit@user:alice"
+    - "activity:homework-1#can_delete@user:alice"
+    - "activity:homework-1#can_grade@user:alice"
+    - "course:intro-cs#can_view@user:bob"
+    - "course:intro-cs#can_edit@user:bob"
+    - "course:intro-cs#can_publish@user:bob"
+    - "class:section-a#can_view@user:bob"
+    - "class:section-a#can_edit@user:bob"
+    - "class:section-a#can_enroll@user:bob"
+    - "content:lecture-slides#can_view@user:bob"
+    - "content:lecture-slides#can_edit@user:bob"
+    - "content:lecture-slides#can_delete@user:bob"
+    - "collection:cs-fundamentals#can_view@user:bob"
+    - "collection:cs-fundamentals#can_edit@user:bob"
+    - "activity:homework-1#can_view@user:bob"
+    - "activity:homework-1#can_edit@user:bob"
+    - "activity:homework-1#can_grade@user:bob"
+    - "course:intro-cs#can_view@user:charlie"
+    - "class:section-a#can_view@user:charlie"
+    - "content:lecture-slides#can_view@user:charlie"
+    - "collection:cs-fundamentals#can_view@user:charlie"
+    - "activity:homework-1#can_view@user:charlie"
+    - "activity:homework-1#can_submit@user:charlie"
+  assertFalse:
+    - "activity:homework-1#can_submit@user:alice"
+    - "course:intro-cs#can_delete@user:bob"
+    - "class:section-a#can_delete@user:bob"
+    - "collection:cs-fundamentals#can_delete@user:bob"
+    - "activity:homework-1#can_delete@user:bob"
+    - "activity:homework-1#can_submit@user:bob"
+    - "course:intro-cs#can_edit@user:charlie"
+    - "course:intro-cs#can_delete@user:charlie"
+    - "course:intro-cs#can_publish@user:charlie"
+    - "class:section-a#can_edit@user:charlie"
+    - "class:section-a#can_delete@user:charlie"
+    - "class:section-a#can_enroll@user:charlie"
+    - "content:lecture-slides#can_edit@user:charlie"
+    - "content:lecture-slides#can_delete@user:charlie"
+    - "collection:cs-fundamentals#can_edit@user:charlie"
+    - "collection:cs-fundamentals#can_delete@user:charlie"
+    - "activity:homework-1#can_edit@user:charlie"
+    - "activity:homework-1#can_delete@user:charlie"
+    - "activity:homework-1#can_grade@user:charlie"
+    - "course:intro-cs#can_view@user:diana"
+    - "course:intro-cs#can_edit@user:diana"
+    - "course:intro-cs#can_delete@user:diana"
+    - "course:intro-cs#can_publish@user:diana"
+    - "class:section-a#can_view@user:diana"
+    - "class:section-a#can_edit@user:diana"
+    - "class:section-a#can_delete@user:diana"
+    - "class:section-a#can_enroll@user:diana"
+    - "content:lecture-slides#can_view@user:diana"
+    - "content:lecture-slides#can_edit@user:diana"
+    - "content:lecture-slides#can_delete@user:diana"
+    - "collection:cs-fundamentals#can_view@user:diana"
+    - "collection:cs-fundamentals#can_edit@user:diana"
+    - "collection:cs-fundamentals#can_delete@user:diana"
+    - "activity:homework-1#can_view@user:diana"
+    - "activity:homework-1#can_edit@user:diana"
+    - "activity:homework-1#can_delete@user:diana"
+    - "activity:homework-1#can_grade@user:diana"
+    - "activity:homework-1#can_submit@user:diana"

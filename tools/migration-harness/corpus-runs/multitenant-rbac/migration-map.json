@@ -1,0 +1,61 @@
+{
+  "types": {
+    "user": "user",
+    "group": "group",
+    "role": "role",
+    "organization": "organization",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {},
+    "group": {
+      "member": "member"
+    },
+    "role": {
+      "assignee": "assignee"
+    },
+    "organization": {
+      "admin": "admin",
+      "billing_manager": "billing_manager",
+      "can_create_document": "can_create_document",
+      "can_delete_user": "can_delete_user",
+      "can_edit_billing": "can_edit_billing",
+      "can_invite_user": "can_invite_user",
+      "document_manager": "document_manager",
+      "document_viewer": "document_viewer",
+      "user_manager": "user_manager"
+    },
+    "document": {
+      "organization": "organization",
+      "editor": "editor",
+      "viewer": "viewer",
+      "can_view": "can_view",
+      "can_edit": "can_edit",
+      "can_delete": "can_delete"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "billing_manager": {
+        "relation": "billing_manager__direct",
+        "permission": "billing_manager"
+      },
+      "document_manager": {
+        "relation": "document_manager__direct",
+        "permission": "document_manager"
+      },
+      "document_viewer": {
+        "relation": "document_viewer__direct",
+        "permission": "document_viewer"
+      },
+      "user_manager": {
+        "relation": "user_manager__direct",
+        "permission": "user_manager"
+      }
+    }
+  }
+}

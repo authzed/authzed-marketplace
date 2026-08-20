@@ -1,0 +1,20 @@
+{
+  "name": "code-conversion-fixture-openfga-api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "original": "tsx src/original/app.ts",
+    "converted": "tsx src/converted/app.ts"
+  },
+  "dependencies": {
+    "@openfga/sdk": "^0.9.6",
+    "@spicedb/client": "file:third_party/spicedb-clients/spicedb-typescript"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.23.12",
+    "typescript": "^5.6.0"
+  }
+}

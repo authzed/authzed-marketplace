@@ -6,7 +6,7 @@ Usage:
 
 Environment:
     SPICEDB_ENDPOINT  SpiceDB gRPC endpoint (default: localhost:50051)
-    SPICEDB_TOKEN     Preshared key (default: test-token)
+    SPICEDB_TOKEN     Token (default: test-token)
     LOAD_TEST_N       Number of iterations (default: 100)
 
 Requires:

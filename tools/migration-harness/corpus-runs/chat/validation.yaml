@@ -1,0 +1,64 @@
+schemaFile: schema.zed
+relationships: |-
+  conversation:bob-charlie-dm#member__direct@user:bob
+  conversation:bob-charlie-dm#member__direct@user:charlie
+  conversation:bob-charlie-dm#organization@organization:acme
+  conversation:engineering-general#member__direct@group:engineering#member
+  conversation:engineering-general#organization@organization:acme
+  conversation:engineering-general#owner@user:bob
+  group:engineering#member@user:bob
+  group:engineering#member@user:charlie
+  group:engineering#organization@organization:acme
+  message:dm-001#conversation@conversation:bob-charlie-dm
+  message:dm-001#sender@user:bob
+  message:msg-001#conversation@conversation:engineering-general
+  message:msg-001#sender@user:charlie
+  organization:acme#admin@user:alice
+  organization:acme#member__direct@user:bob
+  organization:acme#member__direct@user:charlie
+  organization:acme#member__direct@user:diana
+assertions:
+  assertTrue:
+    - "conversation:engineering-general#can_view@user:bob"
+    - "conversation:engineering-general#can_post@user:bob"
+    - "conversation:engineering-general#can_edit@user:bob"
+    - "conversation:engineering-general#can_delete@user:bob"
+    - "conversation:engineering-general#can_add_member@user:bob"
+    - "conversation:engineering-general#can_remove_member@user:bob"
+    - "conversation:engineering-general#can_view@user:charlie"
+    - "conversation:engineering-general#can_post@user:charlie"
+    - "conversation:engineering-general#can_view@user:alice"
+    - "conversation:engineering-general#can_edit@user:alice"
+    - "conversation:engineering-general#can_delete@user:alice"
+    - "conversation:engineering-general#can_add_member@user:alice"
+    - "conversation:bob-charlie-dm#can_view@user:bob"
+    - "conversation:bob-charlie-dm#can_post@user:bob"
+    - "conversation:bob-charlie-dm#can_view@user:charlie"
+    - "conversation:bob-charlie-dm#can_post@user:charlie"
+    - "message:msg-001#can_view@user:charlie"
+    - "message:msg-001#can_edit@user:charlie"
+    - "message:msg-001#can_delete@user:charlie"
+    - "message:msg-001#can_reply@user:charlie"
+    - "message:msg-001#can_view@user:bob"
+    - "message:msg-001#can_reply@user:bob"
+    - "message:msg-001#can_view@user:alice"
+    - "message:msg-001#can_delete@user:alice"
+    - "message:dm-001#can_view@user:alice"
+    - "message:dm-001#can_delete@user:alice"
+    - "message:dm-001#can_view@user:bob"
+    - "message:dm-001#can_edit@user:bob"
+    - "message:dm-001#can_delete@user:bob"
+    - "message:dm-001#can_view@user:charlie"
+    - "message:dm-001#can_reply@user:charlie"
+  assertFalse:
+    - "conversation:engineering-general#can_edit@user:charlie"
+    - "conversation:engineering-general#can_add_member@user:charlie"
+    - "conversation:engineering-general#can_view@user:diana"
+    - "conversation:engineering-general#can_post@user:diana"
+    - "conversation:bob-charlie-dm#can_view@user:diana"
+    - "conversation:bob-charlie-dm#can_post@user:diana"
+    - "message:msg-001#can_edit@user:bob"
+    - "message:msg-001#can_view@user:diana"
+    - "message:msg-001#can_reply@user:diana"
+    - "message:dm-001#can_edit@user:charlie"
+    - "message:dm-001#can_view@user:diana"

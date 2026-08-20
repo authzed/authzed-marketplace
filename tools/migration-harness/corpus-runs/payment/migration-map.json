@@ -1,0 +1,65 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "link": "link",
+    "payment": "payment",
+    "payout": "payout",
+    "refund": "refund",
+    "subscription": "subscription"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "finance_manager": "finance_manager",
+      "viewer": "viewer",
+      "member": "member"
+    },
+    "link": {
+      "organization": "organization",
+      "creator": "creator",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "payment": {
+      "organization": "organization",
+      "creator": "creator",
+      "can_delete": "can_delete",
+      "can_refund": "can_refund",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "payout": {
+      "organization": "organization",
+      "can_approve": "can_approve",
+      "can_view": "can_view"
+    },
+    "refund": {
+      "organization": "organization",
+      "can_approve": "can_approve",
+      "can_view": "can_view"
+    },
+    "subscription": {
+      "organization": "organization",
+      "creator": "creator",
+      "can_delete": "can_delete",
+      "can_cancel": "can_cancel",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+// Option B from schema-mapping.md's "Three ways to ship a modular schema": one file,
+// `use partial`, deployed directly to WriteSchema with NO `zed schema compile` step.
+//
+// Verified live (SpiceDB v1.56.0, `zed schema write` + `zed schema read` +
+// `zed permission check` for all six permissions -- see corpus-runs/README.md finding 2 for
+// the transcript). This file is NOT the artifact this store's harness run uses -- schema.zed
+// (option A, the `zed schema compile` output of modules/manifest.zed, option C) is -- because
+// zed v0.31.1's own `validate`/`schema compile` cannot parse `use partial` at all:
+//
+//   $ zed validate schema-use-partial.zed
+//   Unknown use flag: `partial`. Options are: expiration
+//
+// That is a real, current limitation of this pack's harness (which validates through zed),
+// not of SpiceDB itself. Kept here as a verified, working alternative for a team deploying
+// straight to a server without a zed-side validation gate.
+
+use partial
+
+definition user {}
+
+partial core_organization {
+	relation admin: user
+	relation member__direct: user
+
+	permission member = (member__direct + admin)
+}
+
+partial wiki_organization_ext {
+	permission can_create_space = admin
+}
+
+partial issuetracker_organization_ext {
+	permission can_create_project = admin
+}
+
+definition organization {
+	...core_organization
+	...wiki_organization_ext
+	...issuetracker_organization_ext
+}
+
+definition group {
+	relation member: user
+}
+
+definition space {
+	relation organization: organization
+
+	permission can_view_pages = organization->member
+}
+
+definition page {
+	relation space: space
+	relation owner: user
+}
+
+definition project {
+	relation organization: organization
+
+	permission viewer = organization->member
+}
+
+definition ticket {
+	relation project: project
+	relation owner: user
+}

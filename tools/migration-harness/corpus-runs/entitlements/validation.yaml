@@ -1,0 +1,26 @@
+schemaFile: schema.zed
+relationships: |-
+  feature:draft_prs#associated_plan@plan:enterprise
+  feature:draft_prs#associated_plan@plan:team
+  feature:issues#associated_plan@plan:enterprise
+  feature:issues#associated_plan@plan:free
+  feature:issues#associated_plan@plan:team
+  feature:sso#associated_plan@plan:enterprise
+  organization:alpha#member@user:anne
+  organization:brayer#member@user:beth
+  organization:cups#member@user:charles
+  plan:enterprise#subscriber@organization:cups
+  plan:free#subscriber@organization:alpha
+  plan:team#subscriber@organization:brayer
+assertions:
+  assertTrue:
+    - "feature:issues#can_access@user:anne"
+    - "feature:issues#can_access@user:beth"
+    - "feature:issues#can_access@user:charles"
+    - "feature:draft_prs#can_access@user:beth"
+    - "feature:draft_prs#can_access@user:charles"
+    - "feature:sso#can_access@user:charles"
+  assertFalse:
+    - "feature:draft_prs#can_access@user:anne"
+    - "feature:sso#can_access@user:anne"
+    - "feature:sso#can_access@user:beth"

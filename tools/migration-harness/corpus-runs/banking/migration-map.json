@@ -1,0 +1,28 @@
+{
+  "types": {
+    "employee": "employee",
+    "customer": "customer",
+    "bank": "bank",
+    "account": "account"
+  },
+  "permissions": {
+    "employee": {},
+    "customer": {},
+    "bank": {
+      "customer": "customer",
+      "account_manager": "account_manager",
+      "transfer_limit_policy": "transfer_limit_policy"
+    },
+    "account": {
+      "bank": "bank",
+      "owner": "owner",
+      "account_manager": "account_manager",
+      "delegate": "delegate",
+      "can_make_bank_transfer": "can_make_bank_transfer"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

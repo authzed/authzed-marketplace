@@ -1,0 +1,77 @@
+// module: core, file: core.zed
+// 
+// Source: openfga/sample-stores/stores/modular/core.fga (module core)
+// 
+// `organization` is assembled in manifest.zed from this file's `core_organization`
+// partial plus one partial per module that OpenFGA's `extend type organization`
+// adds to it (wiki.zed, issue-tracker/projects.zed). SpiceDB has no `extend type` --
+// the manifest is the one place that has to know about every module that
+// contributes to a shared type, which core.fga itself never does in OpenFGA.
+definition user {}
+
+definition group {
+	// core.fga: `define member: [user]` -- pure-direct, no split
+	relation member: user
+}
+
+definition space {
+	// wiki.fga: `define organization: [organization]` -- pure-direct, no split
+	relation organization: organization
+
+	// wiki.fga: `define can_view_pages: member from organization` -- arrow, operand
+	// order reversed (schema-mapping.md, "Arrows"). No `__perm` alias needed: the
+	// arrow's target (`organization#member`) already resolved to a *permission* via
+	// the split in core.zed, and the "point arrows at permissions" rule only adds an
+	// alias when the target is a bare relation.
+	permission can_view_pages = organization->member
+}
+
+definition page {
+	// wiki.fga: `define space: [space]` -- pure-direct, no split
+	relation space: space
+
+	// wiki.fga: `define owner: [user]` -- pure-direct, no split
+	relation owner: user
+}
+
+definition project {
+	// projects.fga: `define organization: [organization]` -- pure-direct, no split
+	relation organization: organization
+
+	// projects.fga: `define viewer: member from organization` -- arrow, reversed
+	// operand order, no `__perm` alias needed (target is `organization#member`, a
+	// permission after the core split).
+	permission viewer = organization->member
+}
+
+// module: issue-tracker, file: issue-tracker/tickets.zed
+// 
+// Source: openfga/sample-stores/stores/modular/issue-tracker/tickets.fga
+// (module issue-tracker, a second file in the same module -- OpenFGA modules can
+// span more than one .fga file, and SpiceDB modules can span more than one .zed
+// file the same way: this file needs no `import` and contributes no partial, it
+// just declares a type outright, same as any single-file model would.)
+definition ticket {
+	// tickets.fga: `define project: [project]` -- pure-direct, no split
+	relation project: project
+
+	// tickets.fga: `define owner: [user]` -- pure-direct, no split
+	relation owner: user
+}
+
+definition organization {
+	// core.fga: `define admin: [user]` -- pure-direct, no split
+	relation admin: user
+
+	// core.fga: `define member: [user] or admin` -- mixes a type list with `or`,
+	// so it splits (schema-mapping.md, "The relation/permission split").
+	relation member__direct: user
+	permission member = member__direct + admin
+
+	// wiki.fga: `define can_create_space: admin` -- pure alias, no type list, so it
+	// stays a plain permission (no split).
+	permission can_create_space = admin
+
+	// projects.fga: `define can_create_project: admin` -- pure alias, no split
+	permission can_create_project = admin
+}

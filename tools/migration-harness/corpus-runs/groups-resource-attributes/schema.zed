@@ -1,0 +1,23 @@
+caveat doc_viewer_condition(document_attributes map<string>, permitted_states list<string>) {
+	document_attributes["status"] in permitted_states
+}
+
+definition user {}
+
+definition organization {
+	relation member: user
+	relation can_access_docs: group#member with doc_viewer_condition
+
+	permission can_access_docs__perm = can_access_docs
+}
+
+definition group {
+	relation organization: organization
+	relation member: user
+}
+
+definition document {
+	relation organization: organization
+
+	permission can_access = organization->can_access_docs__perm
+}

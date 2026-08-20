@@ -1,0 +1,24 @@
+schemaFile: schema.zed
+relationships: |-
+  application:1#organization@organization:acme
+  component:payment#organization@organization:acme
+  component:payment#reader__direct@application:1
+  component:payment#writer__direct@application:2
+  component:purchases#organization@organization:acme
+  organization:acme#admin@user:anne
+  organization:acme#application@application:1
+  organization:acme#application@application:2
+  organization:acme#member@user:marie
+assertions:
+  assertTrue:
+    - "application:1#can_edit@user:anne"
+    - "application:1#can_delete@user:anne"
+    - "application:1#can_view@user:anne"
+    - "application:1#can_view@user:marie"
+    - "component:payment#can_view@application:1"
+    - "component:payment#can_view@application:2"
+    - "component:payment#can_write@application:2"
+  assertFalse:
+    - "application:1#can_edit@user:marie"
+    - "application:1#can_delete@user:marie"
+    - "component:payment#can_write@application:1"

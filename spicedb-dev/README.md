@@ -15,6 +15,12 @@ SpiceDB development plugin for Claude Code. Adds fine-grained authorization to a
 - `/spicedb-dev:implement-spicedb-relationships` - Add relationship writes and deletes to code (WriteRelationships, DeleteRelationships)
 - `/spicedb-dev:audit-coverage` - Audit permission coverage; shows which schema permissions have code checks
 - `/spicedb-dev:test-permissions` - Generate test data fixtures and scenarios
+- `/spicedb-dev:migrate` - Migrating from another authorization system? Start here. See [Migrating to SpiceDB](#migrating-to-spicedb) below
+- `/spicedb-dev:migrate-schema` - Convert the source model to a SpiceDB schema
+- `/spicedb-dev:migrate-data` - Move a live store's relationship data into SpiceDB
+- `/spicedb-dev:migrate-code` - Rewrite client call sites and add the SpiceDB client
+- `/spicedb-dev:migrate-tests` - Convert test fixtures and assertions to SpiceDB validation YAML
+- `/spicedb-dev:migrate-verify` - Emit a differential harness that dual-runs SpiceDB beside the still-authoritative source
 
 ### Skills
 
@@ -22,11 +28,15 @@ SpiceDB development plugin for Claude Code. Adds fine-grained authorization to a
 - **spicedb-schema-design** - Schema patterns, anti-patterns, and design decisions
 - **spicedb-best-practices** - Client library usage, consistency models, error handling, performance
 - **authorization-testing** - Test fixture generation and integration testing patterns
+- **migrating-to-spicedb** - Source-agnostic migration framework: phase pipeline (with per-phase build status), pre-flight gate protocol, the conversion-pack contract, and (once conversion is done) the seven-step cutover playbook and the differential-harness contract `/spicedb-dev:migrate-verify` implements
+- **openfga-to-spicedb** - Conversion pack for OpenFGA, Okta FGA, and Auth0 FGA: schema mapping, blocker catalog, identifier normalization, data mapping, code mapping, test mapping, and the differential-harness source adapter
+- **spicedb-client-integration** - General-purpose SpiceDB client integration for Go, Python, TypeScript, C#, Java, Rust, and Ruby: obtaining the prototype client and the vocabulary shared across all seven languages
 
 ### Agents
 
 - **schema-validator** - Validates SpiceDB schemas and suggests improvements
 - **checkpoint-identifier** - Analyzes code to identify where permission checks should go
+- **migration-analyzer** - Phase 0 of a migration: scans the source authorization model and the whole codebase, returns Class A/B/C findings for the pre-flight gate
 
 ## Installation
 
@@ -50,6 +60,63 @@ Alternatively, install from a local clone of the marketplace repository:
 /plugin marketplace add /path/to/authzed-marketplace
 /plugin install spicedb-dev@authzed-marketplace
 ```
+
+## Migrating to SpiceDB
+
+If you already run OpenFGA, Okta FGA, or Auth0 FGA, the plugin converts the model, the
+data, the application code, and the tests -- and then helps you cut over without guessing.
+
+```
+/spicedb-dev:migrate /path/to/your/project
+```
+
+That single command analyzes the project and holds one **pre-flight gate**: every decision
+that cannot be made mechanically is put to you *before* anything is written. Tenancy shape,
+identifier encoding, permission naming, what to do about constructs SpiceDB models
+differently -- all asked once, up front, and recorded. From there it routes through the
+phases.
+
+### The phases
+
+| Phase | Command | What it does |
+|---|---|---|
+| 0 | `migrate` | Analyze, hold the gate, write `migration-plan.md` + `migration-map.json` |
+| 1 | `migrate-schema` | Convert the model to `schema.zed` |
+| 2 | *(automatic)* | Validate the schema and report findings |
+| 3 | `migrate-data` | Extract, transform, load, and verify relationship data |
+| 4 | `migrate-code` | Rewrite call sites; add the SpiceDB client |
+| 5 | `migrate-tests` | Convert fixtures and assertions to validation YAML |
+| — | `migrate-verify` | Dual-run SpiceDB beside the source and diff the answers |
+
+Phases 3 and 5 have no ordering dependency on each other; phase 4 needs phase 3 only when
+object IDs are encoded. Each phase records its own status, so a run can stop and resume.
+
+### Two artifacts, one of them authoritative
+
+- **`migration-map.json`** is the record: every name, every decision, every phase's status.
+  Phases read and write this.
+- **`migration-plan.md`** is a rendering of it, for humans to review. Deleting it loses
+  nothing.
+
+### It stops rather than guessing
+
+Some things have no mechanical conversion, and the pipeline is built to say so instead of
+producing something that compiles and is wrong. It halts and asks when it finds contextual
+tuples, multi-store tenancy, model-ID pinning, a wildcard that would become transitive, or
+an embedded in-process OpenFGA server (which makes the code phase an architectural decision
+rather than a rewrite). Anything it cannot convert is handed back explicitly, with
+`file:line`, under **Needs action** in the plan.
+
+Converted code carries `TODO(spicedbmigration):` and `NOTE(spicedbmigration):` markers at
+every site that needs a human, so `grep` finds all of them.
+
+### What it does not do
+
+It will not push, open a pull request, or work on your default branch -- publishing the
+conversion is your decision. It does not run your cutover: the differential harness and the
+[cutover playbook](skills/migrating-to-spicedb/references/cutover-strategies.md) give you
+dual-write and shadow-read, but deciding when to flip and when to remove the source system
+stays with you.
 
 ## Quick Setup: Make Permissions Ambient
 
@@ -118,9 +185,19 @@ Both are required. SpiceDB returns NO_PERMISSION for everything until relationsh
 
 Fastest local setup:
 ```bash
-spicedb serve-testing --grpc-preshared-key test
+spicedb serve-testing
 ```
-This starts an in-memory SpiceDB instance on `localhost:50051` with no persistence -- suitable for development and testing. Data is lost on restart.
+This starts an in-memory SpiceDB instance on `localhost:50051` (gRPC) with no persistence -- suitable for development and testing. Data is lost on restart.
+
+`serve-testing` needs no preshared key: it accepts any client-supplied token and gives
+each unique token its own fully isolated, empty datastore. Connect with whatever token
+you like:
+```bash
+zed schema write schema.zed --endpoint localhost:50051 --token my-token
+```
+Reusing the same token reconnects to that token's datastore; a different token starts
+from empty -- convenient for running parallel test suites against one instance without
+interference.
 
 For a persistent local instance, see instructions in the [SpiceDB docs](https://authzed.com/docs/spicedb/concepts/datastores).
 

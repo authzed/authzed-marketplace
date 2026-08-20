@@ -1,0 +1,67 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	relation scheduler: user
+	relation viewer: user
+	relation member__direct: user
+
+	permission admin__perm = admin
+	permission scheduler__perm = scheduler
+	permission viewer__perm = viewer
+	permission member = (member__direct + admin + scheduler + viewer)
+}
+
+definition calendar {
+	relation organization: organization
+	relation owner: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_scheduler = organization->scheduler__perm
+	permission organization_viewer = organization->viewer__perm
+	permission can_delete = organization_admin
+	permission can_share = (owner + can_delete)
+	permission can_edit = (organization_scheduler + can_share)
+	permission can_create_event = can_edit
+	permission can_view = (organization_viewer + can_edit)
+}
+
+definition event {
+	relation calendar: calendar
+	relation organizer: user
+	relation attendee: user
+
+	permission organization_admin = calendar->organization_admin
+	permission organization_scheduler = calendar->organization_scheduler
+	permission organization_viewer = calendar->organization_viewer
+	permission can_delete = (organizer + organization_admin)
+	permission can_invite = (organization_scheduler + can_delete)
+	permission can_edit = can_invite
+	permission can_view = (attendee + organization_viewer + can_edit)
+}
+
+definition link {
+	relation organization: organization
+	relation owner: user
+
+	permission can_delete = (owner + organization->admin__perm)
+	permission can_edit = (organization->scheduler__perm + can_delete)
+	permission can_view = can_edit
+}
+
+definition recording {
+	relation event: event
+
+	permission can_delete = event->organization_admin
+	permission can_view = (event->organization_viewer + event->organization_scheduler + can_delete)
+}
+
+definition webinar {
+	relation organization: organization
+	relation organizer: user
+
+	permission can_delete = organization->admin__perm
+	permission can_publish = (organizer + can_delete)
+	permission can_edit = (organization->scheduler__perm + can_publish)
+	permission can_view = (organization->viewer__perm + can_edit)
+}

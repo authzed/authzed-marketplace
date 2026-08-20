@@ -1,0 +1,19 @@
+definition user {}
+
+definition organization {
+	relation member: user
+
+	permission member__perm = member
+}
+
+definition plan {
+	relation subscriber: organization
+
+	permission subscriber_member = subscriber->member__perm
+}
+
+definition feature {
+	relation associated_plan: plan
+
+	permission can_access = associated_plan->subscriber_member
+}

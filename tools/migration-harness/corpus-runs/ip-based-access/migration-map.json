@@ -1,0 +1,23 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "ip_based_access_policy": "ip_based_access_policy"
+    },
+    "document": {
+      "organization": "organization",
+      "viewer": "viewer",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

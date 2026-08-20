@@ -1,12 +1,12 @@
 {
   "name": "spicedb-dev",
-  "version": "1.0.0",
-  "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, and testing",
+  "version": "1.1.0",
+  "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, etc.) to SpiceDB",
   "author": {
     "name": "AuthZed"
   },
   "homepage": "https://github.com/authzed/authzed-marketplace/tree/main/spicedb-dev",
   "repository": "https://github.com/authzed/authzed-marketplace",
   "license": "Apache-2.0",
-  "keywords": ["spicedb", "authorization", "permissions", "development", "authzed", "schema", "modeling"]
+  "keywords": ["spicedb", "authorization", "permissions", "development", "authzed", "schema", "modeling", "migration", "openfga"]
 }

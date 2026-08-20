@@ -1,0 +1,9 @@
+caveat temporal_access(issued_at timestamp, valid_for duration, current_time timestamp) {
+	current_time < issued_at + valid_for
+}
+
+definition user {}
+
+definition document {
+	relation viewer: user | user with temporal_access
+}

@@ -1,0 +1,20 @@
+{
+  "types": {
+    "employee": "employee",
+    "report": "report"
+  },
+  "permissions": {
+    "employee": {
+      "manager": "manager",
+      "can_manage": "can_manage"
+    },
+    "report": {
+      "submitter": "submitter",
+      "approver": "approver"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

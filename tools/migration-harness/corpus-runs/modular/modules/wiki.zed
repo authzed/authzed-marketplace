@@ -1,0 +1,37 @@
+// module: wiki, file: wiki.zed
+//
+// Source: openfga/sample-stores/stores/modular/wiki.fga (module wiki)
+//
+// wiki.fga's `extend type organization { define can_create_space: admin }` has no
+// direct SpiceDB syntax -- it becomes a partial that manifest.zed spreads into
+// `organization` alongside core.zed's own contribution. The partial references
+// `admin`, which is declared in core.zed's `core_organization` partial, not in this
+// file; that resolves fine once both are merged into one `organization` block --
+// SpiceDB resolves names against the whole compiled program, not per source file
+// (verified: a partial's unresolved reference is not even checked in isolation,
+// only once something spreads it into a definition).
+
+partial wiki_organization_ext {
+	// wiki.fga: `define can_create_space: admin` -- pure alias, no type list, so it
+	// stays a plain permission (no split).
+	permission can_create_space = admin
+}
+
+definition space {
+	// wiki.fga: `define organization: [organization]` -- pure-direct, no split
+	relation organization: organization
+
+	// wiki.fga: `define can_view_pages: member from organization` -- arrow, operand
+	// order reversed (schema-mapping.md, "Arrows"). No `__perm` alias needed: the
+	// arrow's target (`organization#member`) already resolved to a *permission* via
+	// the split in core.zed, and the "point arrows at permissions" rule only adds an
+	// alias when the target is a bare relation.
+	permission can_view_pages = organization->member
+}
+
+definition page {
+	// wiki.fga: `define space: [space]` -- pure-direct, no split
+	relation space: space
+	// wiki.fga: `define owner: [user]` -- pure-direct, no split
+	relation owner: user
+}

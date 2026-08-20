@@ -1,0 +1,32 @@
+{
+  "types": {
+    "user": "user",
+    "group": "group",
+    "folder": "folder",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {},
+    "group": {
+      "member": "member"
+    },
+    "folder": {
+      "owner": "owner"
+    },
+    "document": {
+      "parent": "parent",
+      "writer": "writer",
+      "viewer": "viewer"
+    }
+  },
+  "relation_splits": {
+    "document": {
+      "writer": { "relation": "writer__direct", "permission": "writer" },
+      "viewer": { "relation": "viewer__direct", "permission": "viewer" }
+    }
+  },
+  "id_encoding": {
+    "mode": "base64url",
+    "types": ["user"]
+  }
+}

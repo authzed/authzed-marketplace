@@ -1,0 +1,24 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "plan": "plan",
+    "feature": "feature"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member"
+    },
+    "plan": {
+      "subscriber": "subscriber"
+    },
+    "feature": {
+      "has_feature": "has_feature"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

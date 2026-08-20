@@ -1,0 +1,11 @@
+schemaFile: schema.zed
+relationships: |-
+  organization:acme#ip_based_access_policy@organization:acme#member[in_company_network:{"ip_range":"192.168.0.0/24"}]
+  document:1#organization@organization:acme
+  document:1#viewer@user:anne
+  organization:acme#member@user:anne
+assertions:
+  assertTrue:
+    - 'document:1#can_view@user:anne with {"user_ip":"192.168.0.1"}'
+  assertFalse:
+    - 'document:1#can_view@user:anne with {"user_ip":"192.168.1.1"}'

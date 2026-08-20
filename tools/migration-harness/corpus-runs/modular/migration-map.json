@@ -1,0 +1,51 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "group": "group",
+    "space": "space",
+    "page": "page",
+    "project": "project",
+    "ticket": "ticket"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "admin": "admin",
+      "member": "member",
+      "can_create_space": "can_create_space",
+      "can_create_project": "can_create_project"
+    },
+    "group": {
+      "member": "member"
+    },
+    "space": {
+      "organization": "organization",
+      "can_view_pages": "can_view_pages"
+    },
+    "page": {
+      "space": "space",
+      "owner": "owner"
+    },
+    "project": {
+      "organization": "organization",
+      "viewer": "viewer"
+    },
+    "ticket": {
+      "project": "project",
+      "owner": "owner"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

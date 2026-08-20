@@ -435,8 +435,8 @@ definition document {
 Access restricted by IP address.
 
 ```
-caveat ip_allowlist(user_ip ipaddress, cidr string) {
-    user_ip.in_cidr(cidr)
+caveat ip_allowlist(user_ip ipaddress, allowed_cidrs list<string>) {
+    allowed_cidrs.exists(c, user_ip.in_cidr(c))
 }
 
 definition resource {
@@ -455,7 +455,7 @@ definition resource {
 
 **Important:** `ipaddress` is a SpiceDB-specific CEL type with an `.in_cidr(string)` method.
 The IP must be passed as a caveat parameter at check time -- SpiceDB has no `request` object.
-Pass it via `CheckPermissionRequest.Context`: `{"user_ip": "203.0.113.5", "cidr": "203.0.113.0/24"}`.
+Pass it via `CheckPermissionRequest.Context`: `{"user_ip": "203.0.113.5", "allowed_cidrs": ["203.0.113.0/24"]}`.
 
 ### Delegated Administration
 

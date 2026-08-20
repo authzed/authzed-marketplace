@@ -1,0 +1,25 @@
+{
+  "types": {
+    "user": "user",
+    "document": "document"
+  },
+  "permissions": {
+    "user": {
+      "email_verified": "email_verified"
+    },
+    "document": {
+      "draft": "draft",
+      "published": "published",
+      "viewer": "viewer",
+      "owner": "owner",
+      "viewer_email_verified": "viewer_email_verified",
+      "owner_email_verified": "owner_email_verified",
+      "can_view": "can_view",
+      "can_edit": "can_edit"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

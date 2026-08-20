@@ -1,0 +1,98 @@
+schemaFile: schema.zed
+relationships: |-
+  customer:diana#account_owner@user:diana
+  customer:diana#store@store:main-shop
+  order:ord-001#customer@customer:diana
+  order:ord-001#placed_by@user:diana
+  order:ord-001#store@store:main-shop
+  organization:acme#admin@user:alice
+  organization:acme#member__direct@user:charlie
+  organization:acme#store_manager@user:bob
+  product:sneakers#creator@user:charlie
+  product:sneakers#store@store:main-shop
+  review:rev-001#author@user:diana
+  review:rev-001#product@product:sneakers
+  store:main-shop#organization@organization:acme
+  store:main-shop#owner@user:bob
+  store:main-shop#staff__direct@user:charlie
+assertions:
+  assertTrue:
+    - "customer:diana#can_delete@user:alice"
+    - "customer:diana#can_edit@user:alice"
+    - "customer:diana#can_edit@user:bob"
+    - "customer:diana#can_edit@user:diana"
+    - "customer:diana#can_view@user:alice"
+    - "customer:diana#can_view@user:bob"
+    - "customer:diana#can_view@user:charlie"
+    - "customer:diana#can_view@user:diana"
+    - "order:ord-001#can_cancel@user:alice"
+    - "order:ord-001#can_cancel@user:bob"
+    - "order:ord-001#can_cancel@user:diana"
+    - "order:ord-001#can_delete@user:alice"
+    - "order:ord-001#can_edit@user:alice"
+    - "order:ord-001#can_edit@user:bob"
+    - "order:ord-001#can_edit@user:charlie"
+    - "order:ord-001#can_fulfill@user:alice"
+    - "order:ord-001#can_fulfill@user:bob"
+    - "order:ord-001#can_fulfill@user:charlie"
+    - "order:ord-001#can_refund@user:alice"
+    - "order:ord-001#can_refund@user:bob"
+    - "order:ord-001#can_view@user:alice"
+    - "order:ord-001#can_view@user:bob"
+    - "order:ord-001#can_view@user:charlie"
+    - "order:ord-001#can_view@user:diana"
+    - "organization:acme#can_create_store@user:alice"
+    - "product:sneakers#can_create_review@user:bob"
+    - "product:sneakers#can_create_review@user:charlie"
+    - "product:sneakers#can_delete@user:bob"
+    - "product:sneakers#can_edit@user:bob"
+    - "product:sneakers#can_edit@user:charlie"
+    - "product:sneakers#can_manage_inventory@user:charlie"
+    - "product:sneakers#can_view@user:bob"
+    - "product:sneakers#can_view@user:charlie"
+    - "review:rev-001#can_delete@user:bob"
+    - "review:rev-001#can_delete@user:diana"
+    - "review:rev-001#can_edit@user:diana"
+    - "review:rev-001#can_view@user:bob"
+    - "review:rev-001#can_view@user:charlie"
+    - "review:rev-001#can_view@user:diana"
+    - "store:main-shop#can_create_customer@user:alice"
+    - "store:main-shop#can_create_customer@user:bob"
+    - "store:main-shop#can_create_customer@user:charlie"
+    - "store:main-shop#can_create_order@user:alice"
+    - "store:main-shop#can_create_order@user:bob"
+    - "store:main-shop#can_create_order@user:charlie"
+    - "store:main-shop#can_create_product@user:alice"
+    - "store:main-shop#can_create_product@user:bob"
+    - "store:main-shop#can_delete@user:alice"
+    - "store:main-shop#can_delete@user:bob"
+    - "store:main-shop#can_edit@user:alice"
+    - "store:main-shop#can_edit@user:bob"
+    - "store:main-shop#can_view@user:alice"
+    - "store:main-shop#can_view@user:bob"
+    - "store:main-shop#can_view@user:charlie"
+  assertFalse:
+    - "customer:diana#can_delete@user:bob"
+    - "customer:diana#can_delete@user:charlie"
+    - "customer:diana#can_delete@user:diana"
+    - "customer:diana#can_edit@user:charlie"
+    - "order:ord-001#can_cancel@user:charlie"
+    - "order:ord-001#can_delete@user:bob"
+    - "order:ord-001#can_edit@user:diana"
+    - "order:ord-001#can_fulfill@user:diana"
+    - "order:ord-001#can_refund@user:charlie"
+    - "order:ord-001#can_refund@user:diana"
+    - "organization:acme#can_create_store@user:bob"
+    - "organization:acme#can_create_store@user:charlie"
+    - "product:sneakers#can_create_review@user:diana"
+    - "product:sneakers#can_delete@user:charlie"
+    - "product:sneakers#can_edit@user:diana"
+    - "product:sneakers#can_view@user:diana"
+    - "review:rev-001#can_delete@user:charlie"
+    - "review:rev-001#can_edit@user:bob"
+    - "review:rev-001#can_edit@user:charlie"
+    - "store:main-shop#can_create_customer@user:diana"
+    - "store:main-shop#can_create_order@user:diana"
+    - "store:main-shop#can_create_product@user:charlie"
+    - "store:main-shop#can_delete@user:charlie"
+    - "store:main-shop#can_edit@user:charlie"

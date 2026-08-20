@@ -1,0 +1,56 @@
+schemaFile: schema.zed
+relationships: |-
+  organization:callcenter#admin@user:alice
+  organization:callcenter#supervisor@user:bob
+  organization:callcenter#agent@user:charlie
+  organization:callcenter#member__direct@user:diana
+  call:call-001#organization@organization:callcenter
+  call:call-001#participant@user:charlie
+  contact:john-doe#organization@organization:callcenter
+  contact:john-doe#owner@user:charlie
+  comment:note-001#call@call:call-001
+  comment:note-001#author@user:charlie
+  recording:rec-001#call@call:call-001
+assertions:
+  assertTrue:
+    - "call:call-001#can_view@user:alice"
+    - "call:call-001#can_delete@user:alice"
+    - "contact:john-doe#can_view@user:alice"
+    - "contact:john-doe#can_edit@user:alice"
+    - "contact:john-doe#can_delete@user:alice"
+    - "comment:note-001#can_view@user:alice"
+    - "comment:note-001#can_edit@user:alice"
+    - "comment:note-001#can_delete@user:alice"
+    - "recording:rec-001#can_view@user:alice"
+    - "recording:rec-001#can_delete@user:alice"
+    - "call:call-001#can_view@user:bob"
+    - "contact:john-doe#can_view@user:bob"
+    - "contact:john-doe#can_edit@user:bob"
+    - "contact:john-doe#can_delete@user:bob"
+    - "comment:note-001#can_view@user:bob"
+    - "comment:note-001#can_edit@user:bob"
+    - "recording:rec-001#can_view@user:bob"
+    - "call:call-001#can_view@user:charlie"
+    - "contact:john-doe#can_view@user:charlie"
+    - "contact:john-doe#can_edit@user:charlie"
+    - "comment:note-001#can_view@user:charlie"
+    - "comment:note-001#can_edit@user:charlie"
+    - "comment:note-001#can_delete@user:charlie"
+  assertFalse:
+    - "call:call-001#can_delete@user:bob"
+    - "comment:note-001#can_delete@user:bob"
+    - "recording:rec-001#can_delete@user:bob"
+    - "call:call-001#can_delete@user:charlie"
+    - "contact:john-doe#can_delete@user:charlie"
+    - "recording:rec-001#can_view@user:charlie"
+    - "recording:rec-001#can_delete@user:charlie"
+    - "call:call-001#can_view@user:diana"
+    - "call:call-001#can_delete@user:diana"
+    - "contact:john-doe#can_view@user:diana"
+    - "contact:john-doe#can_edit@user:diana"
+    - "contact:john-doe#can_delete@user:diana"
+    - "comment:note-001#can_view@user:diana"
+    - "comment:note-001#can_edit@user:diana"
+    - "comment:note-001#can_delete@user:diana"
+    - "recording:rec-001#can_view@user:diana"
+    - "recording:rec-001#can_delete@user:diana"

@@ -1,0 +1,94 @@
+definition user {}
+
+definition organization {
+	relation member__direct: user
+	relation admin: user
+	relation recruiter: user
+	relation hiring_manager: user
+
+	permission member = (member__direct + admin + recruiter + hiring_manager)
+	permission admin__perm = admin
+	permission recruiter__perm = recruiter
+}
+
+definition department {
+	relation organization: organization
+	relation head: user
+
+	permission head__perm = head
+	permission organization_admin = organization->admin__perm
+	permission organization_recruiter = organization->recruiter__perm
+	permission can_manage = (head + organization_admin)
+	permission can_view = (organization->member + can_manage)
+}
+
+definition office {
+	relation organization: organization
+
+	permission can_manage = organization->admin__perm
+	permission can_view = (organization->member + can_manage)
+}
+
+definition job {
+	relation department: department
+	relation hiring_manager: user
+	relation recruiter: user
+
+	permission hiring_manager__perm = hiring_manager
+	permission recruiter__perm = recruiter
+	permission organization_admin = department->organization_admin
+	permission organization_recruiter = department->organization_recruiter
+	permission department_head = department->head__perm
+	permission can_close = (hiring_manager + organization_admin)
+	permission can_edit = (recruiter + can_close)
+	permission can_view = (organization_recruiter + department_head + can_edit)
+}
+
+definition candidate {
+	relation organization: organization
+	relation subject: user
+
+	permission can_delete = organization->admin__perm
+	permission can_edit = (organization->recruiter__perm + can_delete)
+	permission can_view = (subject + can_edit)
+}
+
+definition application {
+	relation job: job
+	relation candidate: candidate
+
+	permission organization_admin = job->organization_admin
+	permission organization_recruiter = job->organization_recruiter
+	permission department_head = job->department_head
+	permission can_edit = (job->recruiter__perm + organization_admin)
+	permission can_change_stage = (job->recruiter__perm + job->hiring_manager__perm)
+	permission can_view = (job->can_view + candidate->can_view)
+}
+
+definition scheduled_interview {
+	relation application: application
+	relation organizer: user
+	relation interviewer: user
+
+	permission organization_admin = application->organization_admin
+	permission department_head = application->department_head
+	permission can_edit = (organizer + organization_admin)
+	permission can_view = (department_head + interviewer + can_edit)
+}
+
+definition scorecard {
+	relation interview: scheduled_interview
+	relation interviewer: user
+
+	permission can_edit = interviewer
+	permission can_view = (interview->department_head + interview->organization_admin + can_edit)
+}
+
+definition offer {
+	relation application: application
+	relation creator: user
+
+	permission can_approve = application->organization_admin
+	permission can_edit = (creator + can_approve)
+	permission can_view = (application->department_head + application->organization_recruiter + can_edit)
+}

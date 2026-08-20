@@ -1,0 +1,83 @@
+schemaFile: schema.zed
+relationships: |-
+  calendar:team-cal#organization@organization:acme
+  calendar:team-cal#owner@user:bob
+  event:standup#attendee@user:diana
+  event:standup#calendar@calendar:team-cal
+  event:standup#organizer@user:bob
+  link:booking-page#organization@organization:acme
+  link:booking-page#owner@user:bob
+  organization:acme#admin@user:alice
+  organization:acme#member__direct@user:diana
+  organization:acme#scheduler@user:bob
+  organization:acme#viewer@user:charlie
+  recording:standup-rec#event@event:standup
+  webinar:product-launch#organization@organization:acme
+  webinar:product-launch#organizer@user:bob
+assertions:
+  assertTrue:
+    - "calendar:team-cal#can_view@user:alice"
+    - "calendar:team-cal#can_edit@user:alice"
+    - "calendar:team-cal#can_delete@user:alice"
+    - "calendar:team-cal#can_share@user:alice"
+    - "event:standup#can_view@user:alice"
+    - "event:standup#can_edit@user:alice"
+    - "event:standup#can_delete@user:alice"
+    - "event:standup#can_invite@user:alice"
+    - "link:booking-page#can_view@user:alice"
+    - "link:booking-page#can_edit@user:alice"
+    - "link:booking-page#can_delete@user:alice"
+    - "recording:standup-rec#can_view@user:alice"
+    - "recording:standup-rec#can_delete@user:alice"
+    - "webinar:product-launch#can_view@user:alice"
+    - "webinar:product-launch#can_edit@user:alice"
+    - "webinar:product-launch#can_delete@user:alice"
+    - "webinar:product-launch#can_publish@user:alice"
+    - "calendar:team-cal#can_view@user:bob"
+    - "calendar:team-cal#can_edit@user:bob"
+    - "calendar:team-cal#can_share@user:bob"
+    - "event:standup#can_view@user:bob"
+    - "event:standup#can_edit@user:bob"
+    - "event:standup#can_delete@user:bob"
+    - "event:standup#can_invite@user:bob"
+    - "link:booking-page#can_view@user:bob"
+    - "link:booking-page#can_edit@user:bob"
+    - "link:booking-page#can_delete@user:bob"
+    - "recording:standup-rec#can_view@user:bob"
+    - "webinar:product-launch#can_view@user:bob"
+    - "webinar:product-launch#can_edit@user:bob"
+    - "webinar:product-launch#can_publish@user:bob"
+    - "calendar:team-cal#can_view@user:charlie"
+    - "event:standup#can_view@user:charlie"
+    - "recording:standup-rec#can_view@user:charlie"
+    - "webinar:product-launch#can_view@user:charlie"
+    - "event:standup#can_view@user:diana"
+  assertFalse:
+    - "calendar:team-cal#can_delete@user:bob"
+    - "recording:standup-rec#can_delete@user:bob"
+    - "webinar:product-launch#can_delete@user:bob"
+    - "calendar:team-cal#can_edit@user:charlie"
+    - "calendar:team-cal#can_delete@user:charlie"
+    - "calendar:team-cal#can_share@user:charlie"
+    - "event:standup#can_edit@user:charlie"
+    - "event:standup#can_delete@user:charlie"
+    - "event:standup#can_invite@user:charlie"
+    - "link:booking-page#can_view@user:charlie"
+    - "link:booking-page#can_edit@user:charlie"
+    - "link:booking-page#can_delete@user:charlie"
+    - "recording:standup-rec#can_delete@user:charlie"
+    - "webinar:product-launch#can_edit@user:charlie"
+    - "webinar:product-launch#can_delete@user:charlie"
+    - "webinar:product-launch#can_publish@user:charlie"
+    - "calendar:team-cal#can_view@user:diana"
+    - "calendar:team-cal#can_edit@user:diana"
+    - "calendar:team-cal#can_delete@user:diana"
+    - "event:standup#can_edit@user:diana"
+    - "event:standup#can_delete@user:diana"
+    - "link:booking-page#can_view@user:diana"
+    - "link:booking-page#can_edit@user:diana"
+    - "recording:standup-rec#can_view@user:diana"
+    - "recording:standup-rec#can_delete@user:diana"
+    - "webinar:product-launch#can_view@user:diana"
+    - "webinar:product-launch#can_edit@user:diana"
+    - "webinar:product-launch#can_publish@user:diana"

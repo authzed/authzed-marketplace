@@ -1,0 +1,72 @@
+schemaFile: schema.zed
+relationships: |-
+  application:diana-swe#candidate@candidate:diana
+  application:diana-swe#job@job:swe-senior
+  application:eve-swe#candidate@candidate:eve
+  application:eve-swe#job@job:swe-senior
+  candidate:diana#organization@organization:acme
+  candidate:eve#organization@organization:acme
+  candidate:eve#subject@user:eve
+  department:engineering#head@user:charlie
+  department:engineering#organization@organization:acme
+  job:swe-senior#department@department:engineering
+  job:swe-senior#hiring_manager@user:charlie
+  job:swe-senior#recruiter@user:bob
+  offer:diana-offer#application@application:diana-swe
+  offer:diana-offer#creator@user:bob
+  office:san-francisco#organization@organization:acme
+  organization:acme#admin@user:alice
+  organization:acme#hiring_manager@user:charlie
+  organization:acme#recruiter@user:bob
+  organization:acme#recruiter@user:diana
+  scheduled_interview:diana-onsite#application@application:diana-swe
+  scheduled_interview:diana-onsite#interviewer@user:charlie
+  scheduled_interview:diana-onsite#organizer@user:bob
+  scorecard:charlie-feedback#interview@scheduled_interview:diana-onsite
+  scorecard:charlie-feedback#interviewer@user:charlie
+assertions:
+  assertTrue:
+    - "job:swe-senior#can_view@user:alice"
+    - "job:swe-senior#can_edit@user:alice"
+    - "job:swe-senior#can_close@user:alice"
+    - "job:swe-senior#can_view@user:charlie"
+    - "job:swe-senior#can_edit@user:charlie"
+    - "job:swe-senior#can_close@user:charlie"
+    - "job:swe-senior#can_view@user:diana"
+    - "candidate:diana#can_view@user:bob"
+    - "candidate:diana#can_edit@user:bob"
+    - "application:diana-swe#can_view@user:bob"
+    - "application:diana-swe#can_edit@user:bob"
+    - "application:diana-swe#can_change_stage@user:bob"
+    - "application:diana-swe#can_view@user:charlie"
+    - "application:diana-swe#can_change_stage@user:charlie"
+    - "candidate:eve#can_view@user:eve"
+    - "application:eve-swe#can_view@user:eve"
+    - "scheduled_interview:diana-onsite#can_view@user:charlie"
+    - "scheduled_interview:diana-onsite#can_view@user:bob"
+    - "scheduled_interview:diana-onsite#can_edit@user:bob"
+    - "scorecard:charlie-feedback#can_view@user:charlie"
+    - "scorecard:charlie-feedback#can_edit@user:charlie"
+    - "offer:diana-offer#can_view@user:bob"
+    - "offer:diana-offer#can_edit@user:bob"
+    - "offer:diana-offer#can_view@user:alice"
+    - "offer:diana-offer#can_edit@user:alice"
+    - "offer:diana-offer#can_approve@user:alice"
+    - "department:engineering#can_view@user:bob"
+    - "department:engineering#can_view@user:charlie"
+    - "office:san-francisco#can_view@user:bob"
+  assertFalse:
+    - "job:swe-senior#can_edit@user:diana"
+    - "job:swe-senior#can_close@user:diana"
+    - "candidate:diana#can_delete@user:bob"
+    - "application:diana-swe#can_edit@user:charlie"
+    - "candidate:eve#can_edit@user:eve"
+    - "candidate:eve#can_delete@user:eve"
+    - "application:eve-swe#can_edit@user:eve"
+    - "application:eve-swe#can_change_stage@user:eve"
+    - "scheduled_interview:diana-onsite#can_edit@user:charlie"
+    - "scorecard:charlie-feedback#can_view@user:bob"
+    - "scorecard:charlie-feedback#can_edit@user:bob"
+    - "offer:diana-offer#can_approve@user:bob"
+    - "candidate:diana#can_view@user:charlie"
+    - "candidate:diana#can_edit@user:charlie"

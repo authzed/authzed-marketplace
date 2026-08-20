@@ -1,0 +1,98 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "department": "department",
+    "office": "office",
+    "job": "job",
+    "candidate": "candidate",
+    "application": "application",
+    "scheduled_interview": "scheduled_interview",
+    "scorecard": "scorecard",
+    "offer": "offer"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member",
+      "admin": "admin",
+      "recruiter": "recruiter",
+      "hiring_manager": "hiring_manager"
+    },
+    "department": {
+      "organization": "organization",
+      "head": "head",
+      "organization_admin": "organization_admin",
+      "organization_recruiter": "organization_recruiter",
+      "can_manage": "can_manage",
+      "can_view": "can_view"
+    },
+    "office": {
+      "organization": "organization",
+      "can_manage": "can_manage",
+      "can_view": "can_view"
+    },
+    "job": {
+      "department": "department",
+      "hiring_manager": "hiring_manager",
+      "recruiter": "recruiter",
+      "organization_admin": "organization_admin",
+      "organization_recruiter": "organization_recruiter",
+      "department_head": "department_head",
+      "can_close": "can_close",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "candidate": {
+      "organization": "organization",
+      "subject": "subject",
+      "can_delete": "can_delete",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "application": {
+      "job": "job",
+      "candidate": "candidate",
+      "organization_admin": "organization_admin",
+      "organization_recruiter": "organization_recruiter",
+      "department_head": "department_head",
+      "can_edit": "can_edit",
+      "can_change_stage": "can_change_stage",
+      "can_view": "can_view"
+    },
+    "scheduled_interview": {
+      "application": "application",
+      "organizer": "organizer",
+      "interviewer": "interviewer",
+      "organization_admin": "organization_admin",
+      "department_head": "department_head",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "scorecard": {
+      "interview": "interview",
+      "interviewer": "interviewer",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    },
+    "offer": {
+      "application": "application",
+      "creator": "creator",
+      "can_approve": "can_approve",
+      "can_edit": "can_edit",
+      "can_view": "can_view"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  },
+  "relation_splits": {
+    "organization": {
+      "member": {
+        "relation": "member__direct",
+        "permission": "member"
+      }
+    }
+  }
+}

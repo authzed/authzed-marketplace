@@ -1,0 +1,37 @@
+caveat is_below_collaborator_limit(collaborator_count int, collaborator_max int) {
+	collaborator_count <= collaborator_max
+}
+
+caveat is_below_row_sync_limit(row_sync_count int, row_sync_max int) {
+	row_sync_count <= row_sync_max
+}
+
+caveat is_below_page_history_days_limit(page_history_days_count int, page_history_days_max int) {
+	page_history_days_count <= page_history_days_max
+}
+
+definition user {}
+
+definition organization {
+	relation member: user
+}
+
+definition plan {
+	relation subscriber: organization#member
+}
+
+definition feature {
+	// spicedb-ignore-warning: relation-name-references-parent
+	relation has_feature: plan#subscriber |
+		plan#subscriber with is_below_collaborator_limit |
+		plan#subscriber with is_below_row_sync_limit |
+		plan#subscriber with is_below_page_history_days_limit
+
+	// Materialized-marker alternative (see corpus-runs/README.md's
+	// advanced-entitlements section, "Usage-quota entitlements: caveat vs.
+	// materialized marker"). The application recomputes usage against quota
+	// on its own schedule (or on every usage-changing event) and TOUCHes or
+	// DELETEs this relationship accordingly -- SpiceDB never evaluates CEL
+	// for it and never counts anything itself.
+	relation has_feature_verified: plan#subscriber
+}

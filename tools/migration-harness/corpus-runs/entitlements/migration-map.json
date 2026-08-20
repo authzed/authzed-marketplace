@@ -1,0 +1,26 @@
+{
+  "types": {
+    "user": "user",
+    "organization": "organization",
+    "plan": "plan",
+    "feature": "feature"
+  },
+  "permissions": {
+    "user": {},
+    "organization": {
+      "member": "member"
+    },
+    "plan": {
+      "subscriber": "subscriber",
+      "subscriber_member": "subscriber_member"
+    },
+    "feature": {
+      "associated_plan": "associated_plan",
+      "can_access": "can_access"
+    }
+  },
+  "id_encoding": {
+    "mode": "none",
+    "types": []
+  }
+}

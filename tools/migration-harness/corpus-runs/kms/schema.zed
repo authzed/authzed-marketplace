@@ -1,0 +1,52 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation editor: user
+	permission editor__perm = editor
+
+	relation viewer: user
+	permission viewer__perm = viewer
+
+	relation member__direct: user
+	permission member = (member__direct + admin + editor + viewer)
+}
+
+definition space {
+	relation organization: organization
+	relation owner: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_editor = organization->editor__perm
+	permission organization_viewer = organization->viewer__perm
+
+	permission can_delete = organization_admin
+	permission can_manage_members = (owner + can_delete)
+	permission can_edit = (organization_editor + can_manage_members)
+	permission can_view = (organization_viewer + can_edit)
+}
+
+definition page {
+	relation space: space
+	relation author: user
+
+	permission organization_admin = space->organization_admin
+	permission organization_editor = space->organization_editor
+	permission organization_viewer = space->organization_viewer
+
+	permission can_publish = organization_admin
+	permission can_delete = (author + can_publish)
+	permission can_edit = (organization_editor + can_delete)
+	permission can_view = (organization_viewer + can_edit)
+}
+
+definition comment {
+	relation page: page
+	relation author: user
+
+	permission can_delete = (author + page->organization_admin)
+	permission can_edit = can_delete
+	permission can_view = (page->can_view + can_edit)
+}

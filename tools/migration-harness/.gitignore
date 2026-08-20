@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+corpus/
+corpus-runs/abac-with-rebac/store-draft.fga.yaml
+corpus-runs/abac-with-rebac/store-published.fga.yaml

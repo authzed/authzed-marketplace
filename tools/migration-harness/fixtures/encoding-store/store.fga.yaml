@@ -1,0 +1,41 @@
+name: Synthetic fixture -- object-ID encoding (oracle gap 1)
+# Not a real openfga/sample-stores store. Hand-authored so at least one
+# subject id needs id_encoding to reach SpiceDB's object-id grammar at all --
+# see fixtures/README.md and tests/test_oracle_fixtures.py for why this
+# exists outside corpus-runs/. No model_file is shipped: nothing in
+# migration_harness reads that key (only `fga model test` would, and this
+# fixture is never run through the real `fga` CLI).
+
+tuples:
+  # alice's id is an email address -- the shape migrate.md calls "the common
+  # case" for an IdP-issued subject id, and one SpiceDB's object-id grammar
+  # (`^[a-zA-Z0-9/_|\-=+]{1,1024}$`) rejects outright: '@' and '.' are both
+  # illegal.
+  - {user: user:alice@corp.example, relation: owner, object: doc:quarterly-report}
+
+  # qa:on-call's id contains a colon -- illegal for a different reason (':'
+  # is the type/id separator in every OTHER context in this format, so this
+  # also stresses parse_object_ref's "split on the *first* colon only" rule:
+  # the ref below is type=user, id="qa:on-call").
+  - {user: user:qa:on-call, relation: viewer, object: doc:quarterly-report}
+
+  # A wildcard write: doc:public-notes is visible to every user. '*' is not
+  # an object id at all (a distinct grammar token) and must never be run
+  # through base64url encoding even though `user` is a listed encoded type.
+  - {user: user:*, relation: viewer, object: doc:public-notes}
+
+tests:
+  - name: owner can view and is recorded as owner, despite an email-shaped id
+    check:
+      - {user: user:alice@corp.example, object: doc:quarterly-report, assertions: {owner: true, viewer: true}}
+      - {user: user:alice@corp.example, object: doc:private-notes, assertions: {viewer: false}}
+
+  - name: a colon-shaped id round-trips through encoding on both write and check sides
+    check:
+      - {user: user:qa:on-call, object: doc:quarterly-report, assertions: {viewer: true}}
+      - {user: user:qa:on-call, object: doc:private-notes, assertions: {viewer: false}}
+
+  - name: wildcard grant is visible to any encoded id, doc ids stay unencoded
+    check:
+      - {user: user:completely-different-person@example.org, object: doc:public-notes, assertions: {viewer: true}}
+      - {user: user:completely-different-person@example.org, object: doc:private-notes, assertions: {viewer: false}}

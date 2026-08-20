@@ -1,0 +1,91 @@
+definition user {}
+
+definition organization {
+	relation admin: user
+	permission admin__perm = admin
+
+	relation agent: user
+	permission agent__perm = agent
+
+	relation member__direct: user
+	permission member = (member__direct + admin + agent)
+}
+
+definition team {
+	relation organization: organization
+	relation member: user
+	permission member__perm = member
+
+	relation lead: user
+	permission lead__perm = lead
+
+	permission can_manage = (lead + organization->admin__perm)
+	permission can_view = (member + can_manage)
+}
+
+definition collection {
+	relation organization: organization
+	// spicedb-ignore-warning: relation-name-references-parent
+	relation parent_collection: collection
+	relation owner: user
+
+	permission organization_admin = organization->admin__perm
+	permission organization_agent = organization->agent__perm
+
+	relation viewer__direct: user | team#member
+	permission viewer = (viewer__direct + owner + organization_admin + parent_collection->viewer)
+
+	permission can_delete = organization_admin
+	permission can_edit = (owner + can_delete)
+	permission can_create_ticket = (owner + organization_agent + can_delete)
+	permission can_view = (viewer + can_edit)
+}
+
+definition ticket {
+	relation collection: collection
+	relation assignee: user
+	relation assigned_team: team
+	relation creator: user
+	relation reporter: user
+
+	permission organization_admin = collection->organization_admin
+	permission organization_agent = collection->organization_agent
+
+	relation viewer__direct: user | team#member
+	permission viewer = (viewer__direct + assignee + creator + reporter + assigned_team->member__perm + collection->viewer)
+
+	relation editor__direct: user
+	permission editor = (editor__direct + assignee + assigned_team->member__perm)
+
+	permission team_lead = assigned_team->lead__perm
+
+	permission can_delete = organization_admin
+	permission can_assign = (organization_agent + can_delete)
+	permission can_close = (assignee + team_lead + can_delete)
+	permission can_edit = (editor + can_assign)
+	permission can_view = (viewer + can_close + can_edit)
+}
+
+definition comment {
+	relation ticket: ticket
+	relation author: user
+
+	permission can_delete = (author + ticket->organization_admin)
+	permission can_edit = author
+	permission can_view = (can_edit + ticket->can_view)
+}
+
+definition attachment {
+	relation ticket: ticket
+	relation uploader: user
+
+	permission can_delete = (uploader + ticket->team_lead + ticket->organization_admin)
+	permission can_view = ticket->can_view
+}
+
+definition contact {
+	relation organization: organization
+
+	permission can_edit = (organization->admin__perm + organization->agent__perm)
+	permission can_view = can_edit
+}
