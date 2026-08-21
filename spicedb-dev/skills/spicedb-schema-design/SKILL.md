@@ -33,6 +33,8 @@ Good schema design requires understanding the application's domain, identifying 
 | See platform-level superuser / admin bypass | `examples/superuser.yaml` |
 | See user-defined roles (like JIRA project roles) | `examples/user-defined-roles.yaml` |
 | See Google IAM-style role hierarchy | `examples/google-iam.yaml` |
+| See AI agents delegated access on behalf of a user | `examples/ai-agents.yaml` |
+| See a schema split across multiple validation files | `examples/multiple-validation-files/` |
 | Evolve an existing schema safely | `references/schema-evolution.md` |
 
 ## When to Use This Skill
@@ -131,7 +133,9 @@ they can be run with `zed validate <file.yaml>`. Files ending in `.zed` are sche
 - **`examples/github.yaml`** - GitHub-style orgs, teams, repos (canonical AuthZed version)
 - **`examples/superuser.yaml`** - Platform admin bypass pattern
 - **`examples/user-defined-roles.yaml`** - Runtime-created roles (JIRA-style)
-- **`examples/google-iam.yaml`** - Google IAM-style role hierarchy (trimmed; see source for full)
+- **`examples/google-iam.yaml`** - Google IAM-style role hierarchy (Spanner IAM, full schema)
+- **`examples/ai-agents.yaml`** - AI agents inherit delegated view access from a user, but never gain write access
+- **`examples/multiple-validation-files/`** - Not a modeling pattern -- demonstrates the `zed validate` technique of splitting one schema (`schema.zed`) across multiple independent validation files (`validations/*.yaml`) run together with `zed validate validations/*`. Directory-based, unlike every other example here; requires zed v0.25.0+.
 
 ### External Resources
 

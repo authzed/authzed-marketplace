@@ -1,0 +1,22 @@
+{
+  "name": "authzed-marketplace",
+  "owner": {
+    "name": "AuthZed",
+    "homepage": "https://authzed.com"
+  },
+  "metadata": {
+    "description": "Official AuthZed plugin marketplace for Codex.",
+    "version": "1.0.0",
+    "repository": "https://github.com/authzed/authzed-marketplace"
+  },
+  "plugins": [
+    {
+      "name": "spicedb-dev",
+      "description": "Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, etc.) to SpiceDB",
+      "version": "1.1.0",
+      "source": { "source": "local", "path": "./spicedb-dev" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Development"
+    }
+  ]
+}

@@ -61,6 +61,23 @@ Alternatively, install from a local clone of the marketplace repository:
 /plugin install spicedb-dev@authzed-marketplace
 ```
 
+### Codex CLI
+
+**1. Add the AuthZed marketplace to Codex:**
+
+```bash
+codex plugin marketplace add authzed/authzed-marketplace
+```
+
+**2. Install the plugin:**
+
+```bash
+codex plugin add spicedb-dev@authzed-marketplace
+```
+
+See [`.codex/INSTALL.md`](.codex/INSTALL.md) for the manual installation path
+(no marketplace registration) and troubleshooting.
+
 ## Migrating to SpiceDB
 
 If you already run OpenFGA, Okta FGA, or Auth0 FGA, the plugin converts the model, the
@@ -120,9 +137,11 @@ stays with you.
 
 ## Quick Setup: Make Permissions Ambient
 
-After installing, add the following to your project's `CLAUDE.md`. This is the single
-most effective step -- it makes Claude consider SpiceDB writes and checks automatically
-whenever it generates or modifies handlers, without you needing to invoke any command.
+After installing, add the following to your project's `CLAUDE.md` (Claude Code) or
+`AGENTS.md` (Codex and other tools). This is the single most effective step -- it makes
+your AI assistant consider SpiceDB writes and checks automatically whenever it generates
+or modifies handlers, without you needing to invoke any command. Running `/spicedb-dev:plan`
+(Claude Code) or the `plan` command (Codex) writes both files automatically.
 
 ```markdown
 ## Authorization (SpiceDB)

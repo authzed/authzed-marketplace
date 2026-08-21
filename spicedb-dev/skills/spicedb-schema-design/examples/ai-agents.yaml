@@ -1,0 +1,87 @@
+---
+# AI Agents Acting on Behalf of a User
+# Pattern: AI agents inherit a user's delegated view access via a walked
+#   relation, without ever gaining that user's edit access
+# Source: https://github.com/authzed/examples/tree/main/schemas/ai-agents
+#
+# Use this as a starting point when you need:
+# - AI agents (or other automated actors) that act on behalf of a human user
+# - Agents to automatically inherit read/view access from whichever documents
+#   their delegating user can read or write
+# - Agents to be explicitly excluded from write/edit access, even though the
+#   delegating user may hold it
+
+schema: |-
+  /**
+   * an entity that can be granted permissions
+   */
+  definition user {
+    /**
+     * a user may have one or more AI agents that act on their behalf
+     */
+    relation agent: ai_agent
+
+    /**
+     * the set of AI agents that are permitted to act on this user's behalf
+     */
+    permission delegates = agent
+  }
+
+  /**
+   * an AI agent that can act on behalf of a user
+   */
+  definition ai_agent {}
+
+  /**
+   * a resource that we are trying to protect
+   */
+  definition document {
+    /**
+     * users can be made writers of specific documents
+     */
+    relation writer: user
+
+    /**
+     * users can be made readers of specific documents
+     */
+    relation reader: user
+
+    /**
+     * if a user has the writer relation to a specific document, they
+     * automatically get permission to edit it
+     */
+    permission edit = writer
+
+    /**
+     * a user can view a document if they are a reader (or can edit it). an
+     * AI agent inherits view access by walking to the delegates permission
+     * of any reader or writer of the document, but this never grants the
+     * agent edit access.
+     */
+    permission view = reader + edit + reader->delegates + writer->delegates
+  }
+
+relationships: |-
+  document:firstdoc#writer@user:tom
+  document:firstdoc#reader@user:fred
+  user:tom#agent@ai_agent:assistant_tom
+  user:fred#agent@ai_agent:assistant_fred
+
+assertions:
+  assertTrue:
+    - "document:firstdoc#edit@user:tom"
+    - "document:firstdoc#view@user:tom"
+    - "document:firstdoc#view@user:fred"
+    - "document:firstdoc#view@ai_agent:assistant_tom"
+    - "document:firstdoc#view@ai_agent:assistant_fred"
+  assertFalse:
+    - "document:firstdoc#edit@user:fred"
+    - "document:firstdoc#edit@ai_agent:assistant_tom"
+    - "document:firstdoc#edit@ai_agent:assistant_fred"
+
+validation:
+  document:firstdoc#view:
+    - "[user:tom] is <document:firstdoc#writer>"
+    - "[user:fred] is <document:firstdoc#reader>"
+    - "[ai_agent:assistant_tom] is <user:tom#agent>"
+    - "[ai_agent:assistant_fred] is <user:fred#agent>"

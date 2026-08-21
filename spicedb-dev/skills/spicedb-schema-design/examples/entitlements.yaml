@@ -42,15 +42,15 @@ schema: |-
   }
 
 relationships: |-
-  // Users belong to organizations
+  // Add two users to organizations
   organization:github#member@user:maria
   organization:acme#member@user:frank
 
-  // Organizations are subscribed to plans
+  // Assign entitlements to the organizations
   entitlement:pro_plan#org@organization:github
   entitlement:free_plan#org@organization:acme
 
-  // Plans unlock features
+  // Assign features to the entitlements
   feature:download_analytics#associated_entitlement@entitlement:pro_plan
   feature:view_analytics#associated_entitlement@entitlement:free_plan
   feature:view_analytics#associated_entitlement@entitlement:pro_plan

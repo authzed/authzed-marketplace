@@ -20,7 +20,8 @@ schema: |-
 
   /**
    * model groups as having a parent group -- membership propagates upward.
-   * e.g. engineering has parent company, so engineering members are also company members.
+   * e.g. engineering has parent company, so engineering members are
+   * also company members.
    */
   definition group_with_parent {
     relation parent: group_with_parent
@@ -31,7 +32,8 @@ schema: |-
 
   /**
    * model a group as having children -- membership propagates downward.
-   * e.g. company has child engineering, so company viewers include engineering children.
+   * e.g. company has child engineering, so company viewers include
+   * engineering children.
    */
   definition group_with_child {
     relation child: user | group_with_child#child
@@ -53,21 +55,21 @@ schema: |-
   }
 
 relationships: |-
-  // Add members to leaf groups
+  // Add an engineer to group of engineers
   group_with_parent:engineering#member@user:engineer
   group_with_child:engineering#child@user:engineer
+  // Add an analyst to group of analysts
   group_with_parent:analysis#member@user:analyst
   group_with_child:analysis#child@user:analyst
 
-  // Company is the parent of engineering and analysis (parent model)
+  // Company is the parent of engineering and analysis
+  // Engineering and analysis are children of company
   group_with_parent:engineering#parent@group_with_parent:company
-  group_with_parent:analysis#parent@group_with_parent:company
-
-  // Engineering and analysis are children of company (child model)
   group_with_child:company#child@group_with_child:engineering#child
+  group_with_parent:analysis#parent@group_with_parent:company
   group_with_child:company#child@group_with_child:analysis#child
 
-  // Share documents with groups
+  // Set the permissions on some documents
   document:shared_with_company#viewer@group_with_child:company#view
   document:shared_with_company#viewer@group_with_parent:company#view
   document:shared_with_engineering#viewer@group_with_parent:engineering#view
@@ -91,7 +93,9 @@ validation:
     - "[group_with_parent:analysis#view] is <document:shared_with_analysis#viewer>"
     - "[user:analyst] is <group_with_child:analysis#child>/<group_with_parent:analysis#member>"
   document:shared_with_company#view:
+    - "[group_with_child:analysis#child] is <group_with_child:company#child>"
     - "[group_with_child:company#view] is <document:shared_with_company#viewer>"
+    - "[group_with_child:engineering#child] is <group_with_child:company#child>"
     - "[group_with_parent:company#view] is <document:shared_with_company#viewer>"
     - "[user:analyst] is <group_with_child:analysis#child>"
     - "[user:engineer] is <group_with_child:engineering#child>"
