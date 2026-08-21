@@ -106,7 +106,8 @@ to go; never leave the user at a dead end.
 ### Step 2: Load the conversion pack
 
 Look up the source system in the `migrating-to-spicedb` skill's source registry and load
-the matching pack skill. For OpenFGA, Okta FGA, or Auth0 FGA that is
+the matching pack skill. For Oso Cloud that is `oso-to-spicedb`; for OpenFGA, Okta FGA, or
+Auth0 FGA that is
 `openfga-to-spicedb`; read its `references/schema-mapping.md` and
 `references/naming-normalization.md` before writing any output.
 

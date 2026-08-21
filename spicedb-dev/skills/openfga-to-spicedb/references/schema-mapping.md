@@ -16,7 +16,7 @@ Every row carries a fidelity rating (`clean` / `effort` / `heavy` / `blocked`, d
 `migrating-to-spicedb/SKILL.md`). Constructs rated `heavy` or `blocked` are Class A
 findings and live in `blockers.md`, not here.
 
-Everything in this file was re-verified against **SpiceDB v1.56.0** and **zed v0.31.1**
+Everything in this file was re-verified against **SpiceDB v1.56.0** and **zed v0.31.1**, and the version-sensitive `use`-flag findings re-checked on **zed v1.2.0**
 (floor: v1.52.0). Where the verification produced something sharper than the design spec,
 this file records what the compiler actually did.
 
@@ -2293,10 +2293,26 @@ $ zed validate /tmp/b.zed          # -> zed's own local parser's answer
 Unknown use flag: `bogusflag`. Options are: expiration
 ```
 
-SpiceDB v1.56.0's `WriteSchema` knows `partial` (and `self`, `typechecking`) as real `use`
-flags; zed v0.31.1's local parser (used by `validate` and `schema compile`) knows only
-`expiration`. The two tools disagree about which syntax is valid, **in opposite
-directions**, for the identical construct:
+SpiceDB's `WriteSchema` knows `partial` (and `self`, `typechecking`) as real `use` flags.
+**Whether your `zed` agrees depends on its version, and this is the single most
+version-sensitive area in this file.** zed **v1.2.0** knows them; zed **v0.31.1**'s local
+parser (used by `validate` and `schema compile`) knew only `expiration`, and on that client
+the two tools disagreed about which syntax was valid **in opposite directions** for the
+identical construct.
+
+**On zed v1.2.0 the `partial` skew is gone.** Re-verified against a live SpiceDB v1.56.0:
+`use partial` + `partial { ... }` validates (exit 0) *and* writes, while the bare
+`partial { ... }` form that v0.31.1 required is now **rejected** by `validate`. So a single
+file with `use partial` is valid input to both tools, and the workaround below is no longer
+needed on a current client.
+
+**`import` is unchanged, and is not a version problem.** Re-verified on zed v1.2.0:
+`use import` validates locally and `WriteSchema` still rejects it with
+`import statements are not allowed in this context`. `zed schema compile` still resolves
+imports into a single file, and that remains the only way to ship an `import`-bearing
+schema.
+
+The historical matrix, kept because a project may still be pinned to an older `zed`:
 
 | Form | Live `WriteSchema` (v1.54.0 / v1.56.0) | zed v0.31.1 `validate` / `schema compile` |
 |---|---|---|
@@ -2321,10 +2337,12 @@ Two constructs, two different stories:
   `partial` too. There is no `use import` form, no bare form, no way to `WriteSchema` a
   schema containing an `import` statement, ever.
 
-**Consequence:** no single file text is simultaneously valid input to `zed validate`/`zed
-schema compile` **and** to a live `WriteSchema`, for a schema that uses `partial`. That is a
-real toolchain-pairing skew on this version combination (zed v0.31.1 against SpiceDB
-v1.54.0/v1.56.0), not a designed restriction -- and it is *why* compiling is the practical
+**Consequence, on zed v0.31.1 only:** no single file text was simultaneously valid input to
+`zed validate`/`zed schema compile` **and** to a live `WriteSchema`, for a schema using
+`partial`. That was a toolchain-pairing skew on that version combination, **fixed in zed
+v1.2.0** -- check your client version before designing around it, and note the general
+lesson: a capability the server has had all along can look absent because the client cannot
+express it. It was never a designed restriction -- and it is *why* compiling is the practical
 default even though it is not, strictly, the only way to deploy `partial`. See "Three ways
 to ship a modular schema" below for what each option actually buys and costs, verified.
 
@@ -2479,7 +2497,20 @@ confirmation, not a new construct.
   condition whose name normalizes to `expiration` sets the trap.
 - **`use typechecking` whenever a permission carries a type annotation.** Without the
   flag, annotations are silently discarded and the schema validates clean.
-- **`use self` whenever `self` is used.** Without it, `self` lexes as an ordinary
+- **`use self` whenever `self` is used -- and check your `zed` version before concluding it
+  is unsupported.** Verified on **zed v1.2.0** against a live SpiceDB v1.56.0: `use self` plus
+  `permission read_profile = self` validates, writes, and answers correctly (`true` for a
+  subject against itself, `false` against another) **with no relationship written at all**.
+  Without the flag on that version, validation fails outright.
+
+  **On zed v0.31.1 the same schema is impossible, and the failure is misleading in a way
+  worth knowing about.** That client rejects the flag as unknown (`Options are: expiration`)
+  and accepts a bare `self`, which then fails at `WriteSchema` with ``relation/permission
+  `self` not found``. **The server supported `self` the whole time; the client was too old to
+  express it.** So an "unsupported" verdict reached with an old `zed` can be a client
+  limitation wearing a server error's clothes -- record the `zed` version alongside any
+  capability claim, and re-check on a current client before designing around the gap.
+  Without a flag, `self` lexes as an ordinary
   identifier and compiles to a computed userset that fails at `WriteSchema`.
 - **`use import` is rejected by `WriteSchema` unconditionally**, deliberately, with a
   distinct error (``import statements are not allowed in this context``) rather than a
