@@ -1,7 +1,7 @@
 ---
 name: Migrating to SpiceDB
 description: Use when migrating an application from another authorization system
-  (OpenFGA, Okta FGA) to SpiceDB - runs the phase pipeline that converts schema,
+  (OpenFGA, Okta FGA, Oso Cloud) to SpiceDB - runs the phase pipeline that converts schema,
   data, application code, and tests, with a pre-flight gate that surfaces every
   blocking decision before conversion begins
 ---
@@ -27,6 +27,7 @@ code rewriting). Nothing is converted past an unresolved hard blocker.
 | Source system | Pack skill | Status |
 |---|---|---|
 | OpenFGA / Okta FGA / Auth0 FGA | `openfga-to-spicedb` | supported |
+| Oso Cloud | `oso-to-spicedb` | supported -- policy and code mappings verified against live Oso; fact export at scale is not yet exercised, and the pack says so |
 
 If the detected source has no pack, stop and say so. Do not improvise a translation --
 an unsupported source needs a new pack, not an ad hoc conversion.

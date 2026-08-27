@@ -29,6 +29,7 @@ SpiceDB development plugin for Claude Code. Adds fine-grained authorization to a
 - **spicedb-best-practices** - Client library usage, consistency models, error handling, performance
 - **authorization-testing** - Test fixture generation and integration testing patterns
 - **migrating-to-spicedb** - Source-agnostic migration framework: phase pipeline (with per-phase build status), pre-flight gate protocol, the conversion-pack contract, and (once conversion is done) the seven-step cutover playbook and the differential-harness contract `/spicedb-dev:migrate-verify` implements
+- **oso-to-spicedb** - Conversion pack for Oso Cloud: Polar policy mapping, blocker catalog, identifier normalization, fact mapping, code mapping, and test mapping
 - **openfga-to-spicedb** - Conversion pack for OpenFGA, Okta FGA, and Auth0 FGA: schema mapping, blocker catalog, identifier normalization, data mapping, code mapping, test mapping, and the differential-harness source adapter
 - **spicedb-client-integration** - General-purpose SpiceDB client integration for Go, Python, TypeScript, C#, Java, Rust, and Ruby: obtaining the prototype client and the vocabulary shared across all seven languages
 
@@ -80,7 +81,7 @@ See [`.codex/INSTALL.md`](.codex/INSTALL.md) for the manual installation path
 
 ## Migrating to SpiceDB
 
-If you already run OpenFGA, Okta FGA, or Auth0 FGA, the plugin converts the model, the
+If you already run OpenFGA, Okta FGA, Auth0 FGA, or Oso Cloud, the plugin converts the model, the
 data, the application code, and the tests -- and then helps you cut over without guessing.
 
 ```

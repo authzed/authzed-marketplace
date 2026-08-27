@@ -108,7 +108,8 @@ what this command actually reads. If either check fails, halt and direct the use
 
 Read the plan's **Source** section for the detected system (already resolved by phase 0; do
 not re-detect it) and look it up in the `migrating-to-spicedb` skill's source registry. For
-OpenFGA, Okta FGA, or Auth0 FGA that is `openfga-to-spicedb`; read its
+Oso Cloud that is `oso-to-spicedb`; for OpenFGA, Okta FGA, or Auth0 FGA that is
+`openfga-to-spicedb`; read its
 `references/test-mapping.md` **in full** before converting anything -- it is the algorithm
 this command applies, and every step below cites it rather than restating it. If the plan's
 source has no pack, or the pack has no test-mapping reference, stop: an unsupported source

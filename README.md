@@ -22,4 +22,4 @@ From a local clone:
 
 | Plugin | Description |
 | --- | --- |
-| [spicedb-dev](./spicedb-dev) | Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, etc.) to SpiceDB |
+| [spicedb-dev](./spicedb-dev) | Comprehensive SpiceDB development toolkit for designing permission models, generating schemas, implementing authorization, testing, and migrating from other authorization systems (OpenFGA, Okta FGA, Oso Cloud) to SpiceDB |
