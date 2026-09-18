@@ -189,7 +189,8 @@ gate this command is the ID codec, handled on its own terms in step 3.
 
 Read the plan's **Source** section for the detected system and look it up in the
 `migrating-to-spicedb` skill's source registry, the same lookup `/spicedb-dev:migrate-data`
-step 2 performs for `data-mapping.md`. For OpenFGA, Okta FGA, or Auth0 FGA that is
+step 2 performs for `data-mapping.md`. For Oso Cloud that is `oso-to-spicedb`; for OpenFGA,
+Okta FGA, or Auth0 FGA that is
 `openfga-to-spicedb`; read its `references/code-mapping.md` **in full** before rewriting
 anything -- it is the algorithm this command applies, and every step below cites it rather
 than restating it. If the plan's source has no pack, or the pack has no code-mapping

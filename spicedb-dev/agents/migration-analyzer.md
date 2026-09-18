@@ -63,6 +63,7 @@ Read `migrating-to-spicedb/SKILL.md` and use its **source registry** table. That
 the authority on which sources are supported.
 
 Detect the source from dependency manifests, imports, config, and model-file extensions.
+For Oso Cloud, `oso-to-spicedb/SKILL.md`'s "Detection" section is the authority.
 For OpenFGA / Okta FGA / Auth0 FGA, `openfga-to-spicedb/SKILL.md`'s "Detection" section
 lists the signals per language; any one is enough to suspect it, and a model file confirms
 it.
@@ -76,6 +77,22 @@ grep -rn '@openfga/\|openfga-sdk\|openfga_sdk\|openfga/go-sdk\|openfga/openfga\|
   --include=package.json --include=go.mod --include=go.sum --include=requirements.txt \
   --include=pyproject.toml --include=pom.xml --include=build.gradle --include='*.csproj' .
 ```
+
+**The sweep above is OpenFGA-specific. Sweep for every registered source, not just one.**
+`migrating-to-spicedb/SKILL.md`'s source registry names the packs; each supplies its own
+detection rule under pack contract item 1, and a project can carry more than one source at
+once (a partial migration already in flight, or two services on different systems). For Oso
+Cloud:
+
+```bash
+grep -rniI 'oso-cloud\|oso_cloud\|osohq\|sqlalchemy-oso' \
+  --include=package.json --include=requirements.txt --include=pyproject.toml \
+  --include=go.mod --include=Gemfile --include=pom.xml --include=build.gradle --include='*.csproj' .
+find . -name '*.polar' | grep -v node_modules
+```
+
+Report which source was found and on what evidence. If more than one fires, say so and stop
+rather than picking -- which pack governs is a decision for the gate.
 
 **A zero from this sweep does not mean "not an OpenFGA project," and must never be read as
 "no pack applies."** The patterns above are dependency *names*, and an application can use

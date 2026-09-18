@@ -91,7 +91,7 @@ every permission.
 | Have a schema, need implementation (Go / TypeScript / Python / C#, using Authzed's published clients) | `/spicedb-dev:implement-spicedb` |
 | Inherited codebase, need coverage picture | `/spicedb-dev:audit-coverage` |
 | Need to validate an existing schema | `/spicedb-dev:validate-schema` |
-| Migrating from OpenFGA / Okta FGA | `/spicedb-dev:migrate` |
+| Migrating from OpenFGA / Okta FGA / Oso Cloud | `/spicedb-dev:migrate` |
 | Migration schema converted, need to move relationship data | `/spicedb-dev:migrate-data` |
 | Migration schema converted, need to rewrite client code | `/spicedb-dev:migrate-code` |
 | Migration schema converted, need to convert test fixtures | `/spicedb-dev:migrate-tests` |
@@ -125,6 +125,7 @@ every permission.
 - **spicedb-best-practices** -- client library usage, consistency models, error handling
 - **authorization-testing** -- test fixture patterns, integration testing
 - **migrating-to-spicedb** -- source-agnostic migration framework: phase pipeline (with per-phase build status), pre-flight gate, conversion-pack contract, and (once conversion is done) the cutover playbook and differential-harness contract
+- **oso-to-spicedb** -- conversion pack for Oso Cloud: Polar policy mapping, blockers, identifier normalization, fact mapping, code mapping, test mapping
 - **openfga-to-spicedb** -- conversion pack for OpenFGA / Okta FGA / Auth0 FGA: schema mapping, blockers, naming normalization, data mapping, code mapping, test mapping, and the differential-harness source adapter
 - **spicedb-client-integration** -- general-purpose client integration for Go, Python, TypeScript, C#, Java, Rust, and Ruby: obtaining the prototype client and the vocabulary shared across all seven languages
 

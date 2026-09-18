@@ -24,7 +24,7 @@ its own. See `schema-mapping.md` for the relation/permission split and
 `naming-normalization.md` for the identifier algorithm; this file only states how those two
 already-decided artifacts get applied when rendering a `.fga.yaml` file's data and checks.
 
-Everything here was re-verified against **SpiceDB v1.56.0** and **zed v0.31.1** (floor:
+Everything here was re-verified against **SpiceDB v1.56.0** and **zed v0.31.1**, and the version-sensitive `use`-flag findings re-checked on **zed v1.2.0** (floor:
 v1.52.0), and every count is derived mechanically from the 39-store corpus at
 `tools/migration-harness/corpus/sample-stores/stores/` (source) and
 `tools/migration-harness/corpus-runs/<store>/` (converted), with the command stated.

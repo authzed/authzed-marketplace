@@ -120,7 +120,8 @@ starting extraction or the bulk/`TOUCH` decision over.
 ### Step 2: Load the conversion pack's data-mapping reference
 
 Read the plan's **Source** section for the detected system and look it up in the
-`migrating-to-spicedb` skill's source registry. For OpenFGA, Okta FGA, or Auth0 FGA that is
+`migrating-to-spicedb` skill's source registry. For Oso Cloud that is `oso-to-spicedb`; for
+OpenFGA, Okta FGA, or Auth0 FGA that is
 `openfga-to-spicedb`; read its `references/data-mapping.md` **in full** before writing
 either output -- it is the algorithm this command applies, and every step below cites it
 rather than restating it. If the plan's source has no pack, or the pack has no data-mapping

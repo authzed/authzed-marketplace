@@ -159,7 +159,7 @@ is authoritative and this command is stale.
 Read the plan's **Source** section for the detected system and look it up in the
 `migrating-to-spicedb` skill's source registry -- the same lookup
 `/spicedb-dev:migrate-data` step 2 and `/spicedb-dev:migrate-code` step 2 perform. For OpenFGA,
-Okta FGA, or Auth0 FGA that is `openfga-to-spicedb`; read its `references/source-adapter.md` **in
+Okta FGA, or Auth0 FGA that is `openfga-to-spicedb`, and for Oso Cloud `oso-to-spicedb`; read its `references/source-adapter.md` **in
 full** before converting anything -- it is the seam `differential-harness.md` defines and
 declines to fill in, and every step below cites it the same way. If the plan's source has no
 pack, or the pack has no `source-adapter.md`, stop: an unsupported source needs an adapter
